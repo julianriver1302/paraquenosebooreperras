@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CodiPlayCo</title>
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    
+  <header>
+    <div class="logo-area">
+      <img src="logo letra.PNG" alt="">
+    </div>
+    <div class="logo-text">CodiPlayCo</div>
+    <hr class="header-divider">
+    <nav class="main-menu">
+      <a href="#"><i class="fas fa-home"></i> Inicio</a>
+      <a href="#"><i class="fas fa-hub"></i> Hub </a>
+      <a href="#"><i class="fas fa-trophy"></i> Mis logros</a>
+    </nav>
+    <button id="theme-toggle" class="theme-toggle"><i class="fas fa-moon"></i></button>
+  </header>
+  <main>
+    <h1>¿ Qué es el internet ?</h1>
+    <hr>
+    <div class="image-square-full-container">
+      <button class="image-btn back-btn" onclick="showPrevBubble()">Atrás</button>
+      <div class="image-square-full">
+        <div class="conversation-bubble" id="bubble1">Hola, ¿sabes qué es el internet?</div>
+        <div class="conversation-bubble" id="bubble2" style="display:none;">El internet es una red que conecta computadoras en todo el mundo.</div>
+        <div class="conversation-bubble" id="bubble3" style="display:none;">Gracias al internet, podemos comunicarnos, aprender y compartir información.</div>
+        <div class="conversation-bubble" id="bubble4" style="display:none;">¡Explora y aprende más sobre el internet aquí!</div>
+      </div>
+      <button class="image-btn next-btn" id="nextBtn" onclick="showNextBubble()">Siguiente</button>
+    </div>
+    <script src="script.js"></script>
+  </main>
+ 
+</body>
+</html>

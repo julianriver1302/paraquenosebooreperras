@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CodiPlayCo</title>
+    <link rel="stylesheet" href="estilos2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo-area">
+          <img src="logo letra.PNG" alt="">
+        </div>
+        <div class="logo-text">CodiPlayCo</div>
+        <hr class="header-divider">
+        <nav class="main-menu">
+          <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+          <a href="#"><i class="fas fa-hub"></i> Hub </a>
+          <a href="#"><i class="fas fa-trophy"></i> Mis logros</a>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle"><i class="fas fa-moon"></i></button>
+      </header>
+    
+<main class="pagina-dibujo-main">
+      <h1>🎨 Dibuja tu Página Web</h1>
+
+      <div class="controls">
+        <label>Color:</label>
+        <input type="color" id="colorPicker" value="#000000">
+    
+        <label>Tamaño:</label>
+        <input type="range" id="sizePicker" min="1" max="20" value="3"><br>
+    
+        <button onclick="activarPincel()">✏️ Pincel</button>
+        <button onclick="activarBorrador()">🧽 Borrador</button>
+        <button onclick="dibujarForma('cuadrado')">⬛ Cuadrado</button>
+        <button onclick="dibujarForma('circulo')">⚪ Círculo</button>
+        <button onclick="dibujarForma('linea')">📏 Línea</button><br>
+    
+        <button onclick="limpiarCanvas()">🧹 Limpiar</button>
+        <button onclick="guardarDibujo()">💾 Guardar</button>
+      </div>
+    
+      <canvas id="canvas" width="500" height="350"></canvas>
+      <div id="imagenGuardada"></div>
+      <script src="script.js"></script>
+    </main>
+</body>
+</html>

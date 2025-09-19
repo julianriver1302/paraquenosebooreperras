@@ -1,0 +1,1119 @@
+/* =========================
+   Reset de márgenes, paddings y fondo
+   ========================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Fondo global */
+body {
+  background-image: url('images/ChatGPT\ Image\ 16\ jul\ 2025\,\ 01_30_59\ p.m..png'); /* Ajusta el nombre del archivo si es diferente */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* =========================
+   Variables y fuentes
+   ========================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --sidebar-bg-light: #ffffff;
+  --card-bg-light: #ffffff;
+  --text-color-light: #333333;
+  --secondary-text-color-light: #000000;
+  --accent-color-light: #000000;
+  --progress-bar-bg-light: #e0e0e0;
+  --progress-bar-fill-light: rgb(0, 0, 0);
+  --alert-banner-bg-light: #fff3cd;
+  --alert-banner-text-light: #856404;
+  --border-color-light: #eeeeee;
+  --hover-color-light: #f5f5f5;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --module-no-aprobado-bg: #00ff08;
+  --module-nuevo-bg: #00ff08;
+  --module-text-light: #ffffff;
+
+}
+
+.dashboard-container {
+    display: flex;
+    margin: 0;
+    min-height: 120px;
+    width: 100vw;
+    height: 100vh;
+    
+}
+.sin_linea {
+  text-decoration: none;
+  color: inherit; /* Opcional: mantiene el color del texto sin cambiarlo */
+}
+
+/* =========================
+   Sidebar (barra lateral)
+   ========================= */
+.sidebar {
+    width: 250px;
+
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+}
+
+/* Logo centrado en la barra lateral */
+.sidebar .logo {
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+/* Título del logo (si se usa texto) */
+.sidebar .logo h1 {
+    font-size: 2.5em;
+    font-weight: 700;
+}
+
+/* Navegación principal de la barra lateral */
+.sidebar .main-nav ul {
+    list-style: none;
+    padding: 0;
+}
+.sidebar .main-nav .nav-item {
+    margin-bottom: 15px;
+}
+.sidebar .main-nav .nav-item a {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 8px;
+    color: var(--secondary-text-color-light);
+    text-decoration: none;
+    font-size: 1.1em;
+    transition: background-color 0.2s, color 0.2s;
+}
+.sidebar .main-nav .nav-item a i {
+    margin-right: 15px;
+    font-size: 1.2em;
+}
+.sidebar .main-nav .nav-item.active a {
+    background-color: var(--accent-color-light);
+    color: #ffffff;
+    font-weight: 500;
+}
+.sidebar .main-nav .nav-item a:hover:not(.active) {
+    background-color: var(--hover-color-light);
+    color: var(--accent-color-light);
+}
+
+/* Sección de soporte en la barra lateral */
+.sidebar .support-section {
+    margin-top: auto;
+    margin-bottom: 20px;
+}
+.sidebar .support-section a {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 8px;
+    color: var(--secondary-text-color-light);
+    text-decoration: none;
+    font-size: 1.1em;
+    transition: background-color 0.2s, color 0.2s;
+}
+.sidebar .support-section a i {
+    margin-right: 15px;
+    font-size: 1.2em;
+}
+.sidebar .support-section a:hover {
+    background-color: var(--hover-color-light);
+    color: var(--accent-color-light);
+}
+/* =========================
+   Reset y base para ocupar toda la pestaña
+   ========================= */
+
+/* =========================
+   Layout principal del dashboard
+   ========================= */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    min-width: 100vw;
+    height: 100vh;
+    width: 100vw;
+    /* Si quieres que el contenido haga scroll interno, puedes usar: */
+    /* overflow: auto; */
+}
+
+/* Asegura que el contenido principal ocupe todo el espacio disponible */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: var(--background-color-light);
+    min-height: 100vh;
+    min-width: 0;
+    overflow-y: auto;
+}
+
+/* Sidebar ocupa toda la altura */
+.sidebar {
+    height: 100vh;
+    min-height: 100vh;
+    /* El resto de tus estilos de sidebar aquí... */
+}
+
+/* El resto de tus estilos permanece igual... */
+
+/* =========================
+   (Resto de tu CSS original aquí, sin el selector .body)
+   ========================= *//* =========================
+   Reset y base para ocupar toda la pestaña
+   ========================= */
+
+/* =========================
+   Layout principal del dashboard
+   ========================= */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    min-width: 100vw;
+    height: 100vh;
+    width: 100vw;
+    /* Si quieres que el contenido haga scroll interno, puedes usar: */
+    /* overflow: auto; */
+}
+
+/* Asegura que el contenido principal ocupe todo el espacio disponible */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    min-height: 100vh;
+    min-width: 0;
+    overflow-y: auto;
+}
+
+/* Sidebar ocupa toda la altura */
+.sidebar {
+    height: 100vh;
+    min-height: 100vh;
+    /* El resto de tus estilos de sidebar aquí... */
+}
+
+/* El resto de tus estilos permanece igual... */
+
+/* =========================
+   (Resto de tu CSS original aquí, sin el selector .body)
+   ========================= */
+/* =========================
+   Contenido principal
+   ========================= */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+
+}
+
+/* =========================
+   Barra superior (top bar)
+   ========================= */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Cambia a flex-start para alinear arriba */
+    margin-bottom: 30px;     /* Ajusta si necesitas menos espacio abajo */
+}
+
+/* Información de usuario en la barra superior */
+.user-info {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse; /* Avatar a la izquierda */
+    margin-left: auto; /* Empuja el bloque hacia la derecha */
+}
+.user-info .balance {
+    text-align: right;
+    margin-right: 20px;
+}
+.user-info .balance span {
+    display: block;
+    font-size: 0.9em;
+    color: var(--secondary-text-color-light);
+}
+.user-info .balance strong {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--text-color-light);
+}
+
+/* Selector de idioma */
+.language-select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color-light);
+    background-color: var(--card-bg-light);
+    color: var(--text-color-light);
+    margin-right: 20px;
+    font-size: 0.95em;
+    cursor: pointer;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.1L146.2%20202.7%2018.5%2074.5a17.6%2017.6%200%200%200-25.3%2023.7l137%20137c.7.7%201.4%201.2%202.1%201.8%202.1%201.7%204.3%203.2%206.5%204.6%201.6%201.1%203.4%202%205.1%202.9%202.5%201.3%205.1%202.3%207.7%202.8%201.6.3%203.3.5%204.9.5h.4c1.6%200%203.2-.2%204.8-.5%202.6-.5%205.2-1.5%207.7-2.8%201.7-.9%203.5-1.8%205.1-2.9%202.2-1.4%204.4-2.9%206.5-4.6.7-.6%201.4-1.1%202.1-1.8l137-137c18.5-18.4%2018.5-48.4%200-66.9z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 12px;
+    padding-right: 30px;
+}
+
+/* Acciones de usuario (iconos y avatar) */
+.user-actions {
+    display: flex;
+    align-items: center;
+}
+.user-actions i {
+    font-size: 1.3em;
+    color: var(--secondary-text-color-light);
+    margin-left: 20px;
+    cursor: pointer;
+}
+.user-actions .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 20px;
+    object-fit: cover;
+}
+
+/* =========================
+   Sección de cabecera de curso
+   ========================= */
+.course-header-section {
+    margin-bottom: 30px;
+}
+.course-header-section .tabs {
+    display: flex;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+.course-header-section .tabs button {
+    padding: 10px 20px;
+    border: 1px solid var(--border-color-light);
+    border-radius: 8px;
+    background-color: var(--card-bg-light);
+    color: var(--secondary-text-color-light);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.course-header-section .tabs button.active {
+    background-color: var(--accent-color-light);
+    color: #ffffff;
+    border-color: var(--accent-color-light);
+}
+.course-header-section .tabs button:hover:not(.active) {
+    background-color: var(--hover-color-light);
+    color: var(--text-color-light);
+}
+
+/*
+    .course-progress-card
+    ---------------------
+    Estilos para la tarjeta que muestra el progreso del curso.
+
+    - background-color: Usa una variable CSS para el color de fondo en modo claro.
+    - padding: Proporciona un espacio interno amplio para el contenido de la tarjeta.
+    - border-radius: Bordes redondeados para una apariencia moderna y suave.
+    - box-shadow: Sombra sutil para dar profundidad y resaltar la tarjeta sobre el fondo.
+    - position: relative; permite posicionar elementos hijos de forma absoluta dentro de la tarjeta.
+    - overflow: hidden; asegura que el contenido que sobresalga de la tarjeta quede oculto.
+*/
+/* Tarjeta de progreso del curso */
+.course-progress-card {
+    background-color: var(--card-bg-light);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px var(--shadow-light);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Fondo decorativo abstracto en la tarjeta de progreso */
+.course-progress-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(90, 94, 255, 0.1) 0%, rgba(90, 94, 255, 0) 50%, rgba(90, 94, 255, 0.05) 100%);
+    opacity: 0.7;
+    transform: rotate(-10deg) scale(1.2);
+    transform-origin: top left;
+    pointer-events: none;
+    z-index: 0;
+}
+.course-progress-card h2 {
+    font-size: 2.2em;
+    margin-bottom: 10px;
+    color: var(--text-color-light);
+    position: relative;
+    z-index: 1;
+}
+.course-progress-card p {
+    font-size: 1.1em;
+    color: var(--secondary-text-color-light);
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+}
+.course-progress-card .progress-indicator {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    color: var(--secondary-text-color-light);
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+}
+.course-progress-card .progress-indicator span:first-child {
+    background-color: var(--accent-color-light);
+    color: #ffffff;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    margin-right: 15px;
+}
+.course-progress-card .progress-indicator .progress-text {
+    font-size: 1.1em;
+    color: var(--accent-color-light);
+    font-weight: 600;
+}
+.course-progress-card .progress-text span:first-child {
+    color: var(--text-color-light);
+}
+
+/* =========================
+   Barras de progreso
+   ========================= */
+.progress-bar-container {
+    width: 100%;
+    background-color: var(--progress-bar-bg-light);
+    border-radius: 10px;
+    height: 10px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+.progress-bar {
+    height: 100%;
+    background-color: var(--progress-bar-fill-light);
+    border-radius: 10px;
+    width: 0%;
+    transition: width 0.5s ease-in-out;
+}
+.progress-bar-container.small {
+    height: 8px;
+    margin-top: 15px;
+}
+
+/* =========================
+   Tabs de detalles del curso
+   ========================= */
+.course-details-tabs {
+    margin-bottom: 30px;
+}
+.course-details-tabs .secondary-nav ul {
+    list-style: none;
+    display: flex;
+    border-bottom: 1px solid var(--border-color-light);
+}
+.course-details-tabs .secondary-nav li {
+    margin-right: 30px;
+}
+.course-details-tabs .secondary-nav li a {
+    display: block;
+    padding: 10px 0;
+    color: var(--secondary-text-color-light);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.1em;
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+.course-details-tabs .secondary-nav li.active a,
+.course-details-tabs .secondary-nav li a:hover {
+    color: var(--accent-color-light);
+    border-bottom-color: var(--accent-color-light);
+}
+.course-details-tabs .secondary-nav li .notification-badge {
+    background-color: var(--notification-red);
+    color: white;
+    font-size: 0.75em;
+    padding: 3px 7px;
+    border-radius: 10px;
+    margin-left: 5px;
+    vertical-align: super;
+}
+
+/* =========================
+   Sección de módulos del curso
+   ========================= */
+.modules-section {
+    margin-top: 30px;
+}
+.module-cards-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+.module-card {
+    background-color: var(--card-bg-light);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px var(--shadow-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 180px;
+}
+.module-card .module-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+.module-card .module-header span:first-child {
+    color: var(--secondary-text-color-light);
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: var(--hover-color-light);
+}
+.module-card.no-aprobado .module-header span:first-child {
+    background-color: var(--module-no-aprobado-bg);
+    color: var(--module-text-light);
+}
+.module-card.nuevo .module-header span:first-child {
+    background-color: var(--module-nuevo-bg);
+    color: var(--module-text-light);
+}
+.module-card .module-progress {
+    color: var(--secondary-text-color-light);
+}
+.module-card h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: var(--text-color-light);
+}
+.module-card p {
+    font-size: 0.95em;
+    color: var(--secondary-text-color-light);
+}
+
+/* =========================
+   Ajustes responsivos para tablets y móviles
+   ========================= */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 200px;
+    }
+    .main-content {
+        padding: 20px;
+    }
+    .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .user-info {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 15px 20px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    .sidebar .logo {
+        margin-bottom: 0;
+        text-align: left;
+    }
+    .sidebar .main-nav {
+        display: none;
+    }
+    .sidebar .support-section,
+    .sidebar .theme-toggle {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    .main-content {
+        padding: 15px;
+    }
+    .alert-banner {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+    .user-info {
+        margin-top: 15px;
+        justify-content: space-around;
+        width: 100%;
+    }
+    .course-header-section .tabs {
+        flex-wrap: wrap;
+    }
+    .module-cards-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 480px) {
+    .sidebar {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .user-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .language-select, .user-actions {
+        margin-right: 0;
+    }
+}
+
+/* =========================
+   Estilos para el logo (imagen)
+   ========================= */
+.logo img {
+    max-width: 110px;      /* Ajusta el tamaño máximo del logo */
+    height: auto;         /* Mantiene la proporción */
+    margin: 0 auto;  /* Centra la imagen si es necesario */
+    display: block;       /* Asegura que ocupe su propia línea */
+}
+
+/* =========================
+   Fondo decorativo para toda la página
+   ========================= */
+
+.h1eader {
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 0;
+    margin-left: 0;
+    text-align: left;
+}
+
+.course-cards {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 350px;
+  height: 350px;
+  border-radius: 10px;
+  color: white;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.card h2 {
+  font-size: 10px;
+  margin: 0;
+}
+
+.card small {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.bio101 {
+  background-color: #30cde2; /* rosa */
+}
+
+.bio102 {
+  background-color: #665b5b; /* verde azulado */
+}
+
+.comms {
+  background-color: #c949ce; /* azul púrpura */
+}
+
+/* From Uiverse.io by andrew-demchenk0 */ 
+.card1 {
+  --main-color: #000;
+  --bg-color: #ffffff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  width: 300px;
+  padding: 25px;
+  background: var(--bg-color);
+  border-radius: 20px;
+}
+
+.card1__wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card1___wrapper-acounts {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.card1___wrapper-acounts > div:nth-child(2) {
+  position: absolute;
+  left: 25px;
+  z-index: -1;
+}
+
+.card1___wrapper-acounts > div:nth-child(3) {
+  position: absolute;
+  left: 50px;
+  z-index: -2;
+}
+
+.card1__score {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  font-size: 16px;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  background: var(--main-color);
+}
+
+.card1__acounts {
+  width: 62px;
+  height: 62px;
+}
+
+.card1__acounts svg {
+  width: 100%;
+  height: 100%;
+}
+
+.card1__menu {
+  width: 40px;
+  height: 40px;
+  background: #000000;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.card1__title {
+  margin-top: 50px;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--main-color);
+}
+
+.card1__subtitle {
+  margin-top: 15px;
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--main-color);
+}
+
+.card1__indicator {
+  margin-top: 50px;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--main-color);
+}
+
+.card1__progress progress {
+  width: 100%;
+  height: 4px;
+  border-radius: 100px;
+}
+
+.card1__progress progress::-webkit-progress-bar {
+  background-color: #00000030;
+  border-radius: 100px;
+}
+
+.card1__progress progress::-webkit-progress-value {
+  background-color: var(--main-color);
+  border-radius: 100px;
+}
+
+.card1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    /* Centra horizontalmente el contenido */
+    justify-content: center;/* Centra verticalmente el contenido */
+    text-align: center;     /* Centra el texto */
+}
+/* From Uiverse.io by alexmaracinaru */ 
+button {
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.2s;
+  padding: 10px 20px;
+  border-radius: 100px;
+  background: #cfef00;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+}
+
+button:hover {
+  background: #c4e201;
+}
+
+button > svg {
+  width: 34px;
+  margin-left: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+button:hover svg {
+  transform: translateX(5px);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Estilo para el botón "Iniciar" en la card */
+.btn-iniciar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #a5a5a5;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  color: rgb(0, 0, 0);
+  text-decoration: #ffffff;
+  text-align: var(--secondary-text-color-light);
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background 0.2s, color 0.2s;
+  
+}
+.btn-iniciar:hover {
+  background: #ffffff;
+  color: rgb(0, 0, 0);
+}
+
+/* =========================
+   MODULO 1
+   ========================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #00bcd4;
+  color: black;
+  min-height: 100vh;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Contenedor principal */
+.layout {
+  display: flex;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+/* Columna izquierda: imagen */
+.left-panel {
+  flex: 1.1;
+  position: sticky;
+  top: 20px;
+
+}
+
+.left-panel img {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 1200px;
+  margin-top: 100px;
+  animation: floatLoop 4s ease-in-out infinite;
+}
+
+/* Columna derecha: tarjetas */
+.right-panel {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 100px;
+}
+
+/* Tarjetas */
+.card {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 700px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 140px; /* 🔽 controla el largo (alto) */
+  position: relative;
+}
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.card h3 {
+  font-size: 18px;                                              
+  margin-bottom: 8px;
+  text-align: left;
+  color: black;
+}
+
+.card p {
+  font-size: 14px;
+  color: #000000;
+  text-align: left;
+  flex-grow: 1; /* Permite que el contenido ocupe el espacio disponible */
+}
+/* Contenido normal arriba */
+.card-content {
+  flex-grow: 1;
+}
+
+/* Botón abajo a la derecha */
+.card-button {
+  align-self: flex-end;
+  margin-top: auto;
+  padding: 8px 25px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.card-button:hover {
+  background-color: #333;
+}
+a {
+  text-decoration: none;
+}
+
+/*Boton de retroceso*/
+.btn-volver {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: black;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  z-index: 1000;
+  transition: background 0.3s;
+}
+
+.btn-volver:hover {
+  background-color: #333;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Barra lateral */
+.sidebar {
+  color: white;
+  padding: 2rem 1rem;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.logo {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  text-decoration: none;
+  display: block;
+}
+
+.nav-btn.active,
+.nav-btn:hover {
+  background-color: white;
+  color: #009dff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+/* Contenido principal */
+.content {
+  flex-grow: 1;
+  padding: 2rem;
+  background: url('fondo-olas.png'); /* puedes usar tu fondo dinámico */
+  background-size: cover;
+  color: #111;
+  
+}
+
+.content h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.support-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 600px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  margin: 0 auto;
+}
+
+.support-form label {
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.support-form input,
+.support-form textarea {
+  width: 100%;
+  max-width: 400px;
+  padding: 1rem 1.2rem;
+  margin-top: 0.3rem;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.support-form input:focus,
+.support-form textarea:focus {
+  border-color: #009dff;
+  box-shadow: 0 0 0 3px rgba(0, 157, 255, 0.1);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.support-form button {
+  margin-top: 1.5rem;
+  padding: 1rem 2rem;
+  background: #009dff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 400px;
+}
+
+.support-form button:hover {
+  background: #007acc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 157, 255, 0.3);
+}
+
+/* Responsive design para formulario de soporte */
+@media (max-width: 768px) {
+  .support-form {
+    max-width: 95%;
+    padding: 1.5rem;
+  }
+  
+  .support-form input,
+  .support-form textarea,
+  .support-form button {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .support-form {
+    padding: 1rem;
+    max-width: 100%;
+  }
+  
+  .support-form input,
+  .support-form textarea {
+    padding: 0.9rem 1rem;
+    font-size: 0.95rem;
+  }
+  
+  .support-form button {
+    padding: 0.9rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}

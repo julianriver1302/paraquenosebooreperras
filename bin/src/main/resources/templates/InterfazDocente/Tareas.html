@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title></title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap">
+    <link rel="stylesheet" href="stylespanel.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+</head>
+<body>
+<nav>
+    <div class="nav-logo">
+        <img src="img/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png" alt="CodiPlayCo Logo" />
+    </div>
+    <button class="toggle-mode-btn" title="Cambiar modo" style="margin:0 auto 0.5rem auto; display:block; background:#fff2; border:none; color:#fff; font-size:1.7rem; border-radius:50%; width:44px; height:44px; box-shadow:0 2px 8px #0002; cursor:pointer; transition:background 0.2s, color 0.2s; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-moon"></i></button>
+    <a href="paneldocente.html"><span class="nav-icon"><i class="fa-solid fa-house"></i></span>Inicio</a>
+    <a href="MisCursos.html"><span class="nav-icon"><i class="fa-solid fa-book"></i></span>Mis Cursos</a>
+    <a href="Tareas.html"><span class="nav-icon"><i class="fa-solid fa-clipboard-list"></i></span>Tareas</a>
+    <a href="Foros.html"><span class="nav-icon"><i class="fa-solid fa-comments"></i></span>Foros</a>
+    <a href="Mensajes.html"><span class="nav-icon"><i class="fa-solid fa-envelope"></i></span>Mensajes</a>
+    <a href="Asistencia.html"><span class="nav-icon"><i class="fa-solid fa-calendar-check"></i></span>Asistencia</a>
+</nav>
+    <div class="main-layout">
+        <header>
+            <div class="header-logo-title">
+                <h1 class="titulo-blanco"><span class="panel-icon"><i class="fa-solid fa-clipboard-list"></i></span>Tareas</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="notificaciones" title="Notificaciones"><i class="fa-solid fa-bell"></i></div>
+                <div class="perfil">
+                    <i class="fa-solid fa-user"></i> Docente
+                    <div class="submenu">
+                        <p><strong>Nombre:</strong></p>
+                        <p><strong>Rol:</strong> Docente</p>
+                        <button><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="container">
+            <div class="panel">
+                <h2><span class="panel-icon"><i class="fa-solid fa-folder-open"></i></span> Asignar Tarea / Actividad</h2>
+                <label>Título:</label>
+                <input type="text" placeholder="Ej: Crea un videojuego en Scratch">
+                <label>Curso:</label>
+                <select>
+                    <option>Trilogia Básico</option>
+                    <option>Trilogia Avanzado</option>
+                    <option>Python</option>
+                    <option>Scratch</option>
+                    <option>Roblox Studio</option>
+                    <option>Unity</option>
+                </select>
+                <label>Descripción:</label>
+                <textarea rows="3" placeholder="Instrucciones para la actividad..."></textarea>
+                <label>Fecha límite:</label>
+                <input type="date">
+                <button>Asignar Tarea</button>
+            </div>
+        </div>
+    </div>
+<script>
+// Mantener modo oscuro con localStorage
+function setDarkMode(enabled) {
+  if(enabled) {
+    document.body.classList.add('dark-mode');
+    localStorage.setItem('theme', 'dark-mode');
+  } else {
+    document.body.classList.remove('dark-mode');
+    localStorage.setItem('theme', 'light-mode');
+  }
+}
+// Al cargar la página, aplicar preferencia
+(function(){
+  const theme = localStorage.getItem('theme');
+  if(theme === 'dark-mode') {
+    document.body.classList.add('dark-mode');
+    const btn = document.querySelector('.toggle-mode-btn');
+    if(btn) {
+      const icon = btn.querySelector('i');
+      icon.classList.remove('fa-moon');
+      icon.classList.add('fa-sun');
+    }
+  }
+})();
+// Alternar icono luna/sol y modo oscuro
+const btn = document.querySelector('.toggle-mode-btn');
+if(btn) btn.addEventListener('click', function() {
+  const icon = btn.querySelector('i');
+  const isDark = !document.body.classList.contains('dark-mode');
+  setDarkMode(isDark);
+  if(isDark) {
+    icon.classList.remove('fa-moon');
+    icon.classList.add('fa-sun');
+  } else {
+    icon.classList.remove('fa-sun');
+    icon.classList.add('fa-moon');
+  }
+});
+</script>
+</body>
+</html> 
