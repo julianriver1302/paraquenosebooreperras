@@ -1,63 +1,76 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Pago | CodiPlayCo</title>
+
+    <!-- Fuentes -->
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&family=Rubik:wght@400;500;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet"/>
-    <link href="assets/estilosinicio.css" rel="stylesheet"/>
-    <link href="assets/estilosmetodo.css" rel="stylesheet"/>
-    <link href="assets/estilosregistropago.css" rel="stylesheet"/>
+
+    <!-- Estilos -->
+    <link th:href="@{/assets/estilosinicio.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/estilosmetodo.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/estilosregistropago.css}" rel="stylesheet"/>
 </head>
 <body>
+    <!-- Logo -->
     <div class="logo-corner">
-        <a href="index.html">
-            <img src="assets/imag/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png" alt="CodiPlayCo Logo" class="logo-animate h-36 w-auto md:h-48 max-w-[420px]"/>
+        <a th:href="@{/}">
+            <img th:src="@{/assets/imag/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}" 
+                 alt="CodiPlayCo Logo" 
+                 class="logo-animate h-36 w-auto md:h-48 max-w-[420px]"/>
         </a>
     </div>
+
+    <!-- Formulario de registro de pago -->
     <main class="main-form-bg">
         <div class="form" style="position: relative; overflow: hidden;">
+            <!-- Estrellas -->
             <div class="bg-stars">
-                <div class="star"></div>
-                <div class="star"></div>
-                <div class="star"></div>
-                <div class="star"></div>
-                <div class="star"></div>
-                <div class="star"></div>
-                <div class="star"></div>
-                <div class="star"></div>
-                <div class="star"></div>
-                <div class="star"></div>
-                <div class="star"></div>
-                <div class="star"></div>
+                <div class="star"></div><div class="star"></div><div class="star"></div>
+                <div class="star"></div><div class="star"></div><div class="star"></div>
+                <div class="star"></div><div class="star"></div><div class="star"></div>
+                <div class="star"></div><div class="star"></div><div class="star"></div>
             </div>
+
             <div class="form-title"><span></span> Registro de pago</div>
             <div class="title-2"><span>CodiPlayCo</span></div>
-            <form action="" autocomplete="on">
+
+            <!-- Spring Boot Controller se enlaza aquí -->
+            <form th:action="@{/registropago}"  method="post" autocomplete="on">
                 <div class="input-container">
                     <label for="nombre"> Nombre del padre/madre</label>
-                    <input type="text" id="nombre" name="nombre" placeholder="Nombre del padre/madre" required />
+                    <input type="text" id="nombre" placeholder="Nombre del padre/madre" required />
                 </div>
+
                 <div class="input-container">
                     <label for="email"> Correo electrónico</label>
-                    <input type="email" id="email" name="email" placeholder="Correo electrónico" required />
+                    <input type="email" id="email"  placeholder="Correo electrónico" required />
                 </div>
+
                 <div class="input-container">
                     <label for="promocion"> Código Promocional</label>
-                    <input type="text" id="promocion" name="promocion" placeholder="Código Promocional" />
+                    <input type="text" id="promocion"  placeholder="Código Promocional" />
                 </div>
+
                 <div class="input-container">
                     <label for="phone"> Número de teléfono</label>
-                    <input id="phone" type="tel" name="phone" placeholder="Número de teléfono" required />
+                    <input id="phone" type="tel"  placeholder="Número de teléfono" required />
                 </div>
-                <button type="submit" class="submit" id="btn-pago" > Registrar ir al Pago</button>
+
+                <button type="submit" class="submit" id="btn-pago">Registrar ir al Pago</button>
             </form>
-            <p class="signup-link">¿Ya tienes cuenta? <a href="iniciosesion.html" class="up">Inicia sesión aquí</a></p>
+
+            <p class="signup-link">
+                ¿Ya tienes cuenta? 
+                <a th:href="@{/iniciosesion}" class="up">Inicia sesión aquí</a>
+            </p>
         </div>
     </main>
     
-    <!-- Modal de método de pago (nuevo diseño exacto del usuario) -->
+    <!-- Modal de método de pago -->
     <div id="modal-metodo-pago" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.35); justify-content:center; align-items:center;">
       <div style="display:flex; justify-content:center; align-items:center; width:100vw; height:100vh; position:relative;">
         <div class="modal">
@@ -90,17 +103,17 @@
             <div class="credit-card-info--form">
               <div class="input_container">
                 <label for="nombre_titular" class="input_label">Nombre completo del titular</label>
-                <input id="nombre_titular" class="input_field" type="text" name="nombre_titular" title="Nombre completo" placeholder="Ingresa tu nombre completo">
+                <input id="nombre_titular" class="input_field" type="text" name="nombre_titular" placeholder="Ingresa tu nombre completo">
               </div>
               <div class="input_container">
                 <label for="numero_tarjeta" class="input_label">Número de tarjeta</label>
-                <input id="numero_tarjeta" class="input_field" type="number" name="numero_tarjeta" title="Número de tarjeta" placeholder="0000 0000 0000 0000">
+                <input id="numero_tarjeta" class="input_field" type="number" name="numero_tarjeta" placeholder="0000 0000 0000 0000">
               </div>
               <div class="input_container">
                 <label for="fecha_cvv" class="input_label">Fecha de vencimiento / CVV</label>
                 <div class="split">
-                  <input id="fecha_vencimiento" class="input_field" type="text" name="fecha_vencimiento" title="Fecha de vencimiento" placeholder="MM/AA">
-                  <input id="cvv" class="input_field" type="number" name="cvv" title="CVV" placeholder="CVV">
+                  <input id="fecha_vencimiento" class="input_field" type="text" name="fecha_vencimiento" placeholder="MM/AA">
+                  <input id="cvv" class="input_field" type="number" name="cvv" placeholder="CVV">
                 </div>
               </div>
             </div>
@@ -110,7 +123,7 @@
       </div>
     </div>
 
-    <script src="assets/scriptregistropago.js"></script>
-
+    <!-- Script -->
+    <script th:src="@{/assets/scriptregistropago.js}"></script>
 </body>
 </html>

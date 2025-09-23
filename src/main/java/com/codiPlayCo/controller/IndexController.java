@@ -28,4 +28,9 @@ public class IndexController {
 	public String registroclasegratis() {
 		return "registroclasegratis";
 	}
+	
+	@GetMapping("/registropago")
+	public String registropago() {
+		return "registropago";
+	}
 }
