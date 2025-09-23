@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 public class IndexController {
 
-	@GetMapping("/cursos")
-	public String cursos() {
-		return "cursos";
-	}
+	
 
 	@GetMapping("/quienessomos")
 	public String quienessomos() {
