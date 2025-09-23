@@ -47,7 +47,6 @@ public class CursosController {
 		return "InfoCursos/unity"; // templates/InfoCursos/unity.html
 	}
 
-	
 
 	@GetMapping
 	public String listarCursos(Model model) {
