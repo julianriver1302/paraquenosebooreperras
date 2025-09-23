@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class IndexController {
 
 	
-
 	@GetMapping("/quienessomos")
 	public String quienessomos() {
 		return "quienessomos";
