@@ -11,18 +11,15 @@ import com.codiPlayCo.service.ICursoService;
 @RequestMapping("/cursos")
 public class CursosController {
 
-    private final ICursoService ICursoService;
+	private final ICursoService ICursoService;
 
+	CursosController(ICursoService ICursoService) {
+		this.ICursoService = ICursoService;
+	}
 
-    CursosController(ICursoService ICursoService) {
-        this.ICursoService = ICursoService;
-    }
-
-	
-	// ✅ InfoCursos individuales (botón "Ver más")
 	@GetMapping("/InfoCursos/html_java_css")
 	public String cursoHtmlCssJs() {
-		return "InfoCursos/html_java_css"; // templates/InfoCursos/html_java_css.html
+		return "InfoCursos/html_java_css";
 	}
 
 	@GetMapping("/InfoCursos/trilogia02")
@@ -50,15 +47,11 @@ public class CursosController {
 		return "InfoCursos/unity"; // templates/InfoCursos/unity.html
 	}
 
-	@GetMapping("/registropago")
-	public String registropago() {
-		return "/registropago";
-	}
+	
 
-	  
-	  @GetMapping
-	    public String listarCursos(Model model) {
-	        model.addAttribute("cursos", ICursoService.findAll());
-	        return "cursos";
-	    }
+	@GetMapping
+	public String listarCursos(Model model) {
+		model.addAttribute("cursos", ICursoService.findAll());
+		return "cursos";
+	}
 }
