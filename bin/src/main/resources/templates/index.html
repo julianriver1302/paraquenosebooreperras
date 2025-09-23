@@ -10,14 +10,14 @@
 		href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&family=Rubik:wght@400;500;700&family=Quicksand:wght@500;700&display=swap"
 		rel="stylesheet" />
 	<link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet" />
-	<link href="assets/estilosindex.css" rel="stylesheet" />
+	<link th:href="@{/assets/estilosindex.css}" rel="stylesheet" />
 </head>
 
 <body class="bg-gray-900 text-white">
 	<div class="hero min-h-screen flex flex-col">
 		<header id="main-header"
 			class="glass-navbar animate-navbar-slideIn flex justify-between items-center px-8 py-1">
-			<a class="flex items-center gap-2 ml-4" th:href="@{/index}">
+			<a class="flex items-center gap-2 ml-4" th:href="@{/}">
 				<img src="assets/imag/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png" alt="CodiPlayCo Logo"
 					class="logo-animate h-24 w-auto md:h-28 max-w-[320px]" />
 			</a>
@@ -33,17 +33,17 @@
 				<a class="nav-link-glass" th:href="@{/cursos}">
 					<span>Cursos</span>
 				</a>
-				<a class="nav-link-glass" href="quienessomos.html">
+				<a class="nav-link-glass" th:href="@{/quienessomos}">
 					<span>Quienes Somos</span>
 				</a>
-				<a class="nav-link-glass" href="preguntasfrecuentes.html">
+				<a class="nav-link-glass" th:href="@{/preguntasfrecuentes}">
 					<span>Preguntas Frecuentes</span>
 				</a>
 
 			</nav>
 
 			<div class="flex gap-3 items-center">
-				<a class="btn-launch" href="iniciosesion.html">
+				<a class="btn-launch" th:href="@{/iniciosesion}">
 					<span>Iniciar Sesión</span>
 				</a>
 			</div>
@@ -51,13 +51,13 @@
 
 		<!-- Mobile menu -->
 		<div id="mobile-menu" class="mobile-menu">
-			<a class="nav-link-glass" href="cursos.html">
+			<a class="nav-link-glass" th:href="@{/cursos}">
 				<span>Cursos</span>
 			</a>
-			<a class="nav-link-glass" href="quienessomos.html">
+			<a class="nav-link-glass" th:href="@{/quienessomos}">
 				<span>Quienes Somos</span>
 			</a>
-			<a class="nav-link-glass" href="preguntasfrecuentes.html">
+			<a class="nav-link-glass" th:href="@{/preguntasfrecuentes}">
 				<span>Preguntas Frecuentes</span>
 			</a>
 
@@ -72,7 +72,7 @@
 					<p class="text-lg text-gray-300 max-w-md">
 						¡Diviértete programando desde cero!
 					</p>
-					<a class="btn-trade inline-block" href="registroclasegratis.html">
+					<a class="btn-trade inline-block" th:href="@{/registroclasegratis}">
 						<span>Pide Tu Clase Gratis</span>
 					</a>
 				</div>

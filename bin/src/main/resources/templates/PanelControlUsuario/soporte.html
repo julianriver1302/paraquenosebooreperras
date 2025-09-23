@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns: th="http://thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Soporte | CodiplayCo</title>
-  <link rel="stylesheet" href="styleUsuario.css" />
+  <link rel="stylesheet" th:href="@{/assetsPanelUsuaario/styleUsuario.css}" />
 </head>
 <body>
   <div class="container">
     <div class="logo">
-          <a href="inicio.html">
-            <img src="images/unnamed-removebg-preview.PNG" alt="Logo Kodland" />
+          <a th:href="@{/PanelControlUsuario/inicio}">
+            <img th:src="@{/assetsPanelUsuaario/unnamed-removebg-preview.PNG}" alt="Logo Codiplay" />
           </a>
         </div>
 
