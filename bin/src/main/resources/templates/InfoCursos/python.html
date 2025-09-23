@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -7,16 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&family=Rubik:wght@400;500;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet"/>
-    <link href="../assets/estilostrilogia1.css" rel="stylesheet"/>
+    <link th:href="@{/assets/estilostrilogia1.css}" rel="stylesheet"/>
 </head>
 <body class="bg-gray-900 text-white">
     <div class="min-h-screen">
         <header id="main-header" class="glass-navbar flex justify-between items-center px-8 py-1">
-            <a class="flex items-center gap-2 ml-4" href="../index.html">
+            <a class="flex items-center gap-2 ml-4" th:href="@{/../index.html}">
                 <img src="../assets/imag/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png" alt="CodiPlayCo Logo" class="logo-animate h-24 w-auto md:h-28 max-w-[320px]"/>
             </a>
             <div class="flex gap-3 items-center">
-                <a class="btn-launch" href="../cursos.html">
+                <a class="btn-launch" th:href="@{/cursos}">
                     <span class="material-icons" style="font-size:1.3em; vertical-align:middle; margin-right:0.3em;">arrow_back</span>
                     <span>Atrás</span>
                 </a>
@@ -148,7 +148,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <a href="#" class="btn-primary">
+                            <a th:href="@{/registropago}" class="btn-primary">
                                 <span class="material-icons">person_add</span>
                                 Inscribirme ahora
                             </a>
@@ -176,6 +176,6 @@
             </div>
         </footer>
     </div>
-    <script src="../assets/scriptphyton.js"></script>
+    <script th:src="@{/assets/scriptphyton.js}"></script>
 </body>
 </html>

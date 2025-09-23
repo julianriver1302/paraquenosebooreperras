@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -19,7 +19,7 @@
                 <img src="../assets/imag/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png" alt="CodiPlayCo Logo" class="logo-animate h-24 w-auto md:h-28 max-w-[320px]"/>
             </a>
             <div class="flex gap-3 items-center">
-                <a class="btn-launch" href="../cursos.html">
+                <a class="btn-launch" th:href="@{/cursos}">
                     <span class="material-icons" style="font-size:1.3em; vertical-align:middle; margin-right:0.3em;">arrow_back</span>
                     <span>Atrás</span>
                 </a>
@@ -162,7 +162,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <a href="#" class="btn-primary">
+                            <a th:href="@{/registropago}" class="btn-primary">
                                 <span class="material-icons">person_add</span>
                                 Inscribirme ahora
                             </a>
