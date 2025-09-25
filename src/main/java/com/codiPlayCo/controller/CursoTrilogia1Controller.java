@@ -41,6 +41,6 @@ public class CursoTrilogia1Controller {
 
 	@GetMapping("/inicio")
 	public String inicio() {
-		return "redirect:/CursoTrilogia1/index";
+		return "redirect:/PanelControlUsuario/inicio";
 	}
 }
