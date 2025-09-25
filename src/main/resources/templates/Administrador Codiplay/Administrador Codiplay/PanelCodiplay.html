@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Codiplay</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/panel_codiplay.css">
+</head>
+<body>
+  <nav class="sidebar">
+   <body>
+  <nav class="topbar">
+    <img src="images/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png" alt="Logo Codiplay" class="logo">
+  </nav>
+
+    <ul>
+      <li><a href="PanelCodiplay.html">Inicio del Panel</a></li>
+      <li><a href="editar_usuarios.html">Editar Usuarios</a></li>
+      <li><a href="registrar_docentes.html">Registrar Docentes</a></li>
+      <li><a href="proceso_estudiantes.html">Progreso Estudiantes</a></li>
+      <li><a href="crear_curso.html">Crear Curso</a></li>
+      <li><a href="login.html">Cerrar Sesión</a></li>
+    </ul>
+  </nav>
+
+  <div class="main">
+    <header>
+      <h1>Bienvenido Admin</h1>
+    </header>
+    <br>
+
+    <section class="dashboard-section">
+      <div class="card" onclick="location.href ='estudiantes_registrados.html'">
+        <h3>Estudiantes Registrados</h3>
+        <p>58 niños actualmente inscritos.</p>
+      </div>
+      <div class="card" onclick="location.href='progreso_por_curso.html'">
+        <h3>Progreso por Curso</h3>
+        <p>Ver avance individual en HTML, CSS, JS, Roblox y Unity.</p>
+      </div>
+      <div class="card" onclick="location.href='docentes_asociados.html'">
+        <h3>Docente Asociados</h3>
+        <p>5 docentes activoss.</p>
+      </div>
+      <div class="card" onclick="location.href='crear_curso.html'">
+        <h3>Crear Nuevo Curso</h3>
+        <p>Agregar nuevos cursos a la plataforma educativa.</p>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
