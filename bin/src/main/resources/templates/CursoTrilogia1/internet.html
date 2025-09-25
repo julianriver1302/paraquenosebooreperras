@@ -1,41 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>CodiPlayCo</title>
-    <link rel="stylesheet" href="estilo.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<meta charset="UTF-8">
+	<title th:text="'CodiPlayCo'">CodiPlayCo</title>
+	<!-- Usar Thymeleaf para cargar los estilos desde /static -->
+	<link rel="stylesheet" th:href="@{/assetsCursoTrilogia/estilo.css}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
-    
-  <header>
-    <div class="logo-area">
-      <img src="logo letra.PNG" alt="">
-    </div>
-    <div class="logo-text">CodiPlayCo</div>
-    <hr class="header-divider">
-    <nav class="main-menu">
-      <a href="#"><i class="fas fa-home"></i> Inicio</a>
-      <a href="#"><i class="fas fa-hub"></i> Hub </a>
-      <a href="#"><i class="fas fa-trophy"></i> Mis logros</a>
-    </nav>
-    <button id="theme-toggle" class="theme-toggle"><i class="fas fa-moon"></i></button>
-  </header>
-  <main>
-    <h1>¿ Qué es el internet ?</h1>
-    <hr>
-    <div class="image-square-full-container">
-      <button class="image-btn back-btn" onclick="showPrevBubble()">Atrás</button>
-      <div class="image-square-full">
-        <div class="conversation-bubble" id="bubble1">Hola, ¿sabes qué es el internet?</div>
-        <div class="conversation-bubble" id="bubble2" style="display:none;">El internet es una red que conecta computadoras en todo el mundo.</div>
-        <div class="conversation-bubble" id="bubble3" style="display:none;">Gracias al internet, podemos comunicarnos, aprender y compartir información.</div>
-        <div class="conversation-bubble" id="bubble4" style="display:none;">¡Explora y aprende más sobre el internet aquí!</div>
-      </div>
-      <button class="image-btn next-btn" id="nextBtn" onclick="showNextBubble()">Siguiente</button>
-    </div>
-    <script src="script.js"></script>
-  </main>
- 
+
+	<header>
+		<div class="logo-area">
+			<!-- Thymeleaf para cargar imagen desde /static/images -->
+			<img th:src="@{/assetsCursoTrilogia/logo_letra.PNG}" alt="Logo">
+		</div>
+		<div class="logo-text" th:text="'CodiPlayCo'">CodiPlayCo</div>
+		<hr class="header-divider">
+		<nav class="main-menu">
+			<!-- Usar rutas dinámicas -->
+			<a th:href="@{/}"><i class="fas fa-home"></i> Inicio</a>
+			<a th:href="@{/hub}"><i class="fas fa-hub"></i> Hub </a>
+			<a th:href="@{/logros}"><i class="fas fa-trophy"></i> Mis logros</a>
+		</nav>
+		<button id="theme-toggle" class="theme-toggle"><i class="fas fa-moon"></i></button>
+	</header>
+
+	<main>
+		<h1 th:text="'¿ Qué es el internet ?'">¿ Qué es el internet ?</h1>
+		<hr>
+		<div class="image-square-full-container">
+			<button class="image-btn back-btn" type="button" onclick="showPrevBubble()">Atrás</button>
+
+			<div class="image-square-full">
+				<!-- Aquí podrías recorrer una lista de mensajes con th:each si fueran dinámicos -->
+				<div class="conversation-bubble" id="bubble1" th:text="'Hola, ¿sabes qué es el internet?'">Hola, ¿sabes
+					qué es el internet?</div>
+				<div class="conversation-bubble" id="bubble2" style="display:none;"
+					th:text="'El internet es una red que conecta computadoras en todo el mundo.'">El internet es una red
+					que conecta computadoras en todo el mundo.</div>
+				<div class="conversation-bubble" id="bubble3" style="display:none;"
+					th:text="'Gracias al internet, podemos comunicarnos, aprender y compartir información.'">Gracias al
+					internet, podemos comunicarnos, aprender y compartir información.</div>
+				<div class="conversation-bubble" id="bubble4" style="display:none;"
+					th:text="'¡Explora y aprende más sobre el internet aquí!'">¡Explora y aprende más sobre el internet
+					aquí!</div>
+			</div>
+
+			<button class="image-btn next-btn" id="nextBtn" type="button" onclick="showNextBubble()">Siguiente</button>
+		</div>
+
+		<!-- Cargar el JS desde /static con Thymeleaf -->
+		<script th:src="@{/assetsCursoTrilogia/script.js}"></script>
+	</main>
+
 </body>
+
 </html>

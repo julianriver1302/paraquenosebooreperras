@@ -9,6 +9,6 @@ import com.codiPlayCo.model.Curso;
 public interface ICursoRepository extends JpaRepository<Curso, Integer> {
 }
 
-	
+
 
 

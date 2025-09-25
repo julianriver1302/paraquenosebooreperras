@@ -17,9 +17,9 @@ public class CursosController {
 		this.ICursoService = ICursoService;
 	}
 
-	@GetMapping("/InfoCursos/html_java_css")
+	@GetMapping("/html_java_css")
 	public String cursoHtmlCssJs() {
-		return "InfoCursos/html_java_css";
+		return "/html_java_css";
 	}
 
 	@GetMapping("/InfoCursos/trilogia02")
