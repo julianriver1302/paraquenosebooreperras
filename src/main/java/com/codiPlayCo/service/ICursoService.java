@@ -10,6 +10,7 @@ import com.codiPlayCo.model.Curso;
 @Service
 public interface ICursoService {
 
+
 	public Curso save(Curso curso);
 
 	public Optional<Curso> get(Integer id);
