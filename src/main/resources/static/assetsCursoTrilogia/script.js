@@ -9,7 +9,7 @@ function showBubble(n) {
     nextBtn.onclick = showNextBubble;
   } else if (n === 4) {
     nextBtn.textContent = 'Llevar a inicio';
-    nextBtn.onclick = function() { window.location.href = 'index.html'; };
+    nextBtn.onclick = function() { window.location.href = "/CursoTrilogia1/index"; };
   }
 }
 function showNextBubble() {
