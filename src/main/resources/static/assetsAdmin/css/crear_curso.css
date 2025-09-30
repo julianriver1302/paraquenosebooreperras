@@ -186,3 +186,62 @@ h1 {
     width: 100%;
   }
 }
+
+.star-rating {
+    display: flex;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+.star {
+    font-size: 24px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    opacity: 0.3;
+}
+
+.star:hover {
+    opacity: 0.7 !important;
+}
+
+.difficulty-label {
+    margin-top: 5px;
+    font-weight: bold;
+    color: #666;
+
+	/* Contenedor de dificultad */
+	.dificultad {
+	    text-align: center;
+	    margin: 15px 0;
+	}
+
+	/* Contenedor de estrellas */
+	.stars-container {
+	    display: flex;
+	    justify-content: center;
+	    gap: 3px;
+	    margin: 8px 0;
+	}
+
+	/* Estrellas llenas */
+	.star-filled {
+	    color: #FFD700; /* Dorado */
+	    font-size: 20px;
+	    text-shadow: 0 0 3px rgba(255, 215, 0, 0.3);
+	}
+
+	/* Estrellas vacías */
+	.star-empty {
+	    color: #E0E0E0; /* Gris muy claro */
+	    font-size: 20px;
+	    opacity: 0.6;
+	}
+
+	/* Texto del nivel */
+	.difficulty-level {
+	    font-size: 13px;
+	    color: #666;
+	    font-weight: 500;
+	    margin-top: 3px;
+	}
+	}

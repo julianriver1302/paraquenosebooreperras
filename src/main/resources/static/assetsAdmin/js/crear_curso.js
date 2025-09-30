@@ -29,6 +29,36 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+	
+	document.addEventListener('DOMContentLoaded', function() {
+	    const stars = document.querySelectorAll('.star');
+	    const dificultadInput = document.getElementById('dificultad');
+	    const difficultyLabel = document.getElementById('difficultyLabel');
+	    
+	    const difficultyText = {
+	        1: 'Muy fácil',
+	        2: 'Fácil', 
+	        3: 'Intermedio',
+	        4: 'Difícil',
+	        5: 'Muy difícil'
+	    };
+	    
+	    stars.forEach(star => {
+	        star.addEventListener('click', function() {
+	            const rating = parseInt(this.getAttribute('data-rating'));
+	            dificultadInput.value = rating;
+	            difficultyLabel.textContent = difficultyText[rating];
+	            
+	            stars.forEach(s => {
+	                s.style.opacity = parseInt(s.getAttribute('data-rating')) <= rating ? '1' : '0.3';
+	            });
+	        });
+	    });
+	    
+	    // Establecer valor por defecto
+	    dificultadInput.value = 1;
+	    difficultyLabel.textContent = difficultyText[1];
+	});
 });
 
 // Función para inicializar el sistema de estrellas
@@ -155,3 +185,119 @@ function getDocenteName(docenteValue) {
     
     return docentes[docenteValue] || docenteValue;
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('.star');
+    const dificultadInput = document.getElementById('dificultad');
+    const difficultyLabel = document.getElementById('difficultyLabel');
+    
+    const difficultyText = {
+        1: 'Muy fácil',
+        2: 'Fácil', 
+        3: 'Intermedio',
+        4: 'Difícil',
+        5: 'Muy difícil'
+    };
+    
+    // Inicializar estrellas
+    function initializeStars() {
+        stars.forEach(star => {
+            star.style.cursor = 'pointer';
+            star.style.opacity = '0.3';
+        });
+        
+        // Establecer valor por defecto (1 estrella)
+        if (dificultadInput.value === '' || dificultadInput.value === '0') {
+            dificultadInput.value = 1;
+            difficultyLabel.textContent = difficultyText[1];
+            stars[0].style.opacity = '1';
+        } else {
+            // Si ya hay un valor, mostrar las estrellas correspondientes
+            const currentRating = parseInt(dificultadInput.value);
+            stars.forEach(star => {
+                const starRating = parseInt(star.getAttribute('data-rating'));
+                star.style.opacity = starRating <= currentRating ? '1' : '0.3';
+            });
+            difficultyLabel.textContent = difficultyText[currentRating] || 'Selecciona la dificultad';
+        }
+    }
+    
+    // Event listeners para las estrellas
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const rating = parseInt(this.getAttribute('data-rating'));
+            dificultadInput.value = rating;
+            difficultyLabel.textContent = difficultyText[rating];
+            
+            // Actualizar apariencia de las estrellas
+            stars.forEach(s => {
+                const starRating = parseInt(s.getAttribute('data-rating'));
+                s.style.opacity = starRating <= rating ? '1' : '0.3';
+            });
+        });
+        
+        // Efecto hover opcional
+        star.addEventListener('mouseover', function() {
+            const rating = parseInt(this.getAttribute('data-rating'));
+            stars.forEach(s => {
+                const starRating = parseInt(s.getAttribute('data-rating'));
+                s.style.opacity = starRating <= rating ? '0.7' : '0.3';
+            });
+        });
+        
+        star.addEventListener('mouseout', function() {
+            const currentRating = parseInt(dificultadInput.value);
+            stars.forEach(s => {
+                const starRating = parseInt(s.getAttribute('data-rating'));
+                s.style.opacity = starRating <= currentRating ? '1' : '0.3';
+            });
+        });
+    });
+    
+    // Inicializar al cargar la página
+    initializeStars();
+	document.addEventListener('DOMContentLoaded', function() {
+	    const stars = document.querySelectorAll('.star');
+	    const dificultadInput = document.getElementById('dificultad');
+	    const difficultyLabel = document.getElementById('difficultyLabel');
+	    
+	    const difficultyText = {
+	        1: 'Muy fácil',
+	        2: 'Fácil', 
+	        3: 'Intermedio',
+	        4: 'Difícil',
+	        5: 'Muy difícil'
+	    };
+	    
+	    // Inicializar estrellas
+	    function initializeStars() {
+	        stars.forEach(star => {
+	            star.style.cursor = 'pointer';
+	            star.addEventListener('click', function() {
+	                const rating = parseInt(this.getAttribute('data-rating'));
+	                dificultadInput.value = rating;
+	                difficultyLabel.textContent = difficultyText[rating];
+	                
+	                // Actualizar apariencia de las estrellas
+	                stars.forEach(s => {
+	                    const starRating = parseInt(s.getAttribute('data-rating'));
+	                    s.style.opacity = starRating <= rating ? '1' : '0.3';
+	                });
+	            });
+	        });
+	        
+	        // Establecer valor actual si existe
+	        if (dificultadInput.value) {
+	            const currentRating = parseInt(dificultadInput.value);
+	            difficultyLabel.textContent = difficultyText[currentRating] || 'Selecciona la dificultad';
+	        } else {
+	            // Valor por defecto para crear curso
+	            dificultadInput.value = 1;
+	            difficultyLabel.textContent = difficultyText[1];
+	            stars[0].style.opacity = '1';
+	        }
+	    }
+	    
+	    initializeStars();
+	});
+});

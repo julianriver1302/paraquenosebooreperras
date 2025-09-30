@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Curso</title>
+  <link rel="stylesheet" th:href="@{/assetsAdmin/css/crear_curso.css}">
+</head>
+<body>
+  <div class="container">
+    <h1>Editar Curso</h1>
+    
+    <form class="course-form" th:action="@{/PanelCodiplay/Admin/actualizar_curso/{id}(id=${curso.id})}" method="post">
+      
+      <div class="form-group">
+        <label for="curso">Nombre del Curso:</label>
+        <input type="text" id="curso" name="curso" th:value="${curso.curso}" 
+               placeholder="Ej: HTML para Principiantes" required>
+      </div>
+
+      <div class="form-group">
+        <label for="dirigido">Dirigido a:</label>
+        <input type="text" id="dirigido" name="dirigido" th:value="${curso.dirigido}" 
+               placeholder="Ej: Niños de 8-12 años" required>
+      </div>
+
+      <div class="form-group">
+        <label for="docente">Docente Asignado:</label>
+        <select id="docente" name="docente" required>
+          <option value="">Seleccionar docente...</option>
+          <option value="camila-rios" th:selected="${curso.asignacionDocente == 'camila-rios'}">Camila Ríos</option>
+          <option value="luis-ortega" th:selected="${curso.asignacionDocente == 'luis-ortega'}">Luis Ortega</option>
+          <option value="daniela-torres" th:selected="${curso.asignacionDocente == 'daniela-torres'}">Daniela Torres</option>
+          <option value="carlos-mendez" th:selected="${curso.asignacionDocente == 'carlos-mendez'}">Carlos Méndez</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion" rows="4"
+                  placeholder="Describe el contenido y objetivos..." 
+                  th:text="${curso.descripcion}" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="dificultad">Dificultad:</label>
+        <div class="star-rating" id="starRating">
+          <span class="star" data-rating="1" th:style="${curso.dificultad >= 1} ? 'opacity: 1' : 'opacity: 0.3'">⭐</span>
+          <span class="star" data-rating="2" th:style="${curso.dificultad >= 2} ? 'opacity: 1' : 'opacity: 0.3'">⭐</span>
+          <span class="star" data-rating="3" th:style="${curso.dificultad >= 3} ? 'opacity: 1' : 'opacity: 0.3'">⭐</span>
+          <span class="star" data-rating="4" th:style="${curso.dificultad >= 4} ? 'opacity: 1' : 'opacity: 0.3'">⭐</span>
+          <span class="star" data-rating="5" th:style="${curso.dificultad >= 5} ? 'opacity: 1' : 'opacity: 0.3'">⭐</span>
+        </div>
+        <input type="hidden" id="dificultad" name="dificultad" th:value="${curso.dificultad}" required>
+        <div class="difficulty-label" id="difficultyLabel">
+          <span th:switch="${curso.dificultad}">
+            <span th:case="1">Muy fácil</span>
+            <span th:case="2">Fácil</span>
+            <span th:case="3">Intermedio</span>
+            <span th:case="4">Difícil</span>
+            <span th:case="5">Muy difícil</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="precio">Precio</label>
+        <input type="number" id="precio" name="precio" step="0.01" 
+               th:value="${curso.precio}" placeholder="0.00" required>
+      </div>
+
+      <div class="form-group">
+        <label for="estado">Estado del Curso:</label>
+        <select id="estado" name="estado" required>
+          <option value="Activo" th:selected="${curso.estado == 'Activo'}">Activo</option>
+          <option value="Inactivo" th:selected="${curso.estado == 'Inactivo'}">Inactivo</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-crear">Actualizar Curso</button>
+        <button type="button" class="btn-cancelar" onclick="window.history.back()">Cancelar</button>
+      </div>
+    </form>
+
+    <a th:href="@{/PanelCodiplay/Admin/lista_cursos}" class="back-link">← Volver a la lista de cursos</a>
+  </div>
+
+  <script th:src="@{/assetsAdmin/js/crear_curso.js}"></script>
+</body>
+</html>

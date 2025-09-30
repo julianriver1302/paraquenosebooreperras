@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Codiplay</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/panel_codiplay.css">
+  <link rel="stylesheet" th:href="@{/assetsAdmin/css/panel_codiplay.css}">
 </head>
 <body>
   <nav class="sidebar">
    <body>
   <nav class="topbar">
-    <img src="images/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png" alt="Logo Codiplay" class="logo">
+    <img th:src="@{/assetsAdmin/images/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}" alt="Logo Codiplay" class="logo">
   </nav>
 
     <ul>
-      <li><a href="PanelCodiplay.html">Inicio del Panel</a></li>
-      <li><a href="editar_usuarios.html">Editar Usuarios</a></li>
-      <li><a href="registrar_docentes.html">Registrar Docentes</a></li>
-      <li><a href="proceso_estudiantes.html">Progreso Estudiantes</a></li>
-      <li><a href="crear_curso.html">Crear Curso</a></li>
+      <li><a th:href="@{/PanelCodiplay}">Inicio del Panel</a></li>
+      <li><a th:href="@{/PanelCodiplay/Admin/editar_usuarios}">Editar Usuarios</a></li>
+      <li><a th:href="@{/PanelCodiplay/Admin/registrar_docentes}">Registrar Docentes</a></li>
+      <li><a th:href="@{/PanelCodiplay/Admin/proceso_estudiantes}">Progreso Estudiantes</a></li>
+      <li><a th:href="@{/PanelCodiplay/Admin/crear_curso}">Crear Curso</a></li>
+	  <li><a th:href="@{/PanelCodiplay/Admin/listar_cursos}">Lista de cursos</a></li>
       <li><a href="login.html">Cerrar Sesión</a></li>
     </ul>
   </nav>
