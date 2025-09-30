@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Progreso Estudiantes</title>
-  <link rel="stylesheet" href="css/proceso_estudiantes.css">
-  <script src="css/proceso_estudiantes.js"></script>
+  <link rel="stylesheet" th:href="@{/assetsAdmin/css/proceso_estudiantes.css}">
+  <script th:src="@{/assetsAdmin/js/proceso_estudiantes.js}"></script>
 </head>
 <body>
   <h1>Progreso de Estudiantes</h1>
@@ -33,6 +33,6 @@
     <div class="label">Curso: Unity - 50% completado</div>
   </div>
 
-  <a href="PanelCodiplay.html">← Volver al panel</a>
+  <a th:href="@{/PanelCodiplay}">← Volver al panel</a>
 </body>
 </html>
