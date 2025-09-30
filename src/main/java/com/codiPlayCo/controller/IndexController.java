@@ -37,11 +37,6 @@ public class IndexController {
 		return "iniciosesion";
 	}
 
-	@GetMapping("/registroclasegratis")
-	public String registroclasegratis() {
-		return "registroclasegratis";
-	}
-
 	@GetMapping("/registropago")
 	public String registropago() {
 		return "registropago";
@@ -76,20 +71,24 @@ public class IndexController {
 
 			// Redirecciones según rol
 			if (user.getRol().getId() == 1) {
-				return "redirect:/admin/PanelCodiplay";
+				return "redirect:/AdministradorCodiplay/PanelCodiplay";
 			} else if (user.getRol().getId() == 2) {
 				return "redirect:/InterfazDocente/paneldocente";
 			} else if (user.getRol().getId() == 3) {
 				return "redirect:/PanelControlUsuario/inicio";
 			} else {
 				LOGGER.warn("Rol no reconocido para usuario {}", user.getEmail());
-				return "redirect:/login?error";
+				return "redirect:/iniciosesion?error";
 			}
 
 		} else {
 			LOGGER.warn("Usuario no existe en DB con email {}", usuario.getEmail());
-			return "redirect:/login?error";
+			return "redirect:/iniciosesion?error";
 		}
 	}
 
+	@GetMapping("/login")
+	public String login() {
+		return "iniciosesion"; // tu archivo HTML/Thymeleaf con el formulario
+	}
 }
