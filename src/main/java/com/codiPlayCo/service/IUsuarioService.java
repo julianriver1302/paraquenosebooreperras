@@ -2,24 +2,15 @@ package com.codiPlayCo.service;
 
 import java.util.List;
 import java.util.Optional;
-
 import com.codiPlayCo.model.Usuario;
 
 public interface IUsuarioService {
-
-public Usuario save(Usuario usuario);
-	
-	public Optional<Usuario> get (Integer id);
-	
-	public void update(Usuario usuario);
-	
-	public void delete(Integer id);
-	
-	public Optional<Usuario> findbyId(Integer id);
-	
-	public Optional<Usuario> findbyEmail(String email);
-	
-	List<Usuario> findALL();
-	
-	
+    List<Usuario> findAll();
+    Usuario save(Usuario usuario);
+    void delete(Integer id);
+    Optional<Usuario> findById(Integer id);
+    Optional<Usuario> findByEmail(String email);
+    boolean existsByEmail(String email);
+    List<Usuario> findByRol(String rolNombre);
+    List<Usuario> findDocentesActivos();
 }

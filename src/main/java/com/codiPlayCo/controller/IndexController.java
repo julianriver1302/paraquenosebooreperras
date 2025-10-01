@@ -53,7 +53,7 @@ public class IndexController {
 		String emailNormalizado = usuario.getEmail().toLowerCase();
 
 		// Buscar por email ignorando mayúsculas/minúsculas
-		Optional<Usuario> userEmail = usuarioService.findbyEmail(emailNormalizado);
+		Optional<Usuario> userEmail = usuarioService.findByEmail(emailNormalizado);
 
 		if (userEmail.isPresent()) {
 			Usuario user = userEmail.get();

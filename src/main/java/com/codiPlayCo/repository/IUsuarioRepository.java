@@ -1,16 +1,21 @@
 package com.codiPlayCo.repository;
 
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
+import org.springframework.stereotype.Repository;
 import com.codiPlayCo.model.Usuario;
 
-public interface IUsuarioRepository extends JpaRepository<Usuario, Integer> {
-	Optional<Usuario> findByEmail(String email);
+import java.util.List;
+import java.util.Optional;
 
-	@Query("SELECT u FROM Usuario u WHERE LOWER(u.email) = LOWER(:email)")
-	Optional<Usuario> findByEmailIgnoreCase(@Param("email") String email);
-//metodo para comparar sin importar mayusculas o minusculas
+@Repository
+public interface IUsuarioRepository extends JpaRepository<Usuario, Integer> {
+    
+    // Solo métodos básicos que sabemos que funcionan
+    Optional<Usuario> findByEmail(String email);
+    boolean existsByEmail(String email);
+    
+    @Query("SELECT u FROM Usuario u JOIN u.rol r WHERE r.nombre = :rolNombre")
+    List<Usuario> findByRolNombre(@Param("rolNombre") String rolNombre);
 }

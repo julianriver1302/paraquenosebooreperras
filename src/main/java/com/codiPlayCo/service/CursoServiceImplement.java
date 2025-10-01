@@ -37,4 +37,10 @@ public class CursoServiceImplement implements ICursoService {
     public Optional<Curso> get(Integer id) {
         return cursoRepository.findById(id);
     }
-}
+ 
+    @Override
+    public List<Curso> findCursosActivos() {
+        return cursoRepository.findAll(); // Por ahora retorna todos
+    }
+    }
+

@@ -1,50 +1,99 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Registro de Docentes</title>
-  <link rel="stylesheet" th:href="@{/assetsAdmin/css/registrar_docentes.css}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Registro de Docentes</title>
+	<link rel="stylesheet" th:href="@{/assetsAdmin/css/registrar_docentes.css}">
 </head>
+
 <body>
-<button th:onclick="window.history.back()" class="btn-volver">← Volver</button>
+	<button th:onclick="window.history.back()" class="btn-volver">← Volver</button>
 
-  <div class="registro-container">
-    <h2>Registro de Docentes</h2>
-    <form>
-      <div class="form-group">
-        <label for="nombre">Nombre completo</label>
-        <input type="text" id="nombre" name="nombre" placeholder="Ej: Carlos Pérez" required>
-      </div>
-      <div class="form-group">
-        <label for="email">Correo electrónico</label>
-        <input type="email" id="email" name="email" placeholder="Ej: docente@email.com" required>
-      </div>
-      <div class="form-group">
-        <label for="telefono">Teléfono</label>
-        <input type="tel" id="telefono" name="telefono" placeholder="Ej: 3001234567" required>
-      </div>
-      <div class="form-group">
-  <label for="temas">Selecciona el Lenguaje Al Cual Se Expecializa</label>
-  <select id="temas" name="temas[]" multiple required>
-    <option value="python">Python</option>
-    <option value="javascript">JavaScript</option>
-    <option value="html">HTML</option>
-    <option value="css">CSS</option>
-    <option value="scratch">Roblox</option>
-    <option value="robotica">Unity</option>
-  </select>
-  <small>Pulsa Ctrl (o Cmd en Mac) para seleccionar varias opciones</small>
-</div>
+	<div class="registro-container">
+		<h2>Registro de Docentes</h2>
 
+		<div th:if="${successMessage}" class="alert alert-success">
+			✅ <span th:text="${successMessage}"></span>
+		</div>
+		<div th:if="${errorMessage}" class="alert alert-error">
+			❌ <span th:text="${errorMessage}"></span>
+		</div>
 
-      <div class="form-group">
-        <label for="password">Contraseña</label>
-        <input type="password" id="password" name="password" placeholder="Mínimo 6 caracteres" required>
-      </div>
-      <button type="submit" class="btn-registrar">Registrar</button>
-    </form>
-  </div>
+		<form th:action="@{/PanelCodiplay/Admin/guardar_docente}" method="post" th:object="${usuario}">
+			<div class="form-group">
+				<label for="nombre">Nombres</label>
+				<input type="text" id="nombre" name="nombre" placeholder="Ej: Carlos Pérez" required>
+			</div>
 
+			<div class="form-group">
+				<label for="apellido">Apellidos</label>
+				<input type="text" id="apellido" name="apellido" placeholder="Ej: Pérez" required>
+			</div>
+
+			<div class="form-group">
+				<label for="tipoDocumento">Tipo de Documento *</label>
+				<select id="tipoDocumento" name="tipoDocumento" required>
+					<option value="">Seleccionar tipo de documento...</option>
+					<option value="Cédula de Ciudadanía">Cédula de Ciudadanía</option>
+					<option value="Cédula de Extranjería">Cédula de Extranjería</option>
+					<option value="Tarjeta de Identidad">Tarjeta de Identidad</option>
+					<option value="Pasaporte">Pasaporte</option>
+					<option value="Documento Nacional de Identidad">Documento Nacional de Identidad</option>
+					<option value="Registro Civil">Registro Civil</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="documento">Número de Documento</label>
+				<input type="text" id="documento" name="documento" placeholder="Ej: 123456789" required>
+			</div>
+
+			<div class="form-group">
+				<label for="celular">Celular</label>
+				<input type="tel" id="celular" name="celular" placeholder="Ej: 3001234567" required>
+			</div>
+
+			<div class="form-group">
+				<label for="email">Correo electrónico</label>
+				<input type="email" id="email" name="email" placeholder="Ej: docente@email.com" required>
+			</div>
+
+			<div class="form-group">
+				<label for="cursos">Selecciona el Lenguaje Al Cual Se Especializa</label>
+
+				<!-- Información de cursos disponibles -->
+				<div th:if="${not #lists.isEmpty(cursosActivos)}" class="cursos-info">
+					📚 <strong th:text="${#lists.size(cursosActivos)}"> </strong> cursos disponibles
+				</div>
+
+				<div th:if="${#lists.isEmpty(cursosActivos)}" class="no-cursos">
+					⚠️ No hay cursos disponibles. Primero crea algunos cursos en la plataforma.
+				</div>
+
+				<!-- Select de cursos - CORREGIDO -->
+				<select id="cursos" name="cursosSeleccionados" multiple th:disabled="${#lists.isEmpty(cursosActivos)}"
+					th:classappend="${#lists.isEmpty(cursosActivos)} ? 'disabled-select' : ''">
+					<option th:each="curso : ${cursosActivos}" th:value="${curso.id}" th:text="${curso.curso} ">
+					</option>
+				</select>
+				<small>Pulsa Ctrl (o Cmd en Mac) para seleccionar varias opciones</small>
+			</div>
+
+			<div class="form-group">
+				<label for="password">Contraseña</label>
+				<input type="password" id="password" name="password" placeholder="Mínimo 6 caracteres" required>
+			</div>
+
+			<button type="submit" class="btn-registrar"
+				th:classappend="${#lists.isEmpty(cursosActivos)} ? 'btn-disabled' : ''"
+				th:disabled="${#lists.isEmpty(cursosActivos)}">
+				Registrar Docente
+			</button>
+		</form>
+	</div>
+	<script th:src="@{/assetsAdmin/js/registrar_docentes.js}"></script>
 </body>
+
 </html>
