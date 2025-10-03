@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/InterfazDocente/paneldocente")
+@RequestMapping("/InterfazDocente")
 public class DocenteController {
 
-    @GetMapping
+    @GetMapping ("/paneldocente")
     public String panel() {
         return "InterfazDocente/paneldocente";
     }

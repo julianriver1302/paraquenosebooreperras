@@ -21,7 +21,7 @@
       <li><a th:href="@{/PanelCodiplay/Admin/proceso_estudiantes}">Progreso Estudiantes</a></li>
       <li><a th:href="@{/PanelCodiplay/Admin/crear_curso}">Crear Curso</a></li>
 	  <li><a th:href="@{/PanelCodiplay/Admin/listar_cursos}">Lista de cursos</a></li>
-      <li><a href="login.html">Cerrar Sesión</a></li>
+      <li><a th:href="@{/logout}">Cerrar Sesión</a></li>
     </ul>
   </nav>
 
@@ -34,7 +34,7 @@
     <section class="dashboard-section">
       <div class="card" onclick="location.href ='estudiantes_registrados.html'">
         <h3>Estudiantes Registrados</h3>
-        <p>58 niños actualmente inscritos.</p>
+        <p><span th:text="${totalEstudiantes}">58</span> niños actualmente inscritos.</p>
       </div>
       <div class="card" onclick="location.href='progreso_por_curso.html'">
         <h3>Progreso por Curso</h3>

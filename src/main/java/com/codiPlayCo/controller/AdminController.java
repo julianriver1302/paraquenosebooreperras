@@ -33,6 +33,28 @@ public class AdminController {
 		this.rolService = rolService;
 		this.rolRepository = rolRepository;
 	}
+	
+	@GetMapping("/PanelCodiplay")
+	public String panelPrincipal(Model model) {
+		try {
+			// Contar usuarios con rol ID 3 (estudiantes)
+			List<Usuario> todosUsuarios = usuarioServiceImplement.findAll();
+			System.out.println("Total usuarios encontrados: " + todosUsuarios.size());
+			
+			long totalEstudiantes = todosUsuarios.stream()
+				.filter(usuario -> usuario.getRol() != null && usuario.getRol().getId() == 3)
+				.count();
+				
+			System.out.println("Total estudiantes (rol ID 3): " + totalEstudiantes);
+			model.addAttribute("totalEstudiantes", totalEstudiantes);
+		} catch (Exception e) {
+			System.err.println("Error al contar estudiantes: " + e.getMessage());
+			e.printStackTrace();
+			// En caso de error, usar valor por defecto
+			model.addAttribute("totalEstudiantes", 58);
+		}
+		return "Admin/PanelCodiplay";
+	}
 
 	// ========== MÉTODOS PARA CURSOS ==========
 

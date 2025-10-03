@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title></title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap">
-    <link rel="stylesheet" href="stylespanel.css">
+    <link rel="stylesheet" th:href="@{/assetsDocente/stylespanel.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
 </head>
 <body>
 <nav>
     <div class="nav-logo">
-        <img src="img/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png" alt="CodiPlayCo Logo" />
+        <img th:src="@{/assetsDocente/img/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}" alt="CodiPlayCo Logo" />
     </div>
     <button class="toggle-mode-btn" title="Cambiar modo" style="margin:0 auto 0.5rem auto; display:block; background:#fff2; border:none; color:#fff; font-size:1.7rem; border-radius:50%; width:44px; height:44px; box-shadow:0 2px 8px #0002; cursor:pointer; transition:background 0.2s, color 0.2s; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-moon"></i></button>
     <a href="paneldocente.html"><span class="nav-icon"><i class="fa-solid fa-house"></i></span>Inicio</a>
