@@ -57,14 +57,14 @@ public class AdminController {
 
 	@PostMapping("/Admin/guardar_curso")
 	public String guardarCurso(@RequestParam("curso") String nombreCurso, @RequestParam("dirigido") String dirigido,
-			@RequestParam("docente") String docente, @RequestParam("descripcion") String descripcion,
+			@RequestParam("asignacionDocente") String asignacionDocente, @RequestParam("descripcion") String descripcion,
 			@RequestParam("dificultad") Integer dificultad, @RequestParam("precio") Double precio) {
 
 		try {
 			Curso curso = new Curso();
 			curso.setCurso(nombreCurso);
 			curso.setDirigido(dirigido);
-			curso.setAsignacionDocente(docente);
+			curso.setAsignacionDocente(asignacionDocente);
 			curso.setDescripcion(descripcion);
 			curso.setDificultad(dificultad != null ? dificultad : 1);
 			curso.setPrecio(precio != null ? precio : 0.0);

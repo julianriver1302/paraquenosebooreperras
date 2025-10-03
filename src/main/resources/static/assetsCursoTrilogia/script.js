@@ -131,3 +131,15 @@ function guardarDibujo() {
     <p>Haz clic derecho sobre la imagen y selecciona "Guardar imagen como..." 📥</p>
   `;
 }
+/*  GUARDADO de imagen  */
+function guardarCanvas() {
+    const dataURL = canvas.toDataURL("image/png"); // Convertir el canvas a imagen PNG
+
+
+
+    // 1. Descargar la imagen automáticamente
+    const link = document.createElement("a");
+    link.href = dataURL;
+    link.download = "mi_dibujo.png"; // nombre del archivo
+    link.click();
+}

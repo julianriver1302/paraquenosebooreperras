@@ -60,26 +60,7 @@
 				<input type="email" id="email" name="email" placeholder="Ej: docente@email.com" required>
 			</div>
 
-			<div class="form-group">
-				<label for="cursos">Selecciona el Lenguaje Al Cual Se Especializa</label>
-
-				<!-- Información de cursos disponibles -->
-				<div th:if="${not #lists.isEmpty(cursosActivos)}" class="cursos-info">
-					📚 <strong th:text="${#lists.size(cursosActivos)}"> </strong> cursos disponibles
-				</div>
-
-				<div th:if="${#lists.isEmpty(cursosActivos)}" class="no-cursos">
-					⚠️ No hay cursos disponibles. Primero crea algunos cursos en la plataforma.
-				</div>
-
-				<!-- Select de cursos - CORREGIDO -->
-				<select id="cursos" name="cursosSeleccionados" multiple th:disabled="${#lists.isEmpty(cursosActivos)}"
-					th:classappend="${#lists.isEmpty(cursosActivos)} ? 'disabled-select' : ''">
-					<option th:each="curso : ${cursosActivos}" th:value="${curso.id}" th:text="${curso.curso} ">
-					</option>
-				</select>
-				<small>Pulsa Ctrl (o Cmd en Mac) para seleccionar varias opciones</small>
-			</div>
+			
 
 			<div class="form-group">
 				<label for="password">Contraseña</label>
