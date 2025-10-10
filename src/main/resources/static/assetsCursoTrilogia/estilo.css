@@ -255,51 +255,6 @@
       color: #ffe082;
     }
 
-    /* Modo oscuro */
-    .dark-theme body,
-    .dark-theme header {
-      background: #181c24 !important;
-      color: #f5f7fa !important;
-    }
-    .dark-theme main {
-      background: linear-gradient(135deg, #232526 0%, #414345 100%);
-      color: #f5f7fa;
-      box-shadow: 0 8px 32px 0 rgba(0,0,0,0.35);
-    }
-    .dark-theme .card {
-      background: rgba(34, 40, 49, 0.93);
-      border-color: #232526;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.33);
-    }
-    .dark-theme .card-content h2,
-    .dark-theme .card-content p {
-      color: #f5f7fa;
-      text-shadow: 0 2px 8px #0008;
-    }
-    .dark-theme .main-menu a {
-      background: #232526;
-      color: #f5f7fa;
-    }
-    .dark-theme .main-menu a:hover {
-      background: #414345;
-      color: #ffe082;
-    }
-    .dark-theme .theme-toggle {
-      background: linear-gradient(90deg, #232526 0%, #414345 100%);
-      color: #ffe082;
-    }
-    .dark-theme hr {
-      border-top: 2px solid #f5f7fa60;
-    }
-    .dark-theme h1, .dark-theme h2, .dark-theme p {
-      color: #f5f7fa;
-    }
-    .dark-theme .card-background::after {
-      background: rgba(0,0,0,0.45);
-    }
-    .dark-theme .card-background {
-      filter: brightness(0.85) saturate(1.1);
-    }
 
 /* Imagen flotante creativa en main de internet.html */
 .main-content-with-logo {

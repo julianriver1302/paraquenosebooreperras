@@ -264,4 +264,6 @@ public class AdminController {
 	public String proceso_estudiantes() {
 		return "Admin/proceso_estudiantes";
 	}
+	
+	
 }
