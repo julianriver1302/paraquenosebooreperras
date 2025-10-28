@@ -133,12 +133,22 @@ public class PanelControlUsuarioController {
 	}
 
 	@GetMapping("/PanelControlUsuario/mis_cursos")
-	public String mis_cursos() {
+	public String misCursos(Model model, HttpSession session) {
+		Object usuario = session.getAttribute("usuario");
+		if (usuario == null) {
+			return "PanelControlUsuario/mis_cursos";
+		}
+		model.addAttribute("usuario", usuario);
 		return "PanelControlUsuario/mis_cursos";
 	}
 
 	@GetMapping("/PanelControlUsuario/mis_logros")
-	public String mis_logros() {
+	public String misLogros(Model model, HttpSession session) {
+		Object usuario = session.getAttribute("usuario");
+		if (usuario == null) {
+			return "/PanelControlUsuario/mis_logros";
+		}
+		model.addAttribute("usuario", usuario);
 		return "PanelControlUsuario/mis_logros";
 	}
 
@@ -166,7 +176,7 @@ public class PanelControlUsuarioController {
 	public String soporte() {
 		return "PanelControlUsuario/soporte";
 	}
-	
+
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		// Invalidar la sesión
