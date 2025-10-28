@@ -48,7 +48,7 @@ public class UsuarioServiceImplement implements IUsuarioService {
         List<Usuario> todos = usuarioRepository.findAll();
         return todos.stream()
                 .filter(usuario -> usuario.getRol() != null)
-                .filter(usuario -> rolNombre.equals(usuario.getRol().getNombre()))
+                .filter(usuario -> rolNombre.equalsIgnoreCase(usuario.getRol().getNombre()))
                 .toList();
     }
 

@@ -45,20 +45,20 @@ public class PanelControlUsuarioController {
 
 	@GetMapping("/PanelControlUsuario/editar-perfil")
 	public String editarPerfil(HttpSession session, Model model) {
-		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+	    Integer idUsuario = (Integer) session.getAttribute("idUsuario");
 
-		Usuario usuario = new Usuario(); // 👈 crea un objeto vacío por defecto
+	    Usuario usuario = new Usuario(); // 👈 crea un objeto vacío por defecto
 
-		if (idUsuario != null) {
-			Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
-			if (usuarioOpt.isPresent()) {
-				usuario = usuarioOpt.get(); // si lo encuentra, lo usa
-			}
-		}
+	    if (idUsuario != null) {
+	        Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
+	        if (usuarioOpt.isPresent()) {
+	            usuario = usuarioOpt.get(); // si lo encuentra, lo usa
+	        }
+	    }
 
-		model.addAttribute("usuario", usuario); // 👈 siempre agrega el objeto
+	    model.addAttribute("usuario", usuario); // 👈 siempre agrega el objeto
 
-		return "PanelControlUsuario/editar-perfil";
+	    return "PanelControlUsuario/editar-perfil";
 	}
 
 	@PostMapping("/PanelControlUsuario/editar-perfil")

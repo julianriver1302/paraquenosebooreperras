@@ -1,26 +1,213 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Editar Usuarios</title>
-  <link rel="stylesheet" th:href="@{/assetsAdmin/css/editar_usuarios.css}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestionar Usuarios - CodiPlayCo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" th:href="@{/assetsAdmin/css/panel_codiplay.css}">
+  <link th:href="@{/assets/loader.css}" rel="stylesheet" />
 </head>
 <body>
-  <h1>Editar Usuarios</h1>
-  <div class="user-list">
-    <div class="user-item">
-      <span>Juan Pérez - Estudiante</span>
-      <button onclick="alert('Editar Juan Pérez')">Editar</button>
-    </div>
-    <div class="user-item">
-      <span>Ana Gómez - Estudiante</span>
-      <button onclick="alert('Editar Ana Gómez')">Editar</button>
-    </div>
-    <div class="user-item">
-      <span>Laura Méndez - Padre</span>
-      <button onclick="alert('Editar Laura Méndez')">Editar</button>
-    </div>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-container">
+          <img th:src="@{/assetsAdmin/images/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}" alt="CodiPlayCo Logo" class="logo">
+          <h2 class="brand-title">CodiPlayCo</h2>
+        </div>
+      </div>
+      
+      <div class="sidebar-content">
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay}" class="nav-link">
+              <i class="fas fa-home"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a th:href="@{/PanelCodiplay/Admin/editar_usuarios}" class="nav-link">
+              <i class="fas fa-users-cog"></i>
+              <span>Gestionar Usuarios</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/registrar_docentes}" class="nav-link">
+              <i class="fas fa-chalkboard-teacher"></i>
+              <span>Registrar Docentes</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/proceso_estudiantes}" class="nav-link">
+              <i class="fas fa-chart-line"></i>
+              <span>Progreso Estudiantes</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/crear_curso}" class="nav-link">
+              <i class="fas fa-plus-circle"></i>
+              <span>Crear Curso</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/listar_cursos}" class="nav-link">
+              <i class="fas fa-list"></i>
+              <span>Cursos Disponibles</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="sidebar-footer">
+        <a th:href="@{/logout}" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Cerrar Sesión</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="main-header">
+        <div class="header-content">
+          <div class="page-info">
+            <button th:onclick="window.history.back()" class="btn-back">
+              <i class="fas fa-arrow-left"></i>
+              <span>Volver</span>
+            </button>
+            <h1 class="page-title">
+              <i class="fas fa-users-cog"></i>
+              Gestionar Usuarios
+            </h1>
+          </div>
+          <div class="header-info">
+            <div class="admin-info">
+              <i class="fas fa-user-shield"></i>
+              <span>Administrador</span>
+            </div>
+            <div class="current-time" id="currentTime"></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <!-- Sección de estadísticas -->
+        
+
+        <!-- Lista de usuarios -->
+        <section class="quick-actions">
+          <h3 class="section-title">
+            <i class="fas fa-users"></i>
+            Lista de Usuarios
+          </h3>
+          
+          <div class="user-management-container">
+            <div class="user-card">
+              <div class="user-avatar">
+                <i class="fas fa-user-graduate"></i>
+              </div>
+              <div class="user-info">
+                <h4>Juan Pérez</h4>
+                <p>Estudiante</p>
+                <span class="user-status active">Activo</span>
+              </div>
+              <div class="user-actions">
+                <button class="action-btn edit-btn" onclick="alert('Editar Juan Pérez')">
+                  <i class="fas fa-edit"></i>
+                  Editar
+                </button>
+                <button class="action-btn delete-btn" onclick="alert('Eliminar Juan Pérez')">
+                  <i class="fas fa-trash"></i>
+                  Eliminar
+                </button>
+              </div>
+            </div>
+
+            <div class="user-card">
+              <div class="user-avatar">
+                <i class="fas fa-user-graduate"></i>
+              </div>
+              <div class="user-info">
+                <h4>Ana Gómez</h4>
+                <p>Estudiante</p>
+                <span class="user-status active">Activo</span>
+              </div>
+              <div class="user-actions">
+                <button class="action-btn edit-btn" onclick="alert('Editar Ana Gómez')">
+                  <i class="fas fa-edit"></i>
+                  Editar
+                </button>
+                <button class="action-btn delete-btn" onclick="alert('Eliminar Ana Gómez')">
+                  <i class="fas fa-trash"></i>
+                  Eliminar
+                </button>
+              </div>
+            </div>
+
+            <div class="user-card">
+              <div class="user-avatar">
+                <i class="fas fa-user-friends"></i>
+              </div>
+              <div class="user-info">
+                <h4>Laura Méndez</h4>
+                <p>Padre/Madre</p>
+                <span class="user-status active">Activo</span>
+              </div>
+              <div class="user-actions">
+                <button class="action-btn edit-btn" onclick="alert('Editar Laura Méndez')">
+                  <i class="fas fa-edit"></i>
+                  Editar
+                </button>
+                <button class="action-btn delete-btn" onclick="alert('Eliminar Laura Méndez')">
+                  <i class="fas fa-trash"></i>
+                  Eliminar
+                </button>
+              </div>
+            </div>
+
+            <div class="user-card">
+              <div class="user-avatar">
+                <i class="fas fa-chalkboard-teacher"></i>
+              </div>
+              <div class="user-info">
+                <h4>Carlos Rodríguez</h4>
+                <p>Docente</p>
+                <span class="user-status active">Activo</span>
+              </div>
+              <div class="user-actions">
+                <button class="action-btn edit-btn" onclick="alert('Editar Carlos Rodríguez')">
+                  <i class="fas fa-edit"></i>
+                  Editar
+                </button>
+                <button class="action-btn delete-btn" onclick="alert('Eliminar Carlos Rodríguez')">
+                  <i class="fas fa-trash"></i>
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
   </div>
-  <a th:href="@{/PanelCodiplay}">← Volver al panel</a>
+
+  <script>
+   
+
+    // Efecto hover en tarjetas
+    document.querySelectorAll('.stat-card, .user-card').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+      });
+    });
+  </script>
+ 
 </body>
 </html>
