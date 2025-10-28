@@ -6,8 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Editar Perfil | Codiplay Dashboard</title>
 	<link rel="stylesheet" th:href="@{/assetsPanelUsuaario/styleUsuario.css}" />
-	<link rel="stylesheet"
-		th:href="@{/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css}" />
+	<script src="https://kit.fontawesome.com/a2d9a6b8d0.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -18,6 +17,7 @@
 					<img th:src="@{/assetsPanelUsuaario/unnamed-removebg-preview.PNG}" alt="Logo Codiplay" />
 				</a>
 			</div>
+
 			<nav class="main-nav">
 				<ul>
 					<li class="nav-item">
@@ -31,15 +31,19 @@
 					</li>
 				</ul>
 			</nav>
+
 			<div class="support-section">
 				<a th:href="@{/PanelControlUsuario/soporte}"><i class="fas fa-life-ring"></i> Soporte</a>
 			</div>
 		</aside>
+
 		<main class="main-content">
 			<header class="top-bar">
-				<header class="h1eader">
-					<h1>Editar Perfil</h1>
-				</header>
+				<div class="h1eader">
+					<h1 th:if="${usuario}" th:text="'Bienvenido ' + ${usuario.nombre}">Bienvenido Usuario</h1>
+					<h1 th:unless="${usuario}">Bienvenido Usuario</h1>
+				</div>
+
 				<div class="user-info">
 					<div class="user-actions">
 						<i class="fas fa-info-circle"></i>
@@ -53,13 +57,14 @@
 									th:src="@{/assetsPanelUsuaario/22b8078e-03d9-49d7-a4a6-f70b4208e8c9-removebg-preview.png}"
 									alt="User Avatar" class="avatar" />
 							</div>
+
 							<div class="dropdown-content" id="userDropdown">
-								<a th:href="@{/PanelControlUsuario/editar-perfil}"><i class="fas fa-user-edit"></i>
-									Editar Perfil</a>
+								<a th:href="@{/PanelControlUsuario/editar-perfil}"><i class="fas fa-user-edit"></i> Editar Perfil</a>
 								<a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
 							</div>
 						</div>
 					</div>
+
 					<div class="user-name">
 						<span th:if="${usuario}" th:text="${usuario.nombre}">Usuario</span>
 						<span th:unless="${usuario}">Usuario</span>
@@ -70,13 +75,11 @@
 
 			<section class="profile-edit-section">
 				<div class="profile-edit-card">
-					<!-- Mensajes de éxito y error -->
-					<div th:if="${mensaje}" class="alert alert-success"
-						style="background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center;">
+					<!-- Mensajes -->
+					<div th:if="${mensaje}" class="alert alert-success">
 						<span th:text="${mensaje}"></span>
 					</div>
-					<div th:if="${error}" class="alert alert-danger"
-						style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center;">
+					<div th:if="${error}" class="alert alert-danger">
 						<span th:text="${error}"></span>
 					</div>
 
@@ -117,12 +120,9 @@
 									<img th:unless="${usuario != null and usuario.avatar != null and !#strings.isEmpty(usuario.avatar)}"
 										th:src="@{/assetsPanelUsuaario/22b8078e-03d9-49d7-a4a6-f70b4208e8c9-removebg-preview.png}"
 										alt="Avatar por defecto" class="avatar-preview" />
-
 								</div>
-								<input type="file" id="avatar" name="avatarFile" accept="image/*"
-									class="form-control" />
-								<small class="form-text">Selecciona una nueva imagen para tu perfil (JPG, PNG, GIF -
-									Máx. 2MB)</small>
+								<input type="file" id="avatar" name="avatarFile" accept="image/*" class="form-control" />
+								<small class="form-text">Selecciona una nueva imagen (JPG, PNG, GIF - Máx. 2MB)</small>
 							</div>
 						</div>
 
@@ -136,7 +136,12 @@
 		</main>
 	</div>
 
-	<script th:src="@{/assetsPanelUsuaario/editar-perfil.js}"></script>
-</body>
+	<script>
+		function toggleDropdown() {
+			const dropdown = document.getElementById("userDropdown");
+			dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+		}
+	</script>
 
+</body>
 </html>

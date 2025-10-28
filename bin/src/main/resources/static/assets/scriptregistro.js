@@ -1,1 +1,0 @@
-// Archivo preparado para futuros scripts de registro de clase gratis 

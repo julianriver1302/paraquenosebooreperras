@@ -45,17 +45,18 @@ public class PanelControlUsuarioController {
 
 	@GetMapping("/PanelControlUsuario/editar-perfil")
 	public String editarPerfil(HttpSession session, Model model) {
-		// Obtener el ID del usuario de la sesión
 		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
 
+		Usuario usuario = new Usuario(); // 👈 crea un objeto vacío por defecto
+
 		if (idUsuario != null) {
-			// Buscar el usuario en la base de datos
 			Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
 			if (usuarioOpt.isPresent()) {
-				Usuario usuario = usuarioOpt.get();
-				model.addAttribute("usuario", usuario);
+				usuario = usuarioOpt.get(); // si lo encuentra, lo usa
 			}
 		}
+
+		model.addAttribute("usuario", usuario); // 👈 siempre agrega el objeto
 
 		return "PanelControlUsuario/editar-perfil";
 	}
@@ -132,12 +133,22 @@ public class PanelControlUsuarioController {
 	}
 
 	@GetMapping("/PanelControlUsuario/mis_cursos")
-	public String mis_cursos() {
+	public String misCursos(Model model, HttpSession session) {
+		Object usuario = session.getAttribute("usuario");
+		if (usuario == null) {
+			return "PanelControlUsuario/mis_cursos";
+		}
+		model.addAttribute("usuario", usuario);
 		return "PanelControlUsuario/mis_cursos";
 	}
 
 	@GetMapping("/PanelControlUsuario/mis_logros")
-	public String mis_logros() {
+	public String misLogros(Model model, HttpSession session) {
+		Object usuario = session.getAttribute("usuario");
+		if (usuario == null) {
+			return "/PanelControlUsuario/mis_logros";
+		}
+		model.addAttribute("usuario", usuario);
 		return "PanelControlUsuario/mis_logros";
 	}
 
@@ -165,7 +176,7 @@ public class PanelControlUsuarioController {
 	public String soporte() {
 		return "PanelControlUsuario/soporte";
 	}
-	
+
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		// Invalidar la sesión
