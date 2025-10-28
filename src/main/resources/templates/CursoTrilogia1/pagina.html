@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title th:text="'CodiPlayCo'">CodiPlayCo</title>
+
+	<!-- Cargar estilos desde /static -->
+	<link rel="stylesheet" th:href="@{/assetsCursoTrilogia/estilos2.css}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+	<header>
+		<div class="logo-area">
+			<!-- Cargar imagen desde /static/images -->
+			<img th:src="@{/assetsCursoTrilogia/logo_letra.PNG}" alt="Logo">
+		</div>
+		<div class="logo-text" th:text="'CodiPlayCo'">CodiPlayCo</div>
+		<hr class="header-divider">
+		<nav class="main-menu">
+			<!-- Rutas dinámicas -->
+			<a th:href="@{/PanelControlUsuario/inicio}"><i class="fas fa-home"></i> Inicio</a>
+			
+			<a th:href="@{/CursoTrilogia1/paginas-web}">
+				<i class="fas fa-arrow-left"></i>
+			</a>
+		</nav>
+		
+	</header>
+
+	<main class="pagina-dibujo-main">
+		<h1 th:text="'🎨 Dibuja tu Página Web'">🎨 Dibuja tu Página Web</h1>
+
+		<div class="controls">
+			<label>Color:</label>
+			<input type="color" id="colorPicker" value="#000000">
+
+			<label>Tamaño:</label>
+			<input type="range" id="sizePicker" min="1" max="20" value="3"><br>
+
+			<button type="button" onclick="activarPincel()">✏️ Pincel</button>
+			<button type="button" onclick="activarBorrador()">🧽 Borrador</button>
+			<button type="button" onclick="dibujarForma('cuadrado')">⬛ Cuadrado</button>
+			<button type="button" onclick="dibujarForma('circulo')">⚪ Círculo</button>
+			<button type="button" onclick="dibujarForma('linea')">📏 Línea</button><br>
+
+			<button type="button" onclick="limpiarCanvas()">🧹 Limpiar</button>
+			<button type="button" onclick="guardarCanvas()">💾 Guardar</button>
+		</div>
+
+		<canvas id="canvas" width="600" height="350"></canvas>
+		<div id="imagenGuardada"></div>
+
+		<!-- Cargar el JS desde /static -->
+		<script th:src="@{/assetsCursoTrilogia/script.js}"></script>
+	</main>
+</body>
+
+</html>

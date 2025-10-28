@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>CodiPlayCo</title>
+
+	<!-- Archivos CSS locales y externos -->
+	<link rel="stylesheet" th:href="@{/assetsCursoTrilogia/estilo.css}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+	<header>
+		<div class="logo-area">
+			<img th:src="@{/assetsCursoTrilogia/logo_letra.PNG}" alt="Logo CodiPlayCo">
+		</div>
+		<div class="logo-text" th:text="${nombreProyecto}">CodiPlayCo</div>
+		<hr class="header-divider">
+
+		<!-- Menú principal -->
+		<nav class="main-menu">
+			<a th:href="@{/PanelControlUsuario/inicio}"><i class="fas fa-home"></i> Inicio</a>
+			
+		</nav>
+
+	
+	</header>
+
+	<main>
+		<h1>¡Explora el Mundo del Internet!</h1>
+		<hr>
+
+		<div class="main-content-with-logo">
+			<div class="main-info">
+
+			</div>
+
+			<div class="logo-float-center-container">
+				<!-- Carta izquierda -->
+				<div class="info-card left-card">
+					<h3>¿Qué es el internet?</h3>
+					<p>
+						Aquí puedes poner información relevante para la carta derecha. Puedes personalizar el contenido
+						y el fondo.
+					</p>
+					<a th:href="@{/CursoTrilogia1/internet}"><button>Haz click</button></a>
+				</div>
+
+				<!-- Imagen central -->
+				<img th:src="@{/assetsCursoTrilogia/logosenala.png}" alt="Logo Proyecto"
+					class="logo-float logo-float-center" id="logoFloat">
+
+				<!-- Carta derecha -->
+				<div class="info-card right-card">
+					<h3>¿Qué es una página web?</h3>
+					<p>
+						Aquí puedes poner información relevante para la carta izquierda. Puedes personalizar el
+						contenido y el fondo.
+					</p>
+					<a th:href="@{/CursoTrilogia1/paginas-web}"><button>Haz click</button></a>
+				</div>
+			</div>
+		</div>
+
+		<hr>
+		<p><strong>Curso creado por CodiPlayCo - Aprende jugando</strong></p>
+	</main>
+
+</body>
+
+</html>

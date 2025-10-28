@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Crear Curso</title>
+  <link rel="stylesheet" href="css/crear_curso.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Crear Nuevo Curso</h1>
+    
+    <form class="course-form" id="courseForm">
+      <div class="form-group">
+        <label for="nombreCurso">Nombre del Curso:</label>
+        <input type="text" id="nombreCurso" name="nombreCurso" placeholder="Ej: HTML para Principiantes" required>
+      </div>
+
+      <div class="form-group">
+        <label for="cupos">Cupos Disponibles:</label>
+        <input type="number" id="cupos" name="cupos" min="1" max="50" placeholder="Ej: 25" required>
+      </div>
+
+      <div class="form-group">
+        <label for="docente">Docente Asignado:</label>
+        <select id="docente" name="docente" required>
+          <option value="">Seleccionar docente...</option>
+          <option value="camila-rios">Camila Ríos</option>
+          <option value="luis-ortega">Luis Ortega</option>
+          <option value="daniela-torres">Daniela Torres</option>
+          <option value="carlos-mendez">Carlos Méndez</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion" rows="4" placeholder="Describe el contenido y objetivos del curso..." required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="dificultad">Dificultad:</label>
+        <select id="dificultad" name="dificultad" required>
+          <option value="">Seleccionar dificultad...</option>
+          <option value="principiante">Principiante</option>
+          <option value="intermedio">Intermedio</option>
+          <option value="avanzado">Avanzado</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-crear">Crear Curso</button>
+        <button type="button" class="btn-cancelar" onclick="window.history.back()">Cancelar</button>
+      </div>
+    </form>
+
+    <a href="PanelCodiplay.html" class="back-link">← Volver al panel</a>
+  </div>
+
+  <script>
+    document.getElementById('courseForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const courseData = {
+        nombre: formData.get('nombreCurso'),
+        cupos: formData.get('cupos'),
+        docente: formData.get('docente'),
+        descripcion: formData.get('descripcion'),
+        dificultad: formData.get('dificultad')
+      };
+      
+      // Aquí se podría enviar los datos al servidor
+      alert('Curso creado exitosamente:\n' + 
+            'Nombre: ' + courseData.nombre + '\n' +
+            'Cupos: ' + courseData.cupos + '\n' +
+            'Docente: ' + courseData.docente + '\n' +
+            'Dificultad: ' + courseData.dificultad);
+      
+      // Limpiar formulario
+      this.reset();
+    });
+  </script>
+</body>
+</html>

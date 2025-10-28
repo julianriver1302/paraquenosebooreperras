@@ -1,0 +1,247 @@
+body {
+  font-family: 'Rubik', sans-serif;
+  background-color: #f4f6f8;
+  padding: 20px;
+  margin: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+h1 {
+  color: #1e3a8a;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 28px;
+}
+
+.course-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Rubik', sans-serif;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-group input[type="number"] {
+  width: 120px;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group select {
+  cursor: pointer;
+}
+
+/* Estilos para el sistema de estrellas */
+.star-rating {
+  display: flex;
+  gap: 5px;
+  margin: 10px 0;
+}
+
+.star {
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.3;
+  user-select: none;
+}
+
+.star:hover,
+.star.active {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.star:hover ~ .star {
+  opacity: 0.3;
+}
+
+.difficulty-label {
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.btn-crear,
+.btn-cancelar {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Rubik', sans-serif;
+}
+
+.btn-crear {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btn-crear:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-cancelar {
+  background-color: #6b7280;
+  color: white;
+}
+
+.btn-cancelar:hover {
+  background-color: #4b5563;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: none;
+  color: #1e40af;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.back-link:hover {
+  color: #1e3a8a;
+}
+
+/* Estilos para validación */
+.form-group input:invalid,
+.form-group select:invalid,
+.form-group textarea:invalid {
+  border-color: #ef4444;
+}
+
+.form-group input:valid,
+.form-group select:valid,
+.form-group textarea:valid {
+  border-color: #10b981;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    margin: 10px;
+    padding: 20px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .btn-crear,
+  .btn-cancelar {
+    width: 100%;
+  }
+}
+
+.star-rating {
+    display: flex;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+.star {
+    font-size: 24px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    opacity: 0.3;
+}
+
+.star:hover {
+    opacity: 0.7 !important;
+}
+
+.difficulty-label {
+    margin-top: 5px;
+    font-weight: bold;
+    color: #666;
+
+	/* Contenedor de dificultad */
+	.dificultad {
+	    text-align: center;
+	    margin: 15px 0;
+	}
+
+	/* Contenedor de estrellas */
+	.stars-container {
+	    display: flex;
+	    justify-content: center;
+	    gap: 3px;
+	    margin: 8px 0;
+	}
+
+	/* Estrellas llenas */
+	.star-filled {
+	    color: #FFD700; /* Dorado */
+	    font-size: 20px;
+	    text-shadow: 0 0 3px rgba(255, 215, 0, 0.3);
+	}
+
+	/* Estrellas vacías */
+	.star-empty {
+	    color: #E0E0E0; /* Gris muy claro */
+	    font-size: 20px;
+	    opacity: 0.6;
+	}
+
+	/* Texto del nivel */
+	.difficulty-level {
+	    font-size: 13px;
+	    color: #666;
+	    font-weight: 500;
+	    margin-top: 3px;
+	}
+	}

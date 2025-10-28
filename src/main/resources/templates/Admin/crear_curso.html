@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Crear Curso</title>
+	<link rel="stylesheet" th:href="@{/assetsAdmin/css/crear_curso.css}">
+</head>
+
+<body>
+	<div class="container">
+		<h1>Crear Nuevo Curso</h1>
+
+		<form class="course-form" th:action="@{/PanelCodiplay/Admin/guardar_curso}" method="post">
+
+			<div class="form-group">
+				<label for="curso">Nombre del Curso:</label>
+				<input type="text" id="curso" name="curso" placeholder="Ej: HTML para Principiantes" required>
+			</div>
+
+			<div class="form-group">
+				<label for="dirigido">Dirigido a:</label>
+				<input type="text" id="dirigido" name="dirigido" placeholder="Ej: Niños de 8-12 años" required>
+			</div>
+
+			<div class="form-group">
+				<label for="asignacionDocente">Docente Asignado:</label>
+				<select id="asignacionDocente" name="asignacionDocente" required>
+					<option value="">Seleccionar docente...</option>
+					<option th:each="docente : ${docentes}" th:value="${docente.nombre + ' ' + docente.apellido}"
+						th:text="${docente.nombre} + ' ' + ${docente.apellido} + ' - ' + ${docente.email}">
+					</option>
+				</select>
+
+				<div th:if="${#lists.isEmpty(docentes)}" class="no-docentes">
+					⚠️ No hay docentes registrados. Primero registra algunos docentes.
+				</div>
+
+				<div class="form-group">
+					<label for="descripcion">Descripción:</label>
+					<textarea id="descripcion" name="descripcion" rows="4"
+						placeholder="Describe el contenido y objetivos..." required></textarea>
+				</div>
+
+				<div class="form-group">
+					<label for="dificultad">Dificultad:</label>
+					<div class="star-rating" id="starRating">
+						<span class="star" data-rating="1">⭐</span>
+						<span class="star" data-rating="2">⭐</span>
+						<span class="star" data-rating="3">⭐</span>
+						<span class="star" data-rating="4">⭐</span>
+						<span class="star" data-rating="5">⭐</span>
+					</div>
+					<input type="hidden" id="dificultad" name="dificultad" value="1" required>
+					<div class="difficulty-label" id="difficultyLabel">Muy fácil</div>
+				</div>
+
+				<div class="form-group">
+					<label for="precio">Precio</label>
+					<input type="number" id="precio" name="precio" step="0.01" placeholder="0.00" required>
+				</div>
+
+				<div class="form-actions">
+					<button type="submit" class="btn-crear">Crear Curso</button>
+					<button type="button" class="btn-cancelar" onclick="window.history.back()">Cancelar</button>
+				</div>
+		</form>
+
+		<a th:href="@{/PanelCodiplay}" class="back-link">← Volver al panel</a>
+	</div>
+
+	<script th:src="@{/assetsAdmin/js/crear_curso.js}"></script>
+</body>
+
+</html>

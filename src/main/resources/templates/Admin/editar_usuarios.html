@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Usuarios</title>
+  <link rel="stylesheet" th:href="@{/assetsAdmin/css/editar_usuarios.css}">
+</head>
+<body>
+  <h1>Editar Usuarios</h1>
+  <div class="user-list">
+    <div class="user-item">
+      <span>Juan Pérez - Estudiante</span>
+      <button onclick="alert('Editar Juan Pérez')">Editar</button>
+    </div>
+    <div class="user-item">
+      <span>Ana Gómez - Estudiante</span>
+      <button onclick="alert('Editar Ana Gómez')">Editar</button>
+    </div>
+    <div class="user-item">
+      <span>Laura Méndez - Padre</span>
+      <button onclick="alert('Editar Laura Méndez')">Editar</button>
+    </div>
+  </div>
+  <a th:href="@{/PanelCodiplay}">← Volver al panel</a>
+</body>
+</html>

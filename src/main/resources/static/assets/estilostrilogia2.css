@@ -1,0 +1,252 @@
+body {
+    font-family: 'Rubik', sans-serif;
+    background-image: url(../assets/imag/ab52e048-112b-4037-b524-a6e290351461.png);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+}
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(20,20,30,0.45);
+    backdrop-filter: blur(6px);
+    pointer-events: none;
+    z-index: 0;
+}
+#main-header, main, .glass-navbar {
+    position: relative;
+    z-index: 1;
+}
+
+.highlight {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+}
+
+.glass-card {
+    background: rgba(255,255,255,0.13);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+    backdrop-filter: blur(16px);
+    border: 1.5px solid rgba(255,255,255,0.18);
+    transition: transform 0.3s cubic-bezier(.68,-0.55,.27,1.55), box-shadow 0.3s;
+    position: relative;
+}
+.glass-card:hover {
+    transform: translateY(-8px) scale(1.04) rotate(-2deg);
+    box-shadow: 0 16px 40px 0 #00d4ff44;
+}
+
+.btn-launch {
+    background: linear-gradient(135deg,#ffffff, #1effb4,#1effb4);
+    color: #000000;
+    border-radius: 50px;
+    padding: 12px 24px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+.btn-launch::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s;
+}
+.btn-launch:hover::before {
+    left: 100%;
+}
+.btn-launch:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.logo-animate {
+    animation: logoBounce 1.8s cubic-bezier(.68,-0.55,.27,1.55) infinite alternate;
+    transition: filter 0.3s;
+}
+@keyframes logoBounce {
+    0% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 0 #fff0); }
+    80% { filter: drop-shadow(0 8px 24px #a100ff44); }
+    100% { transform: translateY(-12px) scale(1.05); filter: drop-shadow(0 12px 32px #00d4ff88); }
+}
+
+.text-lg text-gray-300 max-w-md {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    color: #ffffff;
+    line-height: 1.6;   
+}
+
+.section-content {
+    width: 90%;
+    max-width: 800px;
+    min-height: 150px;
+    background: rgba(45, 45, 45, 1);
+    color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+    cursor: pointer;
+    margin: 2rem auto;
+    --clr: #1effb4;
+}
+
+.section-content::before {
+    content: "";
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(var(--clr), transparent);
+    animation: animate 2s linear infinite;
+    z-index: 1;
+}
+
+.section-content::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    background: rgba(45, 45, 45, 0.95);
+    border-radius: 9px;
+    z-index: 2;
+}
+
+.section-content:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.section-content:hover::before {
+    animation: animate 1.2s linear infinite;
+}
+
+@keyframes animate {
+    0% {
+        transform: translate(-100px, -100px);
+    }
+    25% {
+        transform: translate(0px, -100px);
+    }
+    50% {
+        transform: translate(0px, 0px);
+    }
+    75% {
+        transform: translate(-100px, 0px);
+    }
+    100% {
+        transform: translate(-100px, -100px);
+    }
+}
+
+.card-content {
+    padding: 25px;
+    position: relative;
+    z-index: 3;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.section-content h2, .section-content h3 {
+    color: #1effb4;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    font-size: 1.6rem;
+    text-shadow: 0 0 8px rgba(30, 255, 180, 0.6);
+    letter-spacing: 0.5px;
+}
+
+.card-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-transform: capitalize;
+    color: #1effb4;
+    text-shadow: 0 0 10px rgba(30, 255, 180, 0.5);
+}
+
+.card-para {
+    font-size: 16px;
+    opacity: 0.9;
+    color: white;
+    font-weight: 500;
+}
+
+.section-content ul {
+    color: white;
+    list-style: none;
+    padding: 0;
+    font-family: 'Rubik', sans-serif;
+}
+
+.section-content li {
+    margin: 0.6rem 0;
+    padding: 0.6rem 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: white;
+    font-weight: 500;
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.4);
+}
+
+.section-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    background: rgba(30, 255, 180, 0.1);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    font-family: 'Rubik', sans-serif;
+    border: 1px solid rgba(30, 255, 180, 0.3);
+}
+
+.section-content th, .section-content td {
+    padding: 1.2rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(30, 255, 180, 0.2);
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.section-content th {
+    background: rgba(30, 255, 180, 0.2);
+    color: #1effb4;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-shadow: 0 0 8px rgba(30, 255, 180, 0.5);
+}
+
+.btn-inscribete {
+    background: linear-gradient(135deg,#ffffff, #1effb4,#1effb4);
+    color: #000000;
+    border-radius: 50px;
+    padding: 12px 24px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+    margin: 1rem 0;
+}
+
+.btn-inscribete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+} 

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lista de Cursos - Admin Codiplay</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/assetsAdmin/css/panel_codiplay.css}">
+  <style>
+    .courses-container {
+        padding: 20px;
+        background: #f8f9fa;
+        min-height: 100vh;
+    }
+    
+    .page-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
+    
+    .page-header h1 {
+        margin: 0;
+        font-size: 2.5rem;
+    }
+    
+    .actions-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        background: white;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-primary {
+        background: #4CAF50;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #45a049;
+        transform: translateY(-2px);
+    }
+    
+    .btn-edit {
+        background: #2196F3;
+        color: white;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .btn-toggle {
+        background: #FF9800;
+        color: white;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .btn-danger {
+        background: #f44336;
+        color: white;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .courses-table {
+        width: 100%;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .courses-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .courses-table th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+    }
+    
+    .courses-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .courses-table tr:hover {
+        background: #f8f9fa;
+    }
+    
+    .status-active {
+        color: #4CAF50;
+        font-weight: 600;
+        background: #e8f5e8;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+    }
+    
+    .status-inactive {
+        color: #f44336;
+        font-weight: 600;
+        background: #ffeaea;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+    }
+    
+    .star-rating {
+        display: flex;
+        gap: 2px;
+    }
+    
+    .star-filled {
+        color: #FFD700;
+    }
+    
+    .star-empty {
+        color: #E0E0E0;
+        opacity: 0.5;
+    }
+    
+    .price {
+        color: #4CAF50;
+        font-weight: bold;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 10px;
+        color: #666;
+    }
+    
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+    
+    .actions-cell {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .difficulty-text {
+        font-size: 0.8rem;
+        color: #666;
+        margin-top: 5px;
+    }
+
+    .course-row-inactive {
+        background-color: #f8f8f8;
+        opacity: 0.7;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+
+    .stats-bar {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        flex: 1;
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #667eea;
+    }
+
+    .stat-label {
+        color: #666;
+        font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="topbar">
+    <img th:src="@{/assetsAdmin/images/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}" alt="Logo Codiplay" class="logo">
+  </nav>
+
+  <nav class="sidebar">
+    <ul>
+      <li><a th:href="@{/PanelCodiplay}">Inicio del Panel</a></li>
+      <li><a th:href="@{/PanelCodiplay/Admin/editar_usuarios}">Editar Usuarios</a></li>
+      <li><a th:href="@{/PanelCodiplay/Admin/registrar_docentes}">Registrar Docentes</a></li>
+      <li><a th:href="@{/PanelCodiplay/Admin/proceso_estudiantes}">Progreso Estudiantes</a></li>
+      <li><a th:href="@{/PanelCodiplay/Admin/crear_curso}">Crear Curso</a></li>
+      <li><a th:href="@{/PanelCodiplay/Admin/listar_cursos}" style="background: #667eea; color: white;">Lista de cursos</a></li>
+      <li><a href="login.html">Cerrar Sesión</a></li>
+    </ul>
+  </nav>
+
+  <div class="main">
+    <div class="courses-container">
+      <div class="page-header">
+        <h1>Gestión de Cursos</h1>
+        <p>Administra todos los cursos de la plataforma</p>
+      </div>
+
+      <!-- Estadísticas - VERSIÓN CORREGIDA -->
+	  <div class="stats-bar" th:if="${not #lists.isEmpty(cursos)}">
+	      <div class="stat-card">
+	          <div class="stat-number" th:text="${#lists.size(cursos)}">0</div>
+	          <div class="stat-label">Total de Cursos</div>
+	      </div>
+	      <div class="stat-card">
+	          <div class="stat-number" th:text="${totalActivos}">0</div>
+	          <div class="stat-label">Cursos Activos</div>
+	      </div>
+	      <div class="stat-card">
+	          <div class="stat-number" th:text="${totalInactivos}">0</div>
+	          <div class="stat-label">Cursos Inactivos</div>
+	      </div>
+	  </div>
+
+      <div class="actions-bar">
+        <a th:href="@{/PanelCodiplay/Admin/crear_curso}" class="btn btn-primary">
+          + Crear Nuevo Curso
+        </a>
+        <span th:text="'Total: ' + ${#lists.size(cursos)} + ' cursos'"></span>
+      </div>
+
+      <div class="courses-table" th:if="${not #lists.isEmpty(cursos)}">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre del Curso</th>
+              <th>Descripción</th>
+              <th>Dirigido a</th>
+              <th>Docente</th>
+              <th>Dificultad</th>
+              <th>Precio</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="curso : ${cursos}" th:classappend="${curso.estado == 'Inactivo'} ? 'course-row-inactive' : ''">
+              <td th:text="${curso.id}"></td>
+              <td>
+                <strong th:text="${curso.curso}"></strong>
+              </td>
+              <td>
+                <span th:text="${#strings.abbreviate(curso.descripcion, 50)}"></span>
+              </td>
+              <td th:text="${curso.dirigido}"></td>
+              <td th:text="${curso.asignacionDocente}"></td>
+              <td>
+                <div class="star-rating">
+                  <span th:each="i : ${#numbers.sequence(1, 5)}">
+                    <span th:if="${i <= curso.dificultad}" class="star-filled">⭐</span>
+                    <span th:if="${i > curso.dificultad}" class="star-empty">⭐</span>
+                  </span>
+                  <div class="difficulty-text">
+                    <span th:switch="${curso.dificultad}">
+                      <span th:case="1">Principiante</span>
+                      <span th:case="2">Básico</span>
+                      <span th:case="3">Intermedio</span>
+                      <span th:case="4">Avanzado</span>
+                      <span th:case="5">Experto</span>
+                      <span th:case="*">Nivel ${curso.dificultad}</span>
+                    </span>
+                  </div>
+                </div>
+              </td>
+              <td class="price" th:text="'$' + ${#numbers.formatDecimal(curso.precio, 0, 'POINT', 0, 'POINT')}"></td>
+              <td>
+                <span th:class="${curso.estado == 'Activo'} ? 'status-active' : 'status-inactive'" 
+                      th:text="${curso.estado}"></span>
+              </td>
+              <td class="actions-cell">
+                <a th:href="@{/PanelCodiplay/Admin/editar_curso/{id}(id=${curso.id})}" 
+                   class="btn btn-edit">
+                  ✏️ Editar
+                </a>
+                <a th:href="@{/PanelCodiplay/Admin/cambiar_estado_curso/{id}(id=${curso.id})}" 
+                   class="btn btn-toggle"
+                   th:text="${curso.estado == 'Activo'} ? '⏸️ Desactivar' : '▶️ Activar'">
+                </a>
+                <a th:href="@{/PanelCodiplay/Admin/eliminar_curso/{id}(id=${curso.id})}" 
+                   class="btn btn-danger"
+                   onclick="return confirm('¿Estás seguro de eliminar el curso: ' + this.parentElement.parentElement.querySelector('strong').textContent + '?')">
+                  🗑️ Eliminar
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="empty-state" th:if="${#lists.isEmpty(cursos)}">
+        <div class="empty-icon">📚</div>
+        <h3>No hay cursos creados</h3>
+        <p>Comienza creando tu primer curso para la plataforma.</p>
+        <a th:href="@{/PanelCodiplay/Admin/crear_curso}" class="btn btn-primary">Crear Primer Curso</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

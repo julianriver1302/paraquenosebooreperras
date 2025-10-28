@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Progreso Estudiantes</title>
+  <link rel="stylesheet" th:href="@{/assetsAdmin/css/proceso_estudiantes.css}">
+  <script th:src="@{/assetsAdmin/js/proceso_estudiantes.js}"></script>
+</head>
+<body>
+  <h1>Progreso de Estudiantes</h1>
+
+  <div class="student-progress">
+    <h3>Juan Pérez</h3>
+    <div class="progress-bar">
+      <div class="progress"></div>
+    </div>
+    <div class="label">Curso: HTML - 80% completado</div>
+  </div>
+
+  <div class="student-progress">
+    <h3>Ana Gómez</h3>
+    <div class="progress-bar">
+      <div class="progress"></div>
+    </div>
+    <div class="label">Curso: Roblox - 65% completado</div>
+  </div>
+
+  <div class="student-progress">
+    <h3>Carlos Martínez</h3>
+    <div class="progress-bar">
+      <div class="progress"></div>
+    </div>
+    <div class="label">Curso: Unity - 50% completado</div>
+  </div>
+
+  <a th:href="@{/PanelCodiplay}">← Volver al panel</a>
+</body>
+</html>
