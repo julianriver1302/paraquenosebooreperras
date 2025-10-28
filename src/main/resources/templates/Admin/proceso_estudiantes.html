@@ -1,38 +1,325 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Progreso Estudiantes</title>
-  <link rel="stylesheet" th:href="@{/assetsAdmin/css/proceso_estudiantes.css}">
-  <script th:src="@{/assetsAdmin/js/proceso_estudiantes.js}"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Progreso de Estudiantes - CodiPlayCo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" th:href="@{/assetsAdmin/css/panel_codiplay.css}">
+  <link th:href="@{/assets/loader.css}" rel="stylesheet" />
 </head>
 <body>
-  <h1>Progreso de Estudiantes</h1>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-container">
+          <img th:src="@{/assetsAdmin/images/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}" alt="CodiPlayCo Logo" class="logo">
+          <h2 class="brand-title">CodiPlayCo</h2>
+        </div>
+      </div>
+      
+      <div class="sidebar-content">
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay}" class="nav-link">
+              <i class="fas fa-home"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/editar_usuarios}" class="nav-link">
+              <i class="fas fa-users-cog"></i>
+              <span>Gestionar Usuarios</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/registrar_docentes}" class="nav-link">
+              <i class="fas fa-chalkboard-teacher"></i>
+              <span>Registrar Docentes</span>
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a th:href="@{/PanelCodiplay/Admin/proceso_estudiantes}" class="nav-link">
+              <i class="fas fa-chart-line"></i>
+              <span>Progreso Estudiantes</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/crear_curso}" class="nav-link">
+              <i class="fas fa-plus-circle"></i>
+              <span>Crear Curso</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/listar_cursos}" class="nav-link">
+              <i class="fas fa-list"></i>
+              <span>Cursos Disponibles</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="sidebar-footer">
+        <a th:href="@{/logout}" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Cerrar Sesión</span>
+        </a>
+      </div>
+    </nav>
 
-  <div class="student-progress">
-    <h3>Juan Pérez</h3>
-    <div class="progress-bar">
-      <div class="progress"></div>
-    </div>
-    <div class="label">Curso: HTML - 80% completado</div>
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="main-header">
+        <div class="header-content">
+          <div class="page-info">
+            <button th:onclick="window.history.back()" class="btn-back">
+              <i class="fas fa-arrow-left"></i>
+              <span>Volver</span>
+            </button>
+            <h1 class="page-title">
+              <i class="fas fa-chart-line"></i>
+              Progreso de Estudiantes
+            </h1>
+          </div>
+          <div class="header-info">
+            <div class="admin-info">
+              <i class="fas fa-user-shield"></i>
+              <span>Administrador</span>
+            </div>
+            <div class="current-time" id="currentTime"></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <!-- Estadísticas generales -->
+        <div class="stats-grid">
+          <div class="stat-card students">
+            <div class="stat-icon">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Estudiantes Activos</h3>
+              <div class="stat-number">45</div>
+              <p>En cursos actualmente</p>
+            </div>
+            <div class="stat-action">
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+
+          <div class="stat-card progress">
+            <div class="stat-icon">
+              <i class="fas fa-chart-bar"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Progreso Promedio</h3>
+              <div class="stat-number">78%</div>
+              <p>Avance general</p>
+            </div>
+            <div class="stat-action">
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+
+          <div class="stat-card teachers">
+            <div class="stat-icon">
+              <i class="fas fa-trophy"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Cursos Completados</h3>
+              <div class="stat-number">12</div>
+              <p>Este mes</p>
+            </div>
+            <div class="stat-action">
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lista de progreso de estudiantes -->
+        <section class="quick-actions">
+          <h3 class="section-title">
+            <i class="fas fa-chart-line"></i>
+            Progreso Individual
+          </h3>
+          
+          <div class="progress-container">
+            <div class="progress-card">
+              <div class="student-info">
+                <div class="student-avatar">
+                  <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="student-details">
+                  <h4>Juan Pérez</h4>
+                  <p>Curso: HTML para Principiantes</p>
+                  <span class="course-status">En progreso</span>
+                </div>
+              </div>
+              <div class="progress-section">
+                <div class="progress-header">
+                  <span class="progress-label">Progreso del curso</span>
+                  <span class="progress-percentage">80%</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" style="width: 80%"></div>
+                </div>
+                <div class="progress-details">
+                  <span class="progress-text">8 de 10 lecciones completadas</span>
+                </div>
+              </div>
+              <div class="progress-actions">
+                <button class="action-btn view-btn">
+                  <i class="fas fa-eye"></i>
+                  Ver Detalles
+                </button>
+              </div>
+            </div>
+
+            <div class="progress-card">
+              <div class="student-info">
+                <div class="student-avatar">
+                  <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="student-details">
+                  <h4>Ana Gómez</h4>
+                  <p>Curso: Roblox Studio</p>
+                  <span class="course-status">En progreso</span>
+                </div>
+              </div>
+              <div class="progress-section">
+                <div class="progress-header">
+                  <span class="progress-label">Progreso del curso</span>
+                  <span class="progress-percentage">65%</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" style="width: 65%"></div>
+                </div>
+                <div class="progress-details">
+                  <span class="progress-text">13 de 20 lecciones completadas</span>
+                </div>
+              </div>
+              <div class="progress-actions">
+                <button class="action-btn view-btn">
+                  <i class="fas fa-eye"></i>
+                  Ver Detalles
+                </button>
+              </div>
+            </div>
+
+            <div class="progress-card">
+              <div class="student-info">
+                <div class="student-avatar">
+                  <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="student-details">
+                  <h4>Carlos Martínez</h4>
+                  <p>Curso: Unity 3D</p>
+                  <span class="course-status">En progreso</span>
+                </div>
+              </div>
+              <div class="progress-section">
+                <div class="progress-header">
+                  <span class="progress-label">Progreso del curso</span>
+                  <span class="progress-percentage">50%</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" style="width: 50%"></div>
+                </div>
+                <div class="progress-details">
+                  <span class="progress-text">5 de 10 lecciones completadas</span>
+                </div>
+              </div>
+              <div class="progress-actions">
+                <button class="action-btn view-btn">
+                  <i class="fas fa-eye"></i>
+                  Ver Detalles
+                </button>
+              </div>
+            </div>
+
+            <div class="progress-card">
+              <div class="student-info">
+                <div class="student-avatar">
+                  <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="student-details">
+                  <h4>María López</h4>
+                  <p>Curso: Python Básico</p>
+                  <span class="course-status completed">Completado</span>
+                </div>
+              </div>
+              <div class="progress-section">
+                <div class="progress-header">
+                  <span class="progress-label">Progreso del curso</span>
+                  <span class="progress-percentage">100%</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill completed" style="width: 100%"></div>
+                </div>
+                <div class="progress-details">
+                  <span class="progress-text">15 de 15 lecciones completadas</span>
+                </div>
+              </div>
+              <div class="progress-actions">
+                <button class="action-btn view-btn">
+                  <i class="fas fa-eye"></i>
+                  Ver Detalles
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
   </div>
 
-  <div class="student-progress">
-    <h3>Ana Gómez</h3>
-    <div class="progress-bar">
-      <div class="progress"></div>
-    </div>
-    <div class="label">Curso: Roblox - 65% completado</div>
-  </div>
+  <script>
+    // Actualizar hora actual
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.toLocaleString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      document.getElementById('currentTime').textContent = timeString;
+    }
+    
+    updateTime();
+    setInterval(updateTime, 60000);
 
-  <div class="student-progress">
-    <h3>Carlos Martínez</h3>
-    <div class="progress-bar">
-      <div class="progress"></div>
-    </div>
-    <div class="label">Curso: Unity - 50% completado</div>
-  </div>
+    // Efecto hover en tarjetas
+    document.querySelectorAll('.stat-card, .progress-card').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+      });
+    });
 
-  <a th:href="@{/PanelCodiplay}">← Volver al panel</a>
+    // Animación de barras de progreso
+    function animateProgressBars() {
+      const progressBars = document.querySelectorAll('.progress-bar-fill');
+      progressBars.forEach(bar => {
+        const width = bar.style.width;
+        bar.style.width = '0%';
+        setTimeout(() => {
+          bar.style.width = width;
+        }, 500);
+      });
+    }
+
+    // Iniciar animación al cargar
+    setTimeout(animateProgressBars, 1000);
+  </script>
+  <script th:src="@{/assets/loader.js}"></script>
 </body>
 </html>

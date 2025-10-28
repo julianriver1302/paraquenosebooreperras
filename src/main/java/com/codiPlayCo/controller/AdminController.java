@@ -7,12 +7,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.codiPlayCo.model.Usuario;
 import com.codiPlayCo.model.Rol;
+import com.codiPlayCo.model.AsignacionDocente;
 import com.codiPlayCo.model.Curso;
 import com.codiPlayCo.service.CursoServiceImplement;
 import com.codiPlayCo.service.UsuarioServiceImplement;
 import com.codiPlayCo.service.RolService;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import com.codiPlayCo.repository.IRolRepository;
@@ -79,7 +79,7 @@ public class AdminController {
 
 	@PostMapping("/Admin/guardar_curso")
 	public String guardarCurso(@RequestParam("curso") String nombreCurso, @RequestParam("dirigido") String dirigido,
-			@RequestParam("asignacionDocente") String asignacionDocente, @RequestParam("descripcion") String descripcion,
+			@RequestParam("asignacionDocente") AsignacionDocente asignacionDocente, @RequestParam("descripcion") String descripcion,
 			@RequestParam("dificultad") Integer dificultad, @RequestParam("precio") Double precio) {
 
 		try {
@@ -138,6 +138,20 @@ public class AdminController {
 			Optional<Curso> cursoOptional = cursoServiceImplement.get(id);
 			if (cursoOptional.isPresent()) {
 				model.addAttribute("curso", cursoOptional.get());
+
+				// Obtener docentes (usuarios con rol de docente)
+				List<Usuario> docentes = usuarioServiceImplement.findByRol("DOCENTE");
+				model.addAttribute("docentes", docentes);
+
+				System.out.println("Docentes encontrados para editar curso: " + docentes.size());
+				for (Usuario docente : docentes) {
+					System.out.println("Docente: " + docente.getNombre() + " " + docente.getApellido() + " - Rol: " + (docente.getRol() != null ? docente.getRol().getNombre() : "null"));
+				}
+				
+				// Si no hay docentes, agregar lista vacía para evitar errores en Thymeleaf
+				if (docentes.isEmpty()) {
+					System.out.println("ADVERTENCIA: No se encontraron docentes registrados");
+				}
 				return "Admin/editar_curso";
 			}
 		} catch (Exception e) {
@@ -148,9 +162,10 @@ public class AdminController {
 
 	@PostMapping("/Admin/actualizar_curso/{id}")
 	public String actualizarCurso(@PathVariable Integer id, @RequestParam("curso") String nombreCurso,
-			@RequestParam("dirigido") String dirigido, @RequestParam("docente") String docente,
+			@RequestParam("dirigido") String dirigido,
+			@RequestParam("asignacionDocente") AsignacionDocente asignacionDocente,
 			@RequestParam("descripcion") String descripcion, @RequestParam("dificultad") Integer dificultad,
-			@RequestParam("precio") Double precio, @RequestParam("estado") String estado) {
+			@RequestParam("precio") Double precio) {
 
 		try {
 			Optional<Curso> cursoOptional = cursoServiceImplement.get(id);
@@ -158,12 +173,11 @@ public class AdminController {
 				Curso curso = cursoOptional.get();
 				curso.setCurso(nombreCurso);
 				curso.setDirigido(dirigido);
-				curso.setAsignacionDocente(docente);
+				curso.setAsignacionDocente(asignacionDocente);
 				curso.setDescripcion(descripcion);
 				curso.setDificultad(dificultad != null ? dificultad : 1);
 				curso.setPrecio(precio != null ? precio : 0.0);
-				curso.setEstado(estado != null ? estado : "Activo");
-
+				curso.setEstado(curso.getEstado() != null ? curso.getEstado() : "Activo");
 				cursoServiceImplement.save(curso);
 			}
 		} catch (Exception e) {

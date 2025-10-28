@@ -3,47 +3,164 @@ package com.codiPlayCo.model;
 import jakarta.persistence.*;
 
 @Entity
+
 @Table(name = "cursos")
+
 public class Curso {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
-    private String curso;
-    private String estado;
-    private String descripcion;
-    private Integer dificultad; // CAMBIADO de String a Integer
-    private String dirigido;
-    private Double precio;
+	@Id
 
-    @Column(name = "asignacionDocente_id")
-    private String asignacionDocente; // CAMBIADO de Integer a String
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    // Constructor vacío
-    public Curso() {}
+	private Integer id;
 
-    // Getters y setters
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+	private String curso;
 
-    public String getCurso() { return curso; }
-    public void setCurso(String curso) { this.curso = curso; }
+	private String estado;
 
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
+	private String descripcion;
 
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+	private Integer dificultad; // CAMBIADO de String a Integer
 
-    public Integer getDificultad() { return dificultad; }
-    public void setDificultad(Integer dificultad) { this.dificultad = dificultad; }
+	private String dirigido;
 
-    public String getDirigido() { return dirigido; }
-    public void setDirigido(String dirigido) { this.dirigido = dirigido; }
+	private Double precio;
 
-    public Double getPrecio() { return precio; }
-    public void setPrecio(Double precio) { this.precio = precio; }
+	@ManyToOne
 
-    public String getAsignacionDocente() { return asignacionDocente; }
-    public void setAsignacionDocente(String asignacionDocente) { this.asignacionDocente = asignacionDocente; }
+	private AsignacionDocente asignacionDocente;
+
+	public Curso() {
+
+	}
+
+	public Curso(Integer id, String curso, String estado, String descripcion, Integer dificultad, String dirigido,
+
+			Double precio, AsignacionDocente asignacionDocente) {
+
+		super();
+
+		this.id = id;
+
+		this.curso = curso;
+
+		this.estado = estado;
+
+		this.descripcion = descripcion;
+
+		this.dificultad = dificultad;
+
+		this.dirigido = dirigido;
+
+		this.precio = precio;
+
+		this.asignacionDocente = asignacionDocente;
+
+	}
+
+	public Integer getId() {
+
+		return id;
+
+	}
+
+	public void setId(Integer id) {
+
+		this.id = id;
+
+	}
+
+	public String getCurso() {
+
+		return curso;
+
+	}
+
+	public void setCurso(String curso) {
+
+		this.curso = curso;
+
+	}
+
+	public String getEstado() {
+
+		return estado;
+
+	}
+
+	public void setEstado(String estado) {
+
+		this.estado = estado;
+
+	}
+
+	public String getDescripcion() {
+
+		return descripcion;
+
+	}
+
+	public void setDescripcion(String descripcion) {
+
+		this.descripcion = descripcion;
+
+	}
+
+	public Integer getDificultad() {
+
+		return dificultad;
+
+	}
+
+	public void setDificultad(Integer dificultad) {
+
+		this.dificultad = dificultad;
+
+	}
+
+	public String getDirigido() {
+
+		return dirigido;
+
+	}
+
+	public void setDirigido(String dirigido) {
+
+		this.dirigido = dirigido;
+
+	}
+
+	public Double getPrecio() {
+
+		return precio;
+
+	}
+
+	public void setPrecio(Double precio) {
+
+		this.precio = precio;
+
+	}
+
+	public AsignacionDocente getAsignacionDocente() {
+
+		return asignacionDocente;
+
+	}
+
+	public void setAsignacionDocente(AsignacionDocente docente) {
+
+		this.asignacionDocente = docente;
+
+	}
+
+	@Override
+
+	public String toString() {
+
+		return "Curso [id=" + id + ", curso=" + curso + ", estado=" + estado + ", descripcion=" + descripcion
+
+				+ ", dificultad=" + dificultad + ", dirigido=" + dirigido + ", precio=" + precio + "]";
+
+	}
 }
