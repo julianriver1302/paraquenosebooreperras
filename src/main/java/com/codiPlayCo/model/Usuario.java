@@ -10,6 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
 
 @Entity
 @Table(name = "usuarios")
@@ -42,13 +45,22 @@ public class Usuario {
 	@ManyToOne
 	private Rol rol;
 
+	// 🔹 Nueva relación con los cursos comprados
+	@ManyToMany
+	@JoinTable(
+	    name = "usuario_curso",
+	    joinColumns = @JoinColumn(name = "usuario_id"),
+	    inverseJoinColumns = @JoinColumn(name = "curso_id")
+	)
+	private List<Curso> cursosComprados;
+
 	public Usuario() {
 
 	}
 
 	public Usuario(Integer id, String nombre, String apellido, String email, String password, String documento,
-			String tipoDocumento,  String celular, Date fechaNacimiento, Date fecharegistro,
-			Date ultimoAcceso, String activo, String avatar, List<ActividadesEstudiantes> actividadesEstudiantes,
+			String tipoDocumento, String celular, Date fechaNacimiento, Date fecharegistro, Date ultimoAcceso,
+			String activo, String avatar, List<ActividadesEstudiantes> actividadesEstudiantes,
 			List<AsignacionDocente> asignacionDocente, List<Actividades> actividades, Rol rol) {
 		super();
 		this.id = id;
@@ -58,7 +70,6 @@ public class Usuario {
 		this.password = password;
 		this.documento = documento;
 		this.tipoDocumento = tipoDocumento;
-
 		this.celular = celular;
 		this.fechaNacimiento = fechaNacimiento;
 		this.fecharegistro = fecharegistro;
@@ -207,6 +218,15 @@ public class Usuario {
 		this.rol = rol;
 	}
 
+	// 🔹 Getters y setters de los cursos comprados
+	public List<Curso> getCursosComprados() {
+		return cursosComprados;
+	}
+
+	public void setCursosComprados(List<Curso> cursosComprados) {
+		this.cursosComprados = cursosComprados;
+	}
+
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", email=" + email
@@ -214,5 +234,4 @@ public class Usuario {
 				+ ", celular=" + celular + ", fechaNacimiento=" + fechaNacimiento + ", fecharegistro=" + fecharegistro
 				+ ", ultimoAcceso=" + ultimoAcceso + ", activo=" + activo + ", avatar=" + avatar + "]";
 	}
-
 }

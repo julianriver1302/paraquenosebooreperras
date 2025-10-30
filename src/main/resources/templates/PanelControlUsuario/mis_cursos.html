@@ -39,14 +39,26 @@
 		</aside>
 
 		<main class="main-content">
-			
-
 			<section class="modules-section">
 				<h2>Mis cursos</h2>
 				<p>Aquí se mostrarán los cursos registrados del usuario.</p>
+
+				<!-- ✅ Si el usuario no tiene cursos -->
+				<div th:if="${#lists.isEmpty(cursos)}" class="no-cursos">
+					<p>No estás inscrito en ningún curso todavía.</p>
+				</div>
+
+				<!-- ✅ Mostrar lista de cursos -->
+				<div class="cursos-lista" th:if="${!#lists.isEmpty(cursos)}">
+					<div class="curso-card" th:each="curso : ${cursos}">
+						<h3 th:text="${curso.nombre}">Nombre del curso</h3>
+						<p th:text="${curso.descripcion}">Descripción del curso</p>
+						<p><strong>Duración:</strong> <span th:text="${curso.duracion}">4 semanas</span></p>
+						<p><strong>Profesor:</strong> <span th:text="${curso.profesor}">Profesor X</span></p>
+					</div>
+				</div>
 			</section>
 		</main>
 	</div>
 </body>
-
 </html>
