@@ -37,10 +37,18 @@ public class CursoServiceImplement implements ICursoService {
     public Optional<Curso> get(Integer id) {
         return cursoRepository.findById(id);
     }
- 
+
     @Override
     public List<Curso> findCursosActivos() {
-        return cursoRepository.findAll(); // Por ahora retorna todos
-    }
+        return cursoRepository.findAll()
+                .stream()
+                .filter(c -> "activo".equalsIgnoreCase(c.getEstado()))
+                .toList();
     }
 
+    // 🔥 Nuevo método: obtiene los cursos de un usuario específico
+    @Override
+    public List<Curso> findByUsuarioId(Integer usuarioId) {
+        return cursoRepository.findByUsuarioId(usuarioId);
+    }
+}

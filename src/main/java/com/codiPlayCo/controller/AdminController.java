@@ -1,5 +1,6 @@
 package com.codiPlayCo.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import com.codiPlayCo.model.Usuario;
 import com.codiPlayCo.model.Rol;
 import com.codiPlayCo.model.AsignacionDocente;
 import com.codiPlayCo.model.Curso;
+import com.codiPlayCo.service.AsignacionDocenteServiceImplement;
 import com.codiPlayCo.service.CursoServiceImplement;
 import com.codiPlayCo.service.UsuarioServiceImplement;
 import com.codiPlayCo.service.RolService;
@@ -24,14 +26,14 @@ public class AdminController {
 	private final CursoServiceImplement cursoServiceImplement;
 	private final UsuarioServiceImplement usuarioServiceImplement;
 	private final RolService rolService;
-	private final IRolRepository rolRepository;
+	private final IRolRepository iRolRepository;
 
 	public AdminController(CursoServiceImplement cursoServiceImplement, UsuarioServiceImplement usuarioServiceImplement,
 			RolService rolService, IRolRepository rolRepository) {
 		this.cursoServiceImplement = cursoServiceImplement;
 		this.usuarioServiceImplement = usuarioServiceImplement;
 		this.rolService = rolService;
-		this.rolRepository = rolRepository;
+		this.iRolRepository = rolRepository;
 	}
 	
 	@GetMapping("/PanelCodiplay")
@@ -58,48 +60,70 @@ public class AdminController {
 
 	// ========== MÉTODOS PARA CURSOS ==========
 
+	@Autowired
+	private AsignacionDocenteServiceImplement asignacionDocenteService;
+
 	@GetMapping("/Admin/crear_curso")
 	public String mostrarFormularioCrearCurso(Model model) {
-		try {
-			// Obtener docentes (usuarios con rol de docente)
-			List<Usuario> docentes = usuarioServiceImplement.findByRol("DOCENTE");
-			model.addAttribute("docentes", docentes);
+	    try {
+	        // Obtener todas las asignaciones de docentes
+	        List<AsignacionDocente> asignaciones = asignacionDocenteService.findAll();
+	        model.addAttribute("asignaciones", asignaciones);
 
-			System.out.println("Docentes encontrados: " + docentes.size());
-			for (Usuario docente : docentes) {
-				System.out.println("Docente: " + docente.getNombre() + " " + docente.getApellido());
-			}
+	        System.out.println("Asignaciones encontradas: " + asignaciones.size());
+	        for (AsignacionDocente asignacion : asignaciones) {
+	            System.out.println("Docente: " + asignacion.getUsuario().getNombre() + " " + asignacion.getUsuario().getApellido());
+	        }
 
-		} catch (Exception e) {
-			model.addAttribute("docentes", List.of());
-			System.err.println("Error al cargar docentes: " + e.getMessage());
-		}
-		return "Admin/crear_curso";
+	    } catch (Exception e) {
+	        model.addAttribute("asignaciones", List.of());
+	        System.err.println("Error al cargar asignaciones: " + e.getMessage());
+	    }
+
+	    return "Admin/crear_curso";
 	}
+
 
 	@PostMapping("/Admin/guardar_curso")
-	public String guardarCurso(@RequestParam("curso") String nombreCurso, @RequestParam("dirigido") String dirigido,
-			@RequestParam("asignacionDocente") AsignacionDocente asignacionDocente, @RequestParam("descripcion") String descripcion,
-			@RequestParam("dificultad") Integer dificultad, @RequestParam("precio") Double precio) {
+	public String guardarCurso(
+	        @RequestParam("curso") String nombreCurso,
+	        @RequestParam("dirigido") String dirigido,
+	        @RequestParam("asignacionDocente") Integer idAsignacionDocente,
+	        @RequestParam("descripcion") String descripcion,
+	        @RequestParam("dificultad") Integer dificultad,
+	        @RequestParam("precio") Double precio) {
 
-		try {
-			Curso curso = new Curso();
-			curso.setCurso(nombreCurso);
-			curso.setDirigido(dirigido);
-			curso.setAsignacionDocente(asignacionDocente);
-			curso.setDescripcion(descripcion);
-			curso.setDificultad(dificultad != null ? dificultad : 1);
-			curso.setPrecio(precio != null ? precio : 0.0);
-			curso.setEstado("Activo");
+	    try {
+	        // Buscar la asignación de docente por ID
+	        AsignacionDocente asignacionDocente = asignacionDocenteService.findById(idAsignacionDocente);
 
-			cursoServiceImplement.save(curso);
-			return "redirect:/PanelCodiplay/Admin/listar_cursos";
+	        if (asignacionDocente == null) {
+	            System.err.println("⚠️ No se encontró la asignación del docente con ID: " + idAsignacionDocente);
+	            return "redirect:/PanelCodiplay/Admin/crear_curso?error=docente";
+	        }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "redirect:/PanelCodiplay/Admin/crear_curso?error=true";
-		}
+	        // Crear y llenar el curso
+	        Curso curso = new Curso();
+	        curso.setCurso(nombreCurso);
+	        curso.setDirigido(dirigido);
+	        curso.setAsignacionDocente(asignacionDocente);
+	        curso.setDescripcion(descripcion);
+	        curso.setDificultad(dificultad != null ? dificultad : 1);
+	        curso.setPrecio(precio != null ? precio : 0.0);
+	        curso.setEstado("Activo");
+
+	        // Guardar
+	        cursoServiceImplement.save(curso);
+
+	        System.out.println("✅ Curso guardado correctamente: " + curso.getCurso());
+	        return "redirect:/PanelCodiplay/Admin/listar_cursos";
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "redirect:/PanelCodiplay/Admin/crear_curso?error=true";
+	    }
 	}
+
 
 	@GetMapping("/Admin/listar_cursos")
 	public String listarCursos(Model model) {

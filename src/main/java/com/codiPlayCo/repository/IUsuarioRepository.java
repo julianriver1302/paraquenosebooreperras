@@ -12,10 +12,13 @@ import java.util.Optional;
 @Repository
 public interface IUsuarioRepository extends JpaRepository<Usuario, Integer> {
     
-    // Solo métodos básicos que sabemos que funcionan
+    // Buscar usuario por email
     Optional<Usuario> findByEmail(String email);
+
+    // Verificar si un email ya existe
     boolean existsByEmail(String email);
     
+    // Buscar usuarios por nombre de rol (Ej: "Docente", "Estudiante")
     @Query("SELECT u FROM Usuario u JOIN u.rol r WHERE r.nombre = :rolNombre")
     List<Usuario> findByRolNombre(@Param("rolNombre") String rolNombre);
 }
