@@ -583,3 +583,142 @@ button:hover, .card-button:hover {
     font-size: 14px;
   }
 }
+
+/* === CONTENEDOR GENERAL === */
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    background: #f2f9ff;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+
+/* === MAIN CONTENT === */
+.main-content {
+    flex: 1;
+    padding: 20px 40px;
+}
+
+/* === TOP BAR === */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.h1eader h1 {
+    font-size: 28px;
+    color: #00395c;
+}
+
+/* === PROFILE EDIT CARD === */
+.profile-edit-section {
+    display: flex;
+    justify-content: center;
+}
+
+.profile-edit-card {
+    width: 650px;
+    background: white;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+/* === FORMULARIO === */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #00395c;
+    margin-bottom: 7px;
+    display: block;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d3d3d3;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+/* === AVATAR === */
+.avatar-upload {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.avatar-preview {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #0093ff;
+}
+
+/* === BOTONES === */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.btn {
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #005fcc;
+}
+
+.btn-secondary {
+    background: #cccccc;
+    color: #00395c;
+}
+
+.btn-secondary:hover {
+    background: #b3b3b3;
+}
+
+/* === DROPDOWN === */
+.user-dropdown {
+    position: relative;
+}
+
+.user-dropdown .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: white;
+    min-width: 160px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    border-radius: 8px;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 12px;
+    color: #00395c;
+    text-decoration: none;
+}
+
+.dropdown-content a:hover {
+    background: #e8f3ff;
+}
+
