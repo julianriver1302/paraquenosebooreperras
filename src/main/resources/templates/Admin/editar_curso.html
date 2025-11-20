@@ -166,15 +166,16 @@
 										</label>
 										<select id="asignacionDocente" name="asignacionDocente" required>
 											<option value="">Seleccionar docente...</option>
-											<option th:each="docente : ${docentes}"
-												th:value="${docente.nombre + ' ' + docente.apellido}"
-												th:text="${docente.nombre} + ' ' + ${docente.apellido} + ' - ' + ${docente.email}">
+											<option th:each="asignacion : ${asignaciones}"
+												th:value="${asignacion.id}"
+												th:selected="${curso.asignacionDocente != null and curso.asignacionDocente.id == asignacion.id}"
+												th:text="${asignacion.usuario.nombre + ' ' + asignacion.usuario.apellido}">
 											</option>
 										</select>
 
-										<div th:if="${#lists.isEmpty(docentes)}" class="alert alert-warning">
+										<div th:if="${#lists.isEmpty(asignaciones)}" class="alert alert-warning">
 											<i class="fas fa-exclamation-triangle"></i>
-											<span>No hay docentes registrados. Primero registra algunos docentes.</span>
+											<span>No hay docentes asignados registrados. Primero registra una asignación docente.</span>
 										</div>
 									</div>
 									<div class="form-group">
@@ -254,8 +255,8 @@
 						<i class="fas fa-times"></i>
 						Cancelar
 					</button>
-					<button type="submit" class="btn-primary" th:disabled="${#lists.isEmpty(docentes)}"
-						th:classappend="${#lists.isEmpty(docentes)} ? 'btn-disabled' : ''">
+					<button type="submit" class="btn-primary" th:disabled="${#lists.isEmpty(asignaciones)}"
+						th:classappend="${#lists.isEmpty(asignaciones)} ? 'btn-disabled' : ''">
 						<i class="fas fa-save"></i>
 						Actualizar Curso
 					</button>

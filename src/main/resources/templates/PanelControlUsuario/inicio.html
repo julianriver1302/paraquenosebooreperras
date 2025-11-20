@@ -17,18 +17,17 @@
 				<a th:href="@{/PanelControlUsuario/inicio}">
 					<img th:src="@{/assetsPanelUsuaario/unnamed-removebg-preview.PNG}" alt="Logo Codiplay" />
 				</a>
-				<span class="logo-text" th:if="${usuario}" th:text="${usuario.nombre}">Usuario</span>
-				<span class="logo-text" th:unless="${usuario}">Usuario</span>
+
+				<span class="logo-text" th:unless="${usuario}"></span>
 			</div>
 			<nav class="main-nav">
 				<ul>
 					<li class="nav-item active">
 						<a th:href="@{/PanelControlUsuario/inicio}"><i class="fas fa-home"></i> Inicio</a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item ">
 						<a th:href="@{/PanelControlUsuario/mis_cursos}"><i class="fas fa-book"></i> Mis cursos</a>
 					</li>
-
 					<li class="nav-item">
 						<a th:href="@{/PanelControlUsuario/mis_logros}"><i class="fas fa-medal"></i> Mis logros</a>
 					</li>
@@ -76,33 +75,16 @@
 							</div>
 						</div>
 			</header>
-			<section class="course-header-section">
-				<div class="course-progress-card">
-					<div class="progress-indicator">
-						<span>EN CURSO</span>
-						<div class="progress-text"><span>0</span> / <span>0</span></div>
-					</div>
-					<h2>Ilustración</h2>
-					<p>Completado 0 de 40 lecciones</p>
-					<div class="progress-bar-container">
-						<div class="progress-bar" style="width: 0%"></div>
-					</div>
-				</div>
-			</section>
-			<section class="course-details-tabs">
-				<nav class="secondary-nav">
-					<ul>
-						<li class="nav-item"><a th:href="@{/#}">En clase de programacion</a></li>
-					</ul>
-				</nav>
-			</section>
+
 			<section class="modules-section">
 				<div class="module-cards-wrapper">
 					<div class="module-card no-aprobado">
 						<div class="module-header">
-							<span>NUEVO</span>
+							<span>Nuevo</span>
 							<span class="module-progress">0 / 285</span>
 						</div>
+						<img th:src="@{/assetsPanelUsuaario/ChatGPT Image 28 oct 2025, 13_36_17.png}" alt="Módulo 1" class="module-image">
+
 						<a th:href="@{/PanelControlUsuario/modulo1}" class="sin_linea">
 							<h3>Módulo 1</h3>
 						</a>
@@ -113,9 +95,12 @@
 					</div>
 					<div class="module-card no-aprobado">
 						<div class="module-header">
-							<span>En Curso</span>
+							<span>Nuevo</span>
 							<span class="module-progress">0 / 30</span>
 						</div>
+						
+						<img th:src="@{/assetsPanelUsuaario/ChatGPT Image 28 oct 2025, 13_42_09.png}" alt="Módulo 2" class="module-image">
+
 						<a th:href="@{/PanelControlUsuario/modulo2}" class="sin_linea">
 							<h3>Módulo 2</h3>
 						</a>
@@ -126,9 +111,11 @@
 					</div>
 					<div class="module-card nuevo">
 						<div class="module-header">
-							<span>NUEVO</span>
+							<span>Nuevo</span>
 							<span class="module-progress">0 / 285</span>
 						</div>
+						<img th:src="@{/assetsPanelUsuaario/ChatGPT Image 28 oct 2025, 13_46_14.png}" alt="Módulo 3" class="module-image">
+
 						<a th:href="@{/PanelControlUsuario/modulo3}" class="sin_linea">
 							<h3>Módulo 3</h3>
 						</a>
@@ -139,9 +126,11 @@
 					</div>
 					<div class="module-card no-aprobado">
 						<div class="module-header">
-							<span>NUEVO</span>
+							<span>Nuevo </span>
 							<span class="module-progress">0 / 30</span>
 						</div>
+						<img th:src="@{/assetsPanelUsuaario/ChatGPT Image 28 oct 2025, 13_49_21.png}" alt="Módulo 4" class="module-image">
+
 						<a th:href="@{/PanelControlUsuario/modulo4}" class="sin_linea">
 							<h3>Módulo 4</h3>
 						</a>
@@ -155,7 +144,6 @@
 		</main>
 	</div>
 
-	<script th:src="@{/assetsPanelUsuaario/inicio.js}"></script>
 
 </body>
 
