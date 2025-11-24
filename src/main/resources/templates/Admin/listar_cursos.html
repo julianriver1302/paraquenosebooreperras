@@ -459,6 +459,10 @@
       position: relative;
       z-index: 2;
       margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
     }
 
     .swal-logo {
@@ -466,15 +470,19 @@
       height: 65px;
       object-fit: contain;
       filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
-      animation: logoFloat 4s ease-in-out infinite;
       position: relative;
       z-index: 2;
+      display: block;
+      margin: 0 auto;
     }
 
     .swal-logo-wrapper-small {
       position: relative;
       z-index: 2;
       margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .swal-logo-small {
@@ -482,16 +490,8 @@
       height: 50px;
       object-fit: contain;
       filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
-      animation: logoFloat 4s ease-in-out infinite;
-    }
-
-    @keyframes logoFloat {
-      0%, 100% {
-        transform: translateY(0) scale(1);
-      }
-      50% {
-        transform: translateY(-12px) scale(1.05);
-      }
+      display: block;
+      margin: 0 auto;
     }
 
     .swal-title {

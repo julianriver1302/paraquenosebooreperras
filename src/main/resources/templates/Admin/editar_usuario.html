@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Editar Usuario - CodiPlayCo</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+	<link rel="stylesheet" th:href="@{/assetsAdmin/css/panel_codiplay.css}">
+	<link th:href="@{/assets/loader.css}" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+	<div class="admin-container">
+		<!-- Sidebar -->
+		<nav class="sidebar">
+			<div class="sidebar-header">
+				<div class="logo-container">
+					<img th:src="@{/assetsAdmin/images/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}"
+						alt="CodiPlayCo Logo" class="logo">
+					<h2 class="brand-title">CodiPlayCo</h2>
+				</div>
+			</div>
+
+			<div class="sidebar-content">
+				<ul class="nav-menu">
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay}" class="nav-link">
+							<i class="fas fa-home"></i>
+							<span>Dashboard</span>
+						</a>
+					</li>
+					<li class="nav-item active">
+						<a th:href="@{/PanelCodiplay/Admin/editar_usuarios}" class="nav-link">
+							<i class="fas fa-users-cog"></i>
+							<span>Gestionar Usuarios</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay/Admin/registrar_docentes}" class="nav-link">
+							<i class="fas fa-chalkboard-teacher"></i>
+							<span>Registrar Docentes</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay/Admin/proceso_estudiantes}" class="nav-link">
+							<i class="fas fa-chart-line"></i>
+							<span>Progreso Estudiantes</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay/Admin/crear_curso}" class="nav-link">
+							<i class="fas fa-plus-circle"></i>
+							<span>Crear Curso</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay/Admin/listar_cursos}" class="nav-link">
+							<i class="fas fa-list"></i>
+							<span>Cursos Disponibles</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="sidebar-footer">
+				<a th:href="@{/logout}" class="logout-btn">
+					<i class="fas fa-sign-out-alt"></i>
+					<span>Cerrar Sesión</span>
+				</a>
+			</div>
+		</nav>
+
+		<!-- Main Content -->
+		<main class="main-content">
+			<header class="main-header">
+				<div class="header-content">
+					<div class="page-info">
+						<a th:href="@{/PanelCodiplay/Admin/editar_usuarios}" class="btn-back">
+							<i class="fas fa-arrow-left"></i>
+							<span>Volver</span>
+						</a>
+						<h1 class="page-title">
+							<i class="fas fa-user-edit"></i>
+							Editar Usuario
+						</h1>
+					</div>
+					<div class="header-info">
+						<div class="admin-info">
+							<i class="fas fa-user-shield"></i>
+							<span>Administrador</span>
+						</div>
+						<div class="current-time" id="currentTime"></div>
+					</div>
+				</div>
+			</header>
+
+			<div class="form-container">
+				<div class="form-wrapper">
+					<!-- Formulario -->
+					<form class="course-form" th:action="@{/PanelCodiplay/Admin/actualizar_usuario/{id}(id=${usuario.id})}"
+						method="post">
+						<div class="form-header">
+							<div class="form-icon">
+								<i class="fas fa-user-edit"></i>
+							</div>
+							<h2>Información del Usuario</h2>
+							<p>Modifica los datos del usuario seleccionado</p>
+						</div>
+
+						<div class="form-grid">
+							<!-- Información Personal -->
+							<div class="form-section">
+								<h3 class="section-title">
+									<i class="fas fa-user"></i>
+									Información Personal
+								</h3>
+
+								<div class="form-row">
+									<div class="form-group">
+										<label for="nombre">
+											<i class="fas fa-user"></i>
+											Nombre *
+										</label>
+										<input type="text" id="nombre" name="nombre" th:value="${usuario.nombre}"
+											placeholder="Ingrese el nombre" required>
+									</div>
+									<div class="form-group">
+										<label for="apellido">
+											<i class="fas fa-user"></i>
+											Apellido *
+										</label>
+										<input type="text" id="apellido" name="apellido" th:value="${usuario.apellido}"
+											placeholder="Ingrese el apellido" required>
+									</div>
+								</div>
+
+								<div class="form-row">
+									<div class="form-group">
+										<label for="email">
+											<i class="fas fa-envelope"></i>
+											Email *
+										</label>
+										<input type="email" id="email" name="email" th:value="${usuario.email}"
+											placeholder="usuario@ejemplo.com" required>
+									</div>
+									<div class="form-group">
+										<label for="celular">
+											<i class="fas fa-phone"></i>
+											Teléfono
+										</label>
+										<input type="text" id="celular" name="celular" th:value="${usuario.celular}"
+											placeholder="Ingrese el número de teléfono">
+									</div>
+								</div>
+							</div>
+
+							<!-- Información de Documento -->
+							<div class="form-section">
+								<h3 class="section-title">
+									<i class="fas fa-id-card"></i>
+									Información de Documento
+								</h3>
+
+								<div class="form-row">
+									<div class="form-group">
+										<label for="tipoDocumento">
+											<i class="fas fa-id-badge"></i>
+											Tipo de Documento *
+										</label>
+										<select id="tipoDocumento" name="tipoDocumento" required>
+											<option value="">Seleccionar...</option>
+											<option value="Cédula" th:selected="${usuario.tipoDocumento == 'Cédula'}">Cédula</option>
+											<option value="Pasaporte" th:selected="${usuario.tipoDocumento == 'Pasaporte'}">Pasaporte</option>
+											<option value="RUC" th:selected="${usuario.tipoDocumento == 'RUC'}">RUC</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label for="documento">
+											<i class="fas fa-hashtag"></i>
+											Número de Documento *
+										</label>
+										<input type="text" id="documento" name="documento" th:value="${usuario.documento}"
+											placeholder="Ingrese el número de documento" required>
+									</div>
+								</div>
+							</div>
+
+							<!-- Información Adicional -->
+							<div class="form-section">
+								<h3 class="section-title">
+									<i class="fas fa-calendar-alt"></i>
+									Información Adicional
+								</h3>
+
+								<div class="form-row">
+									<div class="form-group">
+										<label for="fechaNacimiento">
+											<i class="fas fa-birthday-cake"></i>
+											Fecha de Nacimiento
+										</label>
+										<input type="date" id="fechaNacimiento" name="fechaNacimiento" 
+											th:value="${usuario.fechaNacimiento != null ? #dates.format(usuario.fechaNacimiento, 'yyyy-MM-dd') : ''}"
+											placeholder="Seleccione la fecha">
+									</div>
+									<div class="form-group">
+										<label for="avatar">
+											<i class="fas fa-image"></i>
+											URL del Avatar
+										</label>
+										<input type="text" id="avatar" name="avatar" th:value="${usuario.avatar}"
+											placeholder="URL de la imagen de perfil">
+									</div>
+								</div>
+							</div>
+
+							<!-- Información de Seguridad -->
+							<div class="form-section">
+								<h3 class="section-title">
+									<i class="fas fa-lock"></i>
+									Información de Seguridad
+								</h3>
+
+								<div class="form-group">
+									<label for="password">
+										<i class="fas fa-key"></i>
+										Nueva Contraseña
+									</label>
+									<input type="password" id="password" name="password"
+										placeholder="Deje en blanco para mantener la contraseña actual">
+									<small class="field-help">
+										<i class="fas fa-info-circle"></i>
+										Deje este campo vacío si no desea cambiar la contraseña
+									</small>
+								</div>
+							</div>
+
+							<!-- Información del Sistema (Solo Lectura) -->
+							<div class="form-section readonly-section">
+								<h3 class="section-title">
+									<i class="fas fa-info-circle"></i>
+									Información del Sistema
+								</h3>
+
+								<div class="form-row">
+									<div class="form-group">
+										<label>
+											<i class="fas fa-user-tag"></i>
+											Rol del Usuario
+										</label>
+										<div class="readonly-field">
+											<span th:text="${usuario.rol != null ? usuario.rol.nombre : 'Sin rol asignado'}">Rol</span>
+										</div>
+										<small class="field-help">
+											<i class="fas fa-lock"></i>
+											El rol no puede ser modificado desde aquí
+										</small>
+									</div>
+									<div class="form-group">
+										<label>
+											<i class="fas fa-toggle-on"></i>
+											Estado
+										</label>
+										<select id="activo" name="activo">
+											<option value="activo" th:selected="${usuario.activo == 'activo' or usuario.activo == 'Sí'}">Activo</option>
+											<option value="inactivo" th:selected="${usuario.activo != 'activo' and usuario.activo != 'Sí'}">Inactivo</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="form-row" th:if="${usuario.fecharegistro != null or usuario.ultimoAcceso != null}">
+									<div class="form-group" th:if="${usuario.fecharegistro != null}">
+										<label>
+											<i class="fas fa-calendar-plus"></i>
+											Fecha de Registro
+										</label>
+										<div class="readonly-field">
+											<span th:text="${#dates.format(usuario.fecharegistro, 'dd/MM/yyyy')}">Fecha</span>
+										</div>
+									</div>
+									<div class="form-group" th:if="${usuario.ultimoAcceso != null}">
+										<label>
+											<i class="fas fa-clock"></i>
+											Último Acceso
+										</label>
+										<div class="readonly-field">
+											<span th:text="${#dates.format(usuario.ultimoAcceso, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+
+						<div class="form-actions">
+							<a th:href="@{/PanelCodiplay/Admin/editar_usuarios}" class="btn-secondary">
+								<i class="fas fa-times"></i>
+								Cancelar
+							</a>
+							<button type="submit" class="btn-primary">
+								<i class="fas fa-save"></i>
+								Actualizar Usuario
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</main>
+	</div>
+
+	<script>
+		// Actualizar hora actual
+		function updateTime() {
+			const now = new Date();
+			const timeString = now.toLocaleString('es-ES', {
+				weekday: 'long',
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit'
+			});
+			const timeElement = document.getElementById('currentTime');
+			if (timeElement) {
+				timeElement.textContent = timeString;
+			}
+		}
+
+		updateTime();
+		setInterval(updateTime, 60000);
+
+		// Form validation
+		document.querySelector('.course-form').addEventListener('submit', function (e) {
+			const requiredFields = this.querySelectorAll('input[required], select[required], textarea[required]');
+			let isValid = true;
+
+			requiredFields.forEach(field => {
+				if (!field.value.trim()) {
+					field.classList.add('error');
+					isValid = false;
+				} else {
+					field.classList.remove('error');
+				}
+			});
+
+			if (!isValid) {
+				e.preventDefault();
+				Swal.fire({
+					icon: 'error',
+					title: 'Campos requeridos',
+					text: 'Por favor, complete todos los campos obligatorios',
+					confirmButtonText: 'Entendido'
+				});
+			}
+		});
+
+		// Mostrar mensajes de éxito o error si existen
+		document.addEventListener('DOMContentLoaded', function() {
+			const urlParams = new URLSearchParams(window.location.search);
+			if (urlParams.get('success')) {
+				Swal.fire({
+					icon: 'success',
+					title: '¡Éxito!',
+					text: 'Usuario actualizado correctamente',
+					confirmButtonText: 'Aceptar',
+					timer: 3000
+				});
+			}
+			if (urlParams.get('error')) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Error',
+					text: 'Hubo un problema al actualizar el usuario',
+					confirmButtonText: 'Aceptar'
+				});
+			}
+		});
+	</script>
+
+	<style>
+		.form-container {
+			padding: 30px;
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+
+		.form-wrapper {
+			background: white;
+			border-radius: 20px;
+			box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+			padding: 40px;
+		}
+
+		.form-header {
+			text-align: center;
+			margin-bottom: 40px;
+			padding-bottom: 30px;
+			border-bottom: 2px solid #f0f0f0;
+		}
+
+		.form-icon {
+			width: 80px;
+			height: 80px;
+			margin: 0 auto 20px;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+		}
+
+		.form-icon i {
+			font-size: 36px;
+			color: white;
+		}
+
+		.form-header h2 {
+			font-size: 28px;
+			font-weight: 700;
+			color: #333;
+			margin: 0 0 10px;
+		}
+
+		.form-header p {
+			color: #666;
+			font-size: 16px;
+			margin: 0;
+		}
+
+		.form-grid {
+			display: grid;
+			gap: 30px;
+		}
+
+		.form-section {
+			background: #f8f9fa;
+			padding: 25px;
+			border-radius: 15px;
+			border: 1px solid #e9ecef;
+		}
+
+		.section-title {
+			font-size: 20px;
+			font-weight: 600;
+			color: #333;
+			margin: 0 0 20px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.section-title i {
+			color: #667eea;
+		}
+
+		.form-row {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 20px;
+			margin-bottom: 20px;
+		}
+
+		.form-row:last-child {
+			margin-bottom: 0;
+		}
+
+		.form-group {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.form-group label {
+			font-weight: 600;
+			margin-bottom: 8px;
+			color: #333;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 14px;
+		}
+
+		.form-group label i {
+			color: #667eea;
+			font-size: 16px;
+		}
+
+		.form-group input,
+		.form-group select {
+			padding: 12px 16px;
+			border: 2px solid #e0e0e0;
+			border-radius: 10px;
+			font-size: 14px;
+			transition: all 0.3s ease;
+			font-family: 'Inter', sans-serif;
+		}
+
+		.form-group input:focus,
+		.form-group select:focus {
+			outline: none;
+			border-color: #667eea;
+			box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+		}
+
+		.form-group input.error,
+		.form-group select.error {
+			border-color: #ff6b6b;
+		}
+
+		.readonly-section {
+			background: #f0f4ff;
+			border: 1px solid #cbd5e0;
+		}
+
+		.readonly-field {
+			padding: 12px 16px;
+			background: #ffffff;
+			border: 2px solid #e0e0e0;
+			border-radius: 10px;
+			font-size: 14px;
+			color: #4a5568;
+			font-weight: 500;
+			min-height: 44px;
+			display: flex;
+			align-items: center;
+		}
+
+		.field-help {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			margin-top: 6px;
+			font-size: 12px;
+			color: #718096;
+			font-style: italic;
+		}
+
+		.field-help i {
+			color: #667eea;
+			font-size: 12px;
+		}
+
+		.form-actions {
+			display: flex;
+			gap: 15px;
+			justify-content: flex-end;
+			margin-top: 40px;
+			padding-top: 30px;
+			border-top: 2px solid #f0f0f0;
+		}
+
+		.btn-secondary {
+			background: #6c757d;
+			color: white;
+			border: none;
+			padding: 12px 24px;
+			border-radius: 10px;
+			cursor: pointer;
+			font-weight: 600;
+			transition: all 0.3s ease;
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 14px;
+		}
+
+		.btn-secondary:hover {
+			background: #5a6268;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+		}
+
+		.btn-primary {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			border: none;
+			padding: 12px 24px;
+			border-radius: 10px;
+			cursor: pointer;
+			font-weight: 600;
+			transition: all 0.3s ease;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 14px;
+		}
+
+		.btn-primary:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+		}
+
+		.btn-primary:active,
+		.btn-secondary:active {
+			transform: translateY(0);
+		}
+
+		@media (max-width: 768px) {
+			.form-container {
+				padding: 20px;
+			}
+
+			.form-wrapper {
+				padding: 25px;
+			}
+
+			.form-row {
+				grid-template-columns: 1fr;
+			}
+
+			.form-actions {
+				flex-direction: column;
+			}
+
+			.btn-secondary,
+			.btn-primary {
+				width: 100%;
+				justify-content: center;
+			}
+		}
+	</style>
+
+</body>
+
+</html>
+

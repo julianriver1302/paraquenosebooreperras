@@ -39,21 +39,50 @@ public class AdminController {
 	@GetMapping("/PanelCodiplay")
 	public String panelPrincipal(Model model) {
 		try {
-			// Contar usuarios con rol ID 3 (estudiantes)
+			// Método más directo: contar todos los usuarios y restar ADMIN y DOCENTE
 			List<Usuario> todosUsuarios = usuarioServiceImplement.findAll();
-			System.out.println("Total usuarios encontrados: " + todosUsuarios.size());
+			long totalUsuarios = todosUsuarios.size();
 			
-			long totalEstudiantes = todosUsuarios.stream()
-				.filter(usuario -> usuario.getRol() != null && usuario.getRol().getId() == 3)
-				.count();
-				
-			System.out.println("Total estudiantes (rol ID 3): " + totalEstudiantes);
+			// Contar ADMIN
+			List<Usuario> admins = usuarioServiceImplement.findByRol("ADMIN");
+			long totalAdmins = admins.size();
+			
+			// Contar DOCENTE
+			List<Usuario> docentes = usuarioServiceImplement.findByRol("DOCENTE");
+			long totalDocentes = docentes.size();
+			
+			// Los estudiantes son el resto
+			long totalEstudiantes = totalUsuarios - totalAdmins - totalDocentes;
+			
+			// Logging para debug
+			System.out.println("=== CONTEO DE ESTUDIANTES ===");
+			System.out.println("Total usuarios: " + totalUsuarios);
+			System.out.println("Total ADMIN: " + totalAdmins);
+			System.out.println("Total DOCENTE: " + totalDocentes);
+			System.out.println("Total ESTUDIANTES (USUARIO): " + totalEstudiantes);
+			
+			// Si el resultado es 0 o negativo, intentar método alternativo
+			if (totalEstudiantes <= 0) {
+				System.out.println("Intentando método alternativo...");
+				// Buscar directamente por nombre USUARIO
+				List<Usuario> estudiantesDirecto = usuarioServiceImplement.findByRol("USUARIO");
+				if (!estudiantesDirecto.isEmpty()) {
+					totalEstudiantes = estudiantesDirecto.size();
+					System.out.println("Encontrados por método directo: " + totalEstudiantes);
+				} else {
+					// Último recurso: contar por ID del rol = 3
+					totalEstudiantes = todosUsuarios.stream()
+						.filter(u -> u.getRol() != null && u.getRol().getId() != null && u.getRol().getId().equals(3))
+						.count();
+					System.out.println("Encontrados por ID de rol (3): " + totalEstudiantes);
+				}
+			}
+			
 			model.addAttribute("totalEstudiantes", totalEstudiantes);
 		} catch (Exception e) {
 			System.err.println("Error al contar estudiantes: " + e.getMessage());
 			e.printStackTrace();
-			// En caso de error, usar valor por defecto
-			model.addAttribute("totalEstudiantes", 58);
+			model.addAttribute("totalEstudiantes", 0);
 		}
 		return "Admin/PanelCodiplay";
 	}
@@ -361,8 +390,129 @@ public class AdminController {
 	}
 
 	@GetMapping("/Admin/editar_usuarios")
-	public String editar_usuarios() {
+	public String editar_usuarios(Model model) {
+		try {
+			// Obtener todos los usuarios
+			List<Usuario> todosUsuarios = usuarioServiceImplement.findAll();
+			
+			// Filtrar solo docentes y usuarios (rol USUARIO), excluyendo administradores
+			List<Usuario> usuariosFiltrados = todosUsuarios.stream()
+				.filter(usuario -> usuario.getRol() != null)
+				.filter(usuario -> {
+					String nombreRol = usuario.getRol().getNombre().toUpperCase();
+					return nombreRol.equals("DOCENTE") || nombreRol.equals("USUARIO");
+				})
+				.toList();
+			
+			model.addAttribute("usuarios", usuariosFiltrados);
+			
+			// Obtener todos los roles disponibles para el modal de edición
+			List<Rol> roles = rolService.findAll();
+			model.addAttribute("roles", roles);
+			
+			System.out.println("Total usuarios: " + todosUsuarios.size());
+			System.out.println("Usuarios filtrados (Docentes y Usuarios): " + usuariosFiltrados.size());
+		} catch (Exception e) {
+			System.err.println("Error al cargar usuarios: " + e.getMessage());
+			e.printStackTrace();
+			model.addAttribute("usuarios", List.of());
+			model.addAttribute("roles", List.of());
+		}
 		return "Admin/editar_usuarios";
+	}
+
+	@GetMapping("/Admin/eliminar_usuario/{id}")
+	public String eliminarUsuario(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+		try {
+			usuarioServiceImplement.delete(id);
+			redirectAttributes.addFlashAttribute("success", "Usuario eliminado exitosamente");
+			System.out.println("✅ Usuario eliminado correctamente con ID: " + id);
+		} catch (Exception e) {
+			System.err.println("Error al eliminar usuario: " + e.getMessage());
+			e.printStackTrace();
+			redirectAttributes.addFlashAttribute("error", "Error al eliminar el usuario");
+		}
+		return "redirect:/PanelCodiplay/Admin/editar_usuarios";
+	}
+
+	@GetMapping("/Admin/editar_usuario/{id}")
+	public String mostrarFormularioEditarUsuario(@PathVariable Integer id, Model model) {
+		try {
+			Optional<Usuario> usuarioOptional = usuarioServiceImplement.findById(id);
+			if (usuarioOptional.isPresent()) {
+				Usuario usuario = usuarioOptional.get();
+				model.addAttribute("usuario", usuario);
+				
+				// Obtener todos los roles disponibles
+				List<Rol> roles = rolService.findAll();
+				model.addAttribute("roles", roles);
+				
+				return "Admin/editar_usuario";
+			}
+		} catch (Exception e) {
+			System.err.println("Error al cargar usuario para editar: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return "redirect:/PanelCodiplay/Admin/editar_usuarios";
+	}
+
+
+	@PostMapping("/Admin/actualizar_usuario/{id}")
+	public String actualizarUsuario(@PathVariable Integer id,
+			@RequestParam("nombre") String nombre,
+			@RequestParam("apellido") String apellido,
+			@RequestParam("email") String email,
+			@RequestParam("celular") String celular,
+			@RequestParam("documento") String documento,
+			@RequestParam("tipoDocumento") String tipoDocumento,
+			@RequestParam(value = "password", required = false) String password,
+			@RequestParam(value = "fechaNacimiento", required = false) String fechaNacimientoStr,
+			@RequestParam(value = "avatar", required = false) String avatar,
+			@RequestParam(value = "activo", required = false) String activo,
+			RedirectAttributes redirectAttributes) {
+		try {
+			Optional<Usuario> usuarioOptional = usuarioServiceImplement.findById(id);
+			if (usuarioOptional.isPresent()) {
+				Usuario usuario = usuarioOptional.get();
+				usuario.setNombre(nombre);
+				usuario.setApellido(apellido);
+				usuario.setEmail(email);
+				usuario.setCelular(celular);
+				usuario.setDocumento(documento);
+				usuario.setTipoDocumento(tipoDocumento);
+				usuario.setActivo(activo != null ? activo : "inactivo");
+				
+				// Actualizar contraseña solo si se proporciona una nueva
+				if (password != null && !password.trim().isEmpty()) {
+					usuario.setPassword(password);
+				}
+				
+				// Actualizar fecha de nacimiento si se proporciona
+				if (fechaNacimientoStr != null && !fechaNacimientoStr.trim().isEmpty()) {
+					try {
+						Date fechaNacimiento = Date.valueOf(fechaNacimientoStr);
+						usuario.setFechaNacimiento(fechaNacimiento);
+					} catch (Exception e) {
+						System.err.println("Error al parsear fecha de nacimiento: " + e.getMessage());
+					}
+				}
+				
+				// Actualizar avatar si se proporciona
+				if (avatar != null) {
+					usuario.setAvatar(avatar);
+				}
+				
+				// El rol NO se modifica - se mantiene el rol actual del usuario
+				
+				usuarioServiceImplement.save(usuario);
+				redirectAttributes.addFlashAttribute("success", "Usuario actualizado exitosamente");
+				System.out.println("✅ Usuario actualizado correctamente: " + usuario.getNombre() + " " + usuario.getApellido());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			redirectAttributes.addFlashAttribute("error", "Error al actualizar el usuario");
+		}
+		return "redirect:/PanelCodiplay/Admin/editar_usuarios";
 	}
 
 	@GetMapping("/Admin/proceso_estudiantes")
