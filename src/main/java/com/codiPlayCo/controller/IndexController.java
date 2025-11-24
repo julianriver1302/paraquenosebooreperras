@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
 import com.codiPlayCo.model.Usuario;
 import com.codiPlayCo.service.IUsuarioService;
 
@@ -44,16 +43,20 @@ public class IndexController {
 		return "registropago";
 	}
 
+	@GetMapping("/gracias")
+	public String gracias() {
+		return "gracias";
+	}
+
 	@Autowired
 	private IUsuarioService usuarioService;
-	
+
 	@GetMapping("/login")
 	public String login(Model model) {
 		model.addAttribute("usuario", new Usuario());
 		return "iniciosesion"; // tu archivo HTML/Thymeleaf con el formulario
 	}
 
-	
 	@PostMapping("/login")
 	public String procesarLogin(@ModelAttribute Usuario usuario, HttpSession session, IndexController redirectAttrs) {
 		LOGGER.info("Intentando acceder con usuario: {}", usuario.getEmail());
@@ -95,8 +98,5 @@ public class IndexController {
 			return "redirect:/iniciosesion?error";
 		}
 	}
-	
-	 
 
-	   
-	}
+}
