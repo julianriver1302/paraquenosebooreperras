@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Curso 1 - Lección 1 (Versión 2)</title>
+
+	<style>
+		body {
+			font-family: 'Poppins', sans-serif;
+			background: #0a0a0c;
+			color: white;
+			margin: 0;
+			padding: 0;
+			overflow-x: hidden;
+		}
+
+		/* Fondo cuadriculado */
+		.background-grid {
+			position: fixed;
+			inset: 0;
+			background:
+				linear-gradient(to right, #ffffff06 1px, transparent 1px),
+				linear-gradient(to bottom, #ffffff06 1px, transparent 1px);
+			background-size: 70px 70px;
+			mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
+			z-index: 0;
+		}
+
+		/* ICONOS FLOTANTES */
+		.icon {
+			position: fixed;
+			font-size: 30px;
+			opacity: 0.24;
+			z-index: 1;
+			animation: float 6s ease-in-out infinite;
+		}
+
+		.icon-big { font-size: 42px; opacity: 0.22; }
+		.icon-small { font-size: 20px; opacity: 0.16; }
+
+		@keyframes float {
+			0%,100% { transform: translateY(0); }
+			50% { transform: translateY(18px); }
+		}
+
+		.spin { animation: spin 9s linear infinite; }
+		@keyframes spin {
+			from { transform: rotate(0); }
+			to { transform: rotate(360deg); }
+		}
+
+		/* Contenedor */
+		.container {
+			position: relative;
+			z-index: 4;
+			max-width: 950px;
+			margin: auto;
+			padding: 80px 25px;
+			text-align: center;
+		}
+
+		h1 {
+			font-size: 48px;
+			font-weight: 700;
+			margin-bottom: 25px;
+			background: linear-gradient(90deg, #ffe36d, #ffb14d, #ffdc72);
+			-webkit-background-clip: text;
+			color: transparent;
+			text-shadow: 0 0 12px #ffe36d55;
+		}
+
+		/* Tarjeta */
+		.card {
+			background: linear-gradient(to bottom right, #1a1a1f, #121214 60%, #44310055);
+			border-radius: 35px;
+			padding: 55px;
+			box-shadow: 0 0 50px #000000b0;
+			position: relative;
+			overflow: hidden;
+			z-index: 4;
+		}
+
+		.card img {
+			display: block;
+			margin: 25px auto;
+		}
+
+		p {
+			font-size: 20px;
+			line-height: 1.7;
+		}
+
+		/* Robots */
+		.robot {
+			position: absolute;
+			width: 260px;
+			z-index: 2;
+			opacity: 0.97;
+			filter: drop-shadow(0 0 18px #000);
+			animation: float 5s ease-in-out infinite;
+		}
+
+		.robot-left { left: -140px; top: 43%; }
+		.robot-right { right: -140px; top: 44%; animation-delay: 1.2s; }
+
+		/* Botón */
+		.btn-next {
+			display: inline-block;
+			margin-top: 30px;
+			background: #ffe36d;
+			color: #000;
+			padding: 18px 40px;
+			border-radius: 50px;
+			font-size: 20px;
+			font-weight: 600;
+			text-decoration: none;
+			transition: 0.3s ease;
+			box-shadow: 0 0 18px #ffe36db5;
+		}
+
+		.btn-next:hover {
+			transform: scale(1.08);
+			box-shadow: 0 0 30px #ffe36dff;
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- Fondo cuadriculado -->
+	<div class="background-grid"></div>
+
+	<!-- ICONOS flotantes -->
+	<div class="icon icon-big spin" style="top: 15%; left: 12%;">⚙️</div>
+	<div class="icon" style="top: 32%; right: 20%;">✨</div>
+	<div class="icon icon-small" style="bottom: 25%; left: 18%;">💫</div>
+	<div class="icon icon-big" style="top: 65%; right: 8%;">✦</div>
+	<div class="icon" style="top: 55%; left: 30%;">⚡</div>
+	<div class="icon icon-small" style="bottom: 15%; right: 15%;">🌟</div>
+
+	<!-- Robots decorativos -->
+	<img src="/mnt/data/7b40dc0a-4553-4951-8d7f-af4aa1ad9610.png" class="robot robot-left">
+	<img src="/mnt/data/a3c2c3c6-8a4c-43ae-b847-228240696039.png" class="robot robot-right">
+
+	<div class="container">
+
+		<h1>Lección 1 – ¿Qué es CSS?</h1>
+
+		<div class="card">
+
+			<p>
+				CSS es lo que hace que una página se vea bonita,
+				con colores, formas y estilos profesionales.
+			</p>
+
+			<img src="https://cdn-icons-png.flaticon.com/512/5968/5968242.png" width="150">
+
+			<p>
+				HTML construye la estructura…  
+				<b>¡y CSS le da estilo mágico! ✨</b>
+			</p>
+
+			<p>¿Listo para seguir aprendiendo? Vamos a conocer cómo conectarlo.</p>
+
+			<a href="/CursoTrilogia1/modulo2/leccion2" class="btn-next">
+				Siguiente ➜
+			</a>
+
+		</div>
+
+	</div>
+
+</body>
+
+</html>
