@@ -25,7 +25,7 @@ public class EmailService {
 		String asunto = "🎉 ¡Tu clase gratis está confirmada! - CodiPlayCo";
 		String cuerpo = "Hola " + nombre + ",\n\n"
 				+ "🎮 ¡Gracias por registrarte a tu clase gratuita en *CodiPlayCo*! 🎮\n\n"
-				+ "🗓 Fecha: Sábado 2 de noviembre de 2025\n" + "⏰ Hora: 10:00 a.m.\n"
+				+ "🗓 Fecha: Tu fecha se te asignara pronto\n"
 				+ "📍 Lugar: CodiPlayCo - Duitama, Boyacá\n\n"
 				+ "Te esperamos con toda la energía para aprender programación de forma divertida 🚀\n\n"
 				+ "Si tienes alguna duda, puedes escribirnos a codiplayco@gmail.com.\n\n" + "¡Nos vemos pronto!\n"
