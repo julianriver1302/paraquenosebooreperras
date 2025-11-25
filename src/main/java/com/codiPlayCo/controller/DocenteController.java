@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +25,12 @@ import com.codiPlayCo.model.Curso;
 import com.codiPlayCo.model.ProgresoEstudianteDTO;
 import com.codiPlayCo.model.Actividades;
 import com.codiPlayCo.model.ActividadesEstudiantes;
+import com.codiPlayCo.model.Foro;
 import com.codiPlayCo.service.IUsuarioService;
 import com.codiPlayCo.service.ICursoService;
 import com.codiPlayCo.repository.ActividadesRepository;
 import com.codiPlayCo.repository.ActividadesEstudiantesRepository;
+import com.codiPlayCo.repository.ForoRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -43,6 +49,9 @@ public class DocenteController {
 
 	@Autowired
 	private ActividadesEstudiantesRepository actividadesEstudiantesRepository;
+
+	@Autowired
+	private ForoRepository foroRepository;
 
 	@GetMapping ("/paneldocente")
     public String panel(HttpSession session, Model model) {
@@ -197,9 +206,66 @@ public class DocenteController {
     }
 
     @GetMapping("/foros")
-    public String foros() {
-        return "InterfazDocente/Foros";
-    }
+	public String foros(HttpSession session, Model model) {
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+		Integer rol = (Integer) session.getAttribute("rol");
+
+		if (idUsuario == null || rol == null || rol != 2) {
+			return "redirect:/iniciosesion?error=acceso_denegado";
+		}
+
+		Usuario docente = usuarioService.findById(idUsuario).orElse(null);
+		if (docente == null || docente.getRol() == null || docente.getRol().getId() != 2) {
+			return "redirect:/iniciosesion?error=acceso_denegado";
+		}
+
+		List<Curso> cursosDocente = cursoService.findByDocenteId(idUsuario);
+		Map<Integer, List<Foro>> forosPorCurso = new HashMap<>();
+
+		for (Curso curso : cursosDocente) {
+			List<Foro> forosCurso = foroRepository.findByCursoId(curso.getId());
+			forosPorCurso.put(curso.getId(), forosCurso);
+		}
+
+		model.addAttribute("docente", docente);
+		model.addAttribute("cursos", cursosDocente);
+		model.addAttribute("forosPorCurso", forosPorCurso);
+
+		return "InterfazDocente/Foros";
+	}
+
+	@PostMapping("/foros/crear")
+	public String crearForo(@RequestParam("cursoId") Integer cursoId,
+	                      @RequestParam("titulo") String titulo,
+	                      @RequestParam("descripcion") String descripcion,
+	                      HttpSession session,
+	                      RedirectAttributes redirectAttrs) {
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+		Integer rol = (Integer) session.getAttribute("rol");
+
+		if (idUsuario == null || rol == null || rol != 2) {
+			return "redirect:/iniciosesion?error=acceso_denegado";
+		}
+
+		Usuario docente = usuarioService.findById(idUsuario).orElse(null);
+		Curso curso = cursoService.get(cursoId).orElse(null);
+
+		if (docente == null || curso == null) {
+			redirectAttrs.addFlashAttribute("error", "No se pudo crear el foro. Verifique el curso seleccionado.");
+			return "redirect:/InterfazDocente/foros";
+		}
+
+		Foro foro = new Foro();
+		foro.setTitulo(titulo);
+		foro.setDescripcion(descripcion);
+		foro.setFechaCreacion(LocalDateTime.now());
+		foro.setCurso(curso);
+		foro.setDocente(docente);
+		foroRepository.save(foro);
+
+		redirectAttrs.addFlashAttribute("mensaje", "Foro creado correctamente.");
+		return "redirect:/InterfazDocente/foros";
+	}
 
     @GetMapping("/mis-cursos")
     public String misCursos(HttpSession session, Model model) {

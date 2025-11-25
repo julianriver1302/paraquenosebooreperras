@@ -51,20 +51,39 @@
 		<div class="container">
 			<div class="panel">
 				<h2><span class="panel-icon"><i class="fa-solid fa-comment-dots"></i></span> Crear Foro</h2>
-				<label>Tema:</label>
-				<input type="text" placeholder="Ej: Ideas para nuevos juegos">
-				<label>Curso:</label>
-				<select>
-					<option>Trilogia Básico</option>
-					<option>Trilogia Avanzado</option>
-					<option>Python</option>
-					<option>Scratch</option>
-					<option>Roblox Studio</option>
-					<option>Unity</option>
-				</select>
-				<label>Descripción:</label>
-				<textarea rows="3"></textarea>
-				<button>Crear Foro</button>
+				<form th:action="@{/InterfazDocente/foros/crear}" method="post" class="form-foro">
+					<label for="titulo">Tema:</label>
+					<input id="titulo" name="titulo" type="text" placeholder="Ej: Ideas para nuevos juegos" required>
+					<label for="cursoId">Curso:</label>
+					<select id="cursoId" name="cursoId" required>
+						<option value="" disabled selected>Selecciona un curso</option>
+						<option th:each="curso : ${cursos}"
+						        th:value="${curso.id}"
+						        th:text="${curso.curso}">Curso</option>
+					</select>
+					<label for="descripcion">Descripción:</label>
+					<textarea id="descripcion" name="descripcion" rows="3" required></textarea>
+					<button type="submit">Crear Foro</button>
+				</form>
+			</div>
+
+			<div class="panel" th:if="${cursos != null}">
+				<h2><span class="panel-icon"><i class="fa-solid fa-list"></i></span> Foros creados</h2>
+				<div th:each="curso : ${cursos}" class="foro-curso-bloque">
+					<h3 th:text="${curso.curso}">Nombre curso</h3>
+					<div th:if="${#maps.containsKey(forosPorCurso, curso.id) and !#lists.isEmpty(forosPorCurso[curso.id])}">
+						<ul class="lista-foros">
+							<li th:each="foro : ${forosPorCurso[curso.id]}">
+								<strong th:text="${foro.titulo}">Título foro</strong><br>
+								<span th:text="${foro.descripcion}">Descripción</span><br>
+								<small th:text="${#temporals.format(foro.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</small>
+							</li>
+						</ul>
+					</div>
+					<div th:if="${!#maps.containsKey(forosPorCurso, curso.id) || #lists.isEmpty(forosPorCurso[curso.id])}">
+						<p>No hay foros para este curso.</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
