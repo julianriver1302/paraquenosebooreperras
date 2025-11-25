@@ -51,4 +51,10 @@ public class CursoServiceImplement implements ICursoService {
     public List<Curso> findByUsuarioId(Integer usuarioId) {
         return cursoRepository.findByUsuarioId(usuarioId);
     }
+
+    // Cursos asignados a un docente específico
+    @Override
+    public List<Curso> findByDocenteId(Integer docenteId) {
+        return cursoRepository.findByDocenteId(docenteId);
+    }
 }

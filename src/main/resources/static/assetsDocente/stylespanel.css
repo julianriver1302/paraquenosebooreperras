@@ -1546,4 +1546,86 @@ body.dark-mode .submenu button:hover {
     font-size: 0.9rem;
   }
 }
+/* Contenedor general */
+.datos-docente-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Línea con DOCENTE - EMAIL - CÉDULA */
+.datos-docente-linea {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Cada campo */
+.dato-item {
+    display: flex;
+    gap: .5rem;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.dato-label {
+    font-weight: 700;
+}
+
+.dato-valor {
+    font-weight: 400;
+}
+
+/* Subir imagen */
+.subir-imagen {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.subir-imagen-form {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.input-file {
+    background: #fff;
+    padding: .4rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-subir {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: .5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-subir:hover {
+    background: #43a047;
+}
+
+/* Mensajes */
+.error-message {
+    background: #ffebee;
+    color: #c62828;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ef5350;
+}
+
+.no-data-message {
+    background: #fff3e0;
+    color: #ef6c00;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
 
