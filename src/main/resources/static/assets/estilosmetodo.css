@@ -1,0 +1,113 @@
+/* ======= MODAL FUTURISTA STRIPE ======= */
+
+#modal-metodo-pago {
+    backdrop-filter: blur(6px);
+}
+
+.modal {
+    position: relative;
+    width: 380px;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(20, 20, 35, 0.80);
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.20), 
+                0 0 45px rgba(0, 180, 255, 0.15);
+    border: 2px solid rgba(0, 255, 255, 0.4);
+
+    /* Animación */
+    animation: modalPop 0.45s ease-out;
+}
+
+@keyframes modalPop {
+    from {
+        transform: scale(0.60);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal .separator p {
+    font-family: 'Rubik', sans-serif;
+    color: #00eaff;
+    font-size: 1.1rem;
+    text-shadow: 0 0 8px #00eaff;
+}
+
+.modal .separator .line {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00eaff, transparent);
+}
+
+/* ----- Botón cerrar futurista ----- */
+#cerrar-modal-metodo span {
+    transition: 0.3s;
+}
+
+#cerrar-modal-metodo:hover span {
+    color: #ff4b4b;
+    text-shadow: 0 0 6px #ff4b4b;
+    transform: scale(1.15);
+}
+
+/* ----- Stripe Card Element ----- */
+#card-element {
+    padding: 14px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(0,255,255,0.25);
+    box-shadow: inset 0 0 12px rgba(0,255,255,0.20);
+}
+
+/* ----- BOTÓN FUTURISTA ----- */
+.purchase--btn {
+    width: 100%;
+    padding: 14px;
+    margin-top: 18px;
+    border: none;
+    outline: none;
+    border-radius: 12px;
+
+    background: linear-gradient(90deg, #00eaff, #008cff);
+    color: #001219;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.25s;
+    box-shadow: 0 0 12px rgba(0, 180, 255, 0.4);
+}
+
+.purchase--btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 18px rgba(0, 255, 255, 0.7);
+}
+
+/* ----- Glow al contenedor ----- */
+.modal::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 2px;
+
+    background: linear-gradient(45deg,
+            #00eaff,
+            #008cff,
+            #7a00ff,
+            #00eaff);
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    
+    animation: borderGlow 3s linear infinite;
+}
+
+@keyframes borderGlow {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
