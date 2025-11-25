@@ -100,31 +100,43 @@ if(nav && navToggle && navOverlay) {
 }
 </script>
     <div class="container">
-        <div class="panel">
-            <h2><span class="panel-icon"><i class="fa-solid fa-chart-line"></i></span> Progreso de Estudiantes</h2>
-            <label for="curso">Seleccionar Curso:</label>
-            <select id="curso">
-                <option>Trilogia Básico</option>
-                <option>Trilogia Avanzado</option>
-                <option>Python</option>
-                <option>Scratch</option>
-                <option>Roblox Studio</option>
-                <option>Unity</option>
-            </select>
-            <div class="progreso-estudiante">
-                <p>Juan Pérez - 75%</p>
-                <div class="barra-progreso">
-                    <div class="progreso" style="width: 75%;"></div>
-                </div>
+        <div class="panel" th:if="${cursos == null or #lists.isEmpty(cursos)}">
+            <h2><span class="panel-icon"><i class="fa-solid fa-chart-line"></i></span>Curso Asignado</h2>
+            <p>No tienes cursos asignados actualmente.</p>
+        </div>
+
+        <div th:each="curso : ${cursos}" class="panel">
+            <h2><span class="panel-icon"><i class="fa-solid fa-chart-line"></i></span>
+                <span th:text="${curso.curso}">Nombre del curso</span>
+            </h2>
+
+            <div th:if="${#maps.containsKey(progresoPorCurso, curso.id)}">
+                <table class="tabla-progreso">
+                    <thead>
+                        <tr>
+                            <th>Estudiante</th>
+                            <th>Progreso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${progresoPorCurso[curso.id]}">
+                            <td th:text="${p.nombreCompleto}">Nombre estudiante</td>
+                            <td>
+                                <span th:text="${#numbers.formatDecimal(p.porcentaje, 0, 2)} + ' %'"></span>
+                                <div class="barra-progreso">
+                                    <div class="progreso" th:style="'width:' + ${p.porcentaje} + '%';"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="progreso-estudiante">
-                <p>Lucía Gómez - 90%</p>
-                <div class="barra-progreso">
-                    <div class="progreso" style="width: 90%;"></div>
-                </div>
+
+            <div th:if="${!#maps.containsKey(progresoPorCurso, curso.id) || #lists.isEmpty(progresoPorCurso[curso.id])}">
+                <p>No hay estudiantes inscritos en este curso todavía.</p>
             </div>
         </div>
     </div>
 </div>
 </body>
-</html> 
+</html>

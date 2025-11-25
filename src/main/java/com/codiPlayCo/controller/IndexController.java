@@ -1,5 +1,7 @@
 package com.codiPlayCo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -10,8 +12,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.codiPlayCo.model.Curso;
 import com.codiPlayCo.model.Usuario;
+import com.codiPlayCo.service.ICursoService;
 import com.codiPlayCo.service.IUsuarioService;
 
 import jakarta.servlet.http.HttpSession;
@@ -39,7 +44,13 @@ public class IndexController {
 	}
 
 	@GetMapping("/registropago")
-	public String registropago() {
+	public String registropago(@RequestParam(name = "cursoId", required = false) Integer cursoId,
+	                          HttpSession session,
+	                          Model model) {
+		if (cursoId != null) {
+			session.setAttribute("cursoIdSeleccionado", cursoId);
+			model.addAttribute("cursoId", cursoId);
+		}
 		return "registropago";
 	}
 
@@ -50,6 +61,9 @@ public class IndexController {
 
 	@Autowired
 	private IUsuarioService usuarioService;
+
+	@Autowired
+	private ICursoService cursoService;
 
 	@GetMapping("/login")
 	public String login(Model model) {
@@ -99,4 +113,34 @@ public class IndexController {
 		}
 	}
 
+	@PostMapping("/registropago/confirmar")
+	public String confirmarPago(HttpSession session) {
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+		Integer rol = (Integer) session.getAttribute("rol");
+		Integer cursoId = (Integer) session.getAttribute("cursoIdSeleccionado");
+
+		if (idUsuario == null || rol == null || rol != 3 || cursoId == null) {
+			return "redirect:/iniciosesion";
+		}
+
+		Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
+		Optional<Curso> cursoOpt = cursoService.get(cursoId);
+
+		if (usuarioOpt.isPresent() && cursoOpt.isPresent()) {
+			Usuario usuario = usuarioOpt.get();
+			Curso curso = cursoOpt.get();
+
+			List<Curso> cursosComprados = usuario.getCursosComprados();
+			if (cursosComprados == null) {
+				cursosComprados = new ArrayList<>();
+			}
+			if (!cursosComprados.contains(curso)) {
+				cursosComprados.add(curso);
+			}
+			usuario.setCursosComprados(cursosComprados);
+			usuarioService.save(usuario);
+		}
+
+		return "redirect:/gracias";
+	}
 }

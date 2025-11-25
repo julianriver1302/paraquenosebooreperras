@@ -20,4 +20,7 @@ public interface ICursoService {
 
     // 🔥 Nuevo método para obtener cursos por usuario logueado
     List<Curso> findByUsuarioId(Integer usuarioId);
+
+    // Cursos asignados a un docente
+    List<Curso> findByDocenteId(Integer docenteId);
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Foros</title>
+    <link rel="stylesheet" th:href="@{/assetsPanelUsuaario/stylespanelusuario.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+</head>
+<body>
+<div class="main-layout">
+    <header>
+        <div class="header-logo-title">
+            <h1 class="titulo-blanco"><span class="panel-icon"><i class="fa-solid fa-comments"></i></span>Foros</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="panel" th:if="${cursos == null or #lists.isEmpty(cursos)}">
+            <h2><span class="panel-icon"><i class="fa-solid fa-comment-dots"></i></span>Foros</h2>
+            <p>No tienes cursos inscritos todavía, por lo tanto no hay foros disponibles.</p>
+        </div>
+
+        <div class="panel" th:if="${cursos != null and !#lists.isEmpty(cursos)}">
+            <h2><span class="panel-icon"><i class="fa-solid fa-comment-dots"></i></span>Foros de mis cursos</h2>
+
+            <div th:each="curso : ${cursos}" class="foro-curso-bloque">
+                <h3 th:text="${curso.curso}">Nombre curso</h3>
+
+                <div th:if="${#maps.containsKey(forosPorCurso, curso.id) and !#lists.isEmpty(forosPorCurso[curso.id])}">
+                    <ul class="lista-foros">
+                        <li th:each="foro : ${forosPorCurso[curso.id]}">
+                            <div class="foro-item">
+                                <strong th:text="${foro.titulo}">Título foro</strong><br />
+                                <span th:text="${foro.descripcion}">Descripción</span><br />
+                                <small th:text="${#temporals.format(foro.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</small><br />
+                                <a th:href="@{'/PanelControlUsuario/foros/' + ${foro.id}}" class="btn">Ver y responder</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div th:if="${!#maps.containsKey(forosPorCurso, curso.id) || #lists.isEmpty(forosPorCurso[curso.id])}">
+                    <p>No hay foros para este curso aún.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
