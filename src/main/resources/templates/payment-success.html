@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Pago Exitoso | CodiPlayCo</title>
+
+	<!-- Fuentes futuristas -->
+	<link
+		href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Quantico:wght@400;700&display=swap"
+		rel="stylesheet">
+
+	<!-- Tu CSS global existente -->
+	<link th:href="@{/assets/estilosinicio.css}" rel="stylesheet" />
+	<link th:href="@{/assets/estilosmetodo.css}" rel="stylesheet" />
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background: radial-gradient(circle at top, #00111f, #000000 80%);
+			font-family: 'Orbitron', sans-serif;
+			color: #00eaff;
+			height: 100vh;
+			overflow: hidden;
+		}
+
+		/* Animación estrellas */
+		.stars {
+			width: 100%;
+			height: 100%;
+			background: transparent url(../assets/imag/ab52e048-112b-4037-b524-a6e290351461.png) repeat;
+			animation: moveStars 180s linear infinite;
+			opacity: 0.15;
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+		@keyframes moveStars {
+			from {
+				background-position: 0 0;
+			}
+
+			to {
+				background-position: -3000px 3000px;
+			}
+		}
+
+		.container {
+			position: relative;
+			z-index: 10;
+			text-align: center;
+			margin-top: 120px;
+		}
+
+		.success-box {
+			background: rgba(0, 40, 70, 0.55);
+			padding: 40px;
+			width: 460px;
+			margin: auto;
+			border-radius: 18px;
+			border: 1px solid #00c6ff;
+			box-shadow: 0 0 25px #00eaff80;
+			backdrop-filter: blur(12px);
+			animation: fadeIn 0.9s ease-out;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(50px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		h1 {
+			font-size: 34px;
+			margin-bottom: 10px;
+			color: #00eaff;
+		}
+
+		p {
+			font-size: 18px;
+			color: #9ee8ff;
+			margin-bottom: 30px;
+		}
+
+		.btn-home {
+			display: inline-block;
+			padding: 14px 30px;
+			font-size: 18px;
+			background: linear-gradient(90deg, #009dff, #00eaff);
+			border-radius: 12px;
+			color: #000;
+			font-weight: bold;
+			text-decoration: none;
+			transition: 0.3s;
+			box-shadow: 0 0 10px #00eaff;
+		}
+
+		.btn-home:hover {
+			transform: scale(1.07);
+			box-shadow: 0 0 18px #00eaff;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<div class="stars"></div>
+
+	<div class="container">
+		<div class="success-box">
+			<h1>✔ ¡Pago Exitoso!</h1>
+			<p>Tu compra del curso ha sido registrada correctamente.<br>
+				Se ha enviado un correo con los detalles del pago.</p>
+
+			<a th:href="@{/}" class="btn-home">Volver al Inicio</a>
+		</div>
+	</div>
+
+</body>
+
+</html>
