@@ -1,130 +1,278 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Pago | CodiPlayCo</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Registro de Pago | CodiPlayCo</title>
 
-    <!-- Fuentes -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&family=Rubik:wght@400;500;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet"/>
+	<!-- Fuentes -->
+	<link
+		href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&family=Rubik:wght@400;500;700&family=Quicksand:wght@500;700&display=swap"
+		rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet" />
 
-    <!-- Estilos -->
-    <link th:href="@{/assets/estilosinicio.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/estilosmetodo.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/estilosregistropago.css}" rel="stylesheet"/>
+	<!-- Estilos externos -->
+	<link th:href="@{/assets/estilosinicio.css}" rel="stylesheet" />
+	<link th:href="@{/assets/estilosmetodo.css}" rel="stylesheet" />
+	<link th:href="@{/assets/estilosregistropago.css}" rel="stylesheet" />
+
+	<!-- Stripe -->
+	<script src="https://js.stripe.com/v3/"></script>
+
+	<style>
+		/* ------- ESTILO FUTURISTA PARA EL MODAL ------- */
+		.futuristic-modal {
+			background: rgba(20, 25, 35, 0.95);
+			backdrop-filter: blur(12px);
+			border-radius: 18px;
+			padding: 35px;
+			width: 420px;
+			border: 1px solid rgba(0, 140, 255, 0.4);
+			box-shadow: 0 0 25px rgba(0, 170, 255, 0.35);
+			animation: fadeIn 0.3s ease;
+			position: relative;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: scale(0.95);
+			}
+
+			to {
+				opacity: 1;
+				transform: scale(1);
+			}
+		}
+
+		.modal-title {
+			color: #00d9ff;
+			font-size: 24px;
+			font-weight: bold;
+			text-align: center;
+			margin-bottom: 10px;
+		}
+
+		.modal-subtitle {
+			color: #a7d6ff;
+			text-align: center;
+			margin-bottom: 20px;
+		}
+
+		.card-element {
+			padding: 15px;
+			background: rgba(255, 255, 255, 0.08);
+			border-radius: 12px;
+			border: 1px solid rgba(0, 140, 255, 0.4);
+			margin-bottom: 20px;
+		}
+
+		.pay-btn {
+			width: 100%;
+			padding: 14px;
+			background: linear-gradient(90deg, #009dff, #00d9ff);
+			border: none;
+			border-radius: 12px;
+			color: white;
+			font-size: 18px;
+			cursor: pointer;
+			transition: 0.3s;
+		}
+
+		.pay-btn:hover {
+			transform: scale(1.04);
+			box-shadow: 0 0 12px #00d9ff;
+		}
+
+		.close-btn {
+			position: absolute;
+			right: 15px;
+			top: 15px;
+			background: none;
+			border: none;
+			color: #00d9ff;
+			font-size: 22px;
+			cursor: pointer;
+		}
+	</style>
+
 </head>
+
 <body>
-    <!-- Logo -->
-    <div class="logo-corner">
-        <a th:href="@{/}">
-            <img th:src="@{/assets/imag/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}" 
-                 alt="CodiPlayCo Logo" 
-                 class="logo-animate h-36 w-auto md:h-48 max-w-[420px]"/>
-        </a>
-    </div>
 
-    <!-- Formulario de registro de pago -->
-    <main class="main-form-bg">
-        <div class="form" style="position: relative; overflow: hidden;">
-            <!-- Estrellas -->
-            <div class="bg-stars">
-                <div class="star"></div><div class="star"></div><div class="star"></div>
-                <div class="star"></div><div class="star"></div><div class="star"></div>
-                <div class="star"></div><div class="star"></div><div class="star"></div>
-                <div class="star"></div><div class="star"></div><div class="star"></div>
-            </div>
+	<!-- Logo -->
+	<div class="logo-corner">
+		<a th:href="@{/}">
+			<img th:src="@{/assets/imag/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}" alt="CodiPlayCo Logo"
+				class="logo-animate h-36 w-auto md:h-48 max-w-[420px]" />
+		</a>
+	</div>
 
-            <div class="form-title"><span></span> Registro de pago</div>
-            <div class="title-2"><span>CodiPlayCo</span></div>
+	<!-- Formulario -->
+	<main class="main-form-bg">
+		<div class="form" style="position: relative; overflow: hidden;">
 
-            <!-- Spring Boot Controller se enlaza aquí -->
-            <form th:action="@{/registropago}"  method="post" autocomplete="on">
-                <div class="input-container">
-                    <label for="nombre"> Nombre del padre/madre</label>
-                    <input type="text" id="nombre" placeholder="Nombre del padre/madre" required />
-                </div>
+			<!-- Fondo Estrellas -->
+			<div class="bg-stars">
+				<div class="star"></div>
+				<div class="star"></div>
+				<div class="star"></div>
+				<div class="star"></div>
+				<div class="star"></div>
+				<div class="star"></div>
+				<div class="star"></div>
+				<div class="star"></div>
+				<div class="star"></div>
+				<div class="star"></div>
+				<div class="star"></div>
+				<div class="star"></div>
+			</div>
 
-                <div class="input-container">
-                    <label for="email"> Correo electrónico</label>
-                    <input type="email" id="email"  placeholder="Correo electrónico" required />
-                </div>
+			<div class="form-title">Registro de pago</div>
+			<div class="title-2"><span>CodiPlayCo</span></div>
 
-                <div class="input-container">
-                    <label for="promocion"> Código Promocional</label>
-                    <input type="text" id="promocion"  placeholder="Código Promocional" />
-                </div>
+			<form id="form-registro">
 
-                <div class="input-container">
-                    <label for="phone"> Número de teléfono</label>
-                    <input id="phone" type="tel"  placeholder="Número de teléfono" required />
-                </div>
+				<div class="input-container">
+					<label>Nombre del padre/madre</label>
+					<input type="text" id="nombre" required />
+				</div>
 
-                <button type="submit" class="submit" id="btn-pago">Registrar ir al Pago</button>
-            </form>
+				<div class="input-container">
+					<label>Correo electrónico</label>
+					<input type="email" id="email" required />
+				</div>
 
-            <p class="signup-link">
-                ¿Ya tienes cuenta? 
-                <a th:href="@{/iniciosesion}" class="up">Inicia sesión aquí</a>
-            </p>
-        </div>
-    </main>
-    
-    <!-- Modal de método de pago -->
-    <div id="modal-metodo-pago" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.35); justify-content:center; align-items:center;">
-      <div style="display:flex; justify-content:center; align-items:center; width:100vw; height:100vh; position:relative;">
-        <div class="modal">
-          <button id="cerrar-modal-metodo" aria-label="Cerrar" style="position:absolute; top:18px; right:18px; background:transparent; border:none; font-size:2rem; color:#2563eb; cursor:pointer; z-index:10; line-height:1;">
-            <span class="material-icons">close</span>
-          </button>
-          <form class="form" th:action="@{/registropago/confirmar}" method="post">
-            <div class="payment--options">
-              <button name="credito" type="button">
-                <span style="font-weight:700; color:#444; font-size:1.1em; display:flex; align-items:center; gap:6px;">
-                  <span class="material-icons" style="font-size:1.5em;">credit_card</span> Tarjeta de Crédito
-                </span>
-              </button>
-              <button name="debito" type="button">
-                <span style="font-weight:700; color:#444; font-size:1.1em; display:flex; align-items:center; gap:6px;">
-                  <span class="material-icons" style="font-size:1.5em;">credit_card</span> Tarjeta Débito
-                </span>
-              </button>
-              <button name="pse" type="button">
-                <span style="font-weight:700; color:#444; font-size:1.1em; display:flex; align-items:center; gap:6px;">
-                  <span class="material-icons" style="font-size:1.5em;">account_balance</span> PSE
-                </span>
-              </button>
-            </div>
-            <div class="separator">
-              <hr class="line">
-              <p>o paga con tarjeta</p>
-              <hr class="line">
-            </div>
-            <div class="credit-card-info--form">
-              <div class="input_container">
-                <label for="nombre_titular" class="input_label">Nombre completo del titular</label>
-                <input id="nombre_titular" class="input_field" type="text" name="nombre_titular" placeholder="Ingresa tu nombre completo">
-              </div>
-              <div class="input_container">
-                <label for="numero_tarjeta" class="input_label">Número de tarjeta</label>
-                <input id="numero_tarjeta" class="input_field" type="number" name="numero_tarjeta" placeholder="0000 0000 0000 0000">
-              </div>
-              <div class="input_container">
-                <label for="fecha_cvv" class="input_label">Fecha de vencimiento / CVV</label>
-                <div class="split">
-                  <input id="fecha_vencimiento" class="input_field" type="text" name="fecha_vencimiento" placeholder="MM/AA">
-                  <input id="cvv" class="input_field" type="number" name="cvv" placeholder="CVV">
-                </div>
-              </div>
-            </div>
-            <input type="hidden" name="cursoId" th:value="${cursoId}">
-            <button class="purchase--btn" type="submit">Pagar</button>
-          </form>
-        </div>
-      </div>
-    </div>
+				<div class="input-container">
+					<label>Código promocional</label>
+					<input type="text" id="promocion" />
+				</div>
 
-    <!-- Script -->
-    <script th:src="@{/assets/scriptregistropago.js}"></script>
+				<div class="input-container">
+					<label>Número de teléfono</label>
+					<input type="tel" id="telefono" required />
+				</div>
+
+				<button type="submit" class="submit">Registrar e ir al Pago</button>
+			</form>
+
+			<p class="signup-link">
+				¿Ya tienes cuenta?
+				<a th:href="@{/iniciosesion}" class="up">Inicia sesión aquí</a>
+			</p>
+
+		</div>
+	</main>
+
+	<!-- MODAL STRIPE -->
+	<div id="modal-metodo-pago" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; 
+        background:rgba(0,0,0,0.4); justify-content:center; align-items:center;">
+
+		<div class="futuristic-modal">
+			<button class="close-btn" id="cerrar-modal-metodo">✖</button>
+
+			<h2 class="modal-title">💳 Pagar Curso CodiPlay</h2>
+			<p class="modal-subtitle">Introduce los datos de tu tarjeta</p>
+
+			<!-- RESUMEN DEL PEDIDO -->
+			<div id="resumen-pago" style="background: rgba(255,255,255,0.06); padding: 15px; border-radius: 12px; 
+                       border: 1px solid rgba(0,140,255,0.3); margin-bottom: 20px; color: #c9e8ff;">
+				<h3 style="margin: 0 0 10px 0; color: #00d9ff; font-size: 18px;">🧾 Resumen del pago</h3>
+				<p style="margin: 4px 0;"><strong>Producto:</strong> <span id="producto"></span></p>
+				<p style="margin: 4px 0;"><strong>Valor:</strong> <span id="precio"></span></p>
+			</div>
+
+			<div id="card-element" class="card-element"></div>
+
+			<button id="payButton" class="pay-btn">Pagar ahora</button>
+
+			<p id="card-errors" class="error-text"></p>
+		</div>
+	</div>
+
+	<input type="hidden" id="cursoNombre" value="[[${curso.nombre}]]">
+	<input type="hidden" id="cursoPrecio" value="[[${curso.precio}]]">
+	<input type="hidden" id="cursoId" value="[[${curso.id}]]">
+
+	<!-- Script Pago -->
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+
+			const stripe = Stripe("pk_test_51SX7JBPq4mgnIKbVAOWyqzo4vG9fVH87XgZhJcxs8BUZl2Z8r7wWnPWnlsQzY7QxKaA41FNaHLXZeuJWxIBHAegA00tHKCkZjT");
+
+			let clientSecret = null;
+			let card = null;
+
+			const modal = document.getElementById("modal-metodo-pago");
+
+			document.getElementById("form-registro").addEventListener("submit", async (e) => {
+				e.preventDefault();
+				modal.style.display = "flex";
+				await iniciarPago();
+			});
+
+			document.getElementById("cerrar-modal-metodo").onclick = () => {
+				modal.style.display = "none";
+			};
+
+			async function iniciarPago() {
+
+				// 🔥 DATOS DEL FORMULARIO
+				const nombre = document.getElementById("nombre").value;
+				const email = document.getElementById("email").value;
+				const telefono = document.getElementById("telefono").value;
+
+				// 🔥 DATOS DEL CURSO (de la base de datos)
+				const nombreCurso = document.getElementById("cursoNombre").value;
+				const precioCurso = document.getElementById("cursoPrecio").value;
+
+				// 🔥 STRIPE: enviar valores reales al backend
+				const res = await fetch("/api/payments/create-payment-intent", {
+					method: "POST",
+					headers: {"Content-Type": "application/json"},
+					body: JSON.stringify({
+						amount: precioCurso * 100, // Stripe usa centavos
+						currency: "cop",
+						description: nombreCurso,
+						nombre, email, telefono
+					})
+				});
+
+				const data = await res.json();
+				clientSecret = data.clientSecret;
+
+				/* --- MOSTRAR RESUMEN EN EL MODAL CON DATOS REALES --- */
+				document.getElementById("curso").innerText = nombreCurso;
+				document.getElementById("precio").innerText = precioCurso + " COP";
+
+				cargarStripe();
+			}
+
+			function cargarStripe() {
+				const elements = stripe.elements();
+				card = elements.create("card");
+				card.mount("#card-element");
+			}
+
+			document.getElementById("payButton").addEventListener("click", async () => {
+
+				const {error, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
+					payment_method: {card}
+				});
+
+				if (error) {
+					document.getElementById("card-errors").innerText = error.message;
+				} else if (paymentIntent.status === "succeeded") {
+					window.location.href = "/payment-success";
+				}
+
+			});
+
+		});
+	</script>
+
+
 </body>
+
 </html>
