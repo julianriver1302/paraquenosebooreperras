@@ -10,51 +10,57 @@ import com.codiPlayCo.repository.ICursoRepository;
 @Service
 public class CursoServiceImplement implements ICursoService {
 
-    @Autowired
-    private ICursoRepository cursoRepository;
+	@Autowired
+	private ICursoRepository cursoRepository;
 
-    @Override
-    public List<Curso> findAll() {
-        return cursoRepository.findAll();
-    }
+	@Override
+	public List<Curso> findAll() {
+		return cursoRepository.findAll();
+	}
 
-    @Override
-    public Curso save(Curso curso) {
-        return cursoRepository.save(curso);
-    }
+	@Override
+	public Curso save(Curso curso) {
+		return cursoRepository.save(curso);
+	}
 
-    @Override
-    public Curso update(Curso curso) {
-        return cursoRepository.save(curso);
-    }
+	@Override
+	public Curso update(Curso curso) {
+		return cursoRepository.save(curso);
+	}
 
-    @Override
-    public void delete(Integer id) {
-        cursoRepository.deleteById(id);
-    }
+	@Override
+	public void delete(Integer id) {
+		cursoRepository.deleteById(id);
+	}
 
-    @Override
-    public Optional<Curso> get(Integer id) {
-        return cursoRepository.findById(id);
-    }
+	@Override
+	public Optional<Curso> get(Integer id) {
+		return cursoRepository.findById(id);
+	}
 
-    @Override
-    public List<Curso> findCursosActivos() {
-        return cursoRepository.findAll()
-                .stream()
-                .filter(c -> "activo".equalsIgnoreCase(c.getEstado()))
-                .toList();
-    }
+	@Override
+	public List<Curso> findCursosActivos() {
+		return cursoRepository.findAll().stream().filter(c -> "activo".equalsIgnoreCase(c.getEstado())).toList();
+	}
 
-    // 🔥 Nuevo método: obtiene los cursos de un usuario específico
-    @Override
-    public List<Curso> findByUsuarioId(Integer usuarioId) {
-        return cursoRepository.findByUsuarioId(usuarioId);
-    }
+	// 🔥 Nuevo método: obtiene los cursos de un usuario específico
+	@Override
+	public List<Curso> findByUsuarioId(Integer usuarioId) {
+		return cursoRepository.findByUsuarioId(usuarioId);
+	}
 
-    // Cursos asignados a un docente específico
-    @Override
-    public List<Curso> findByDocenteId(Integer docenteId) {
-        return cursoRepository.findByDocenteId(docenteId);
-    }
+	// Cursos asignados a un docente específico
+	@Override
+	public List<Curso> findByDocenteId(Integer docenteId) {
+		return cursoRepository.findByDocenteId(docenteId);
+	}
+
+	@Override
+	public Optional<Curso> findById(Integer idCurso) {
+				return cursoRepository.findById(idCurso);
+	}
+
+
+
+	
 }

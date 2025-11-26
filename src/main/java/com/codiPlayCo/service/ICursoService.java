@@ -23,4 +23,6 @@ public interface ICursoService {
 
     // Cursos asignados a un docente
     List<Curso> findByDocenteId(Integer docenteId);
+
+	Optional<Curso> findById(Integer idCurso);
 }

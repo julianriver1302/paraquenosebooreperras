@@ -3,10 +3,13 @@ package com.codiPlayCo.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.codiPlayCo.dto.PaymentRequest;
+import com.codiPlayCo.model.Pago;
+import com.codiPlayCo.repository.PagoRepository;
 import com.stripe.Stripe;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
@@ -52,5 +55,12 @@ public class PaymentService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Autowired
+    private PagoRepository pagoRepository;
+
+    public Pago guardar(Pago pago) {
+        return pagoRepository.save(pago);
     }
 }
