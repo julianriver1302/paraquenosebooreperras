@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -195,10 +196,7 @@ public class DocenteController {
         return "redirect:/InterfazDocente/tareas";
     }
 
-    @GetMapping("/asistencia")
-    public String asistencia() {
-        return "InterfazDocente/Asistencia";
-    }
+   
 
     @GetMapping("/mensajes")
     public String mensajes() {
@@ -265,6 +263,41 @@ public class DocenteController {
 
 		redirectAttrs.addFlashAttribute("mensaje", "Foro creado correctamente.");
 		return "redirect:/InterfazDocente/foros";
+	}
+	
+	@PostMapping("/foros/editar")
+	public String editarForo(@RequestParam("foroId") Integer foroId,
+	                       @RequestParam("titulo") String titulo,
+	                       @RequestParam("descripcion") String descripcion,
+	                       HttpSession session,
+	                       RedirectAttributes redirectAttrs) {
+	    Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+	    Integer rol = (Integer) session.getAttribute("rol");
+
+	    if (idUsuario == null || rol == null || rol != 2) {
+	        return "redirect:/iniciosesion?error=acceso_denegado";
+	    }
+
+	    Optional<Foro> foroOpt = foroRepository.findById(foroId);
+	    if (foroOpt.isEmpty()) {
+	        redirectAttrs.addFlashAttribute("error", "El foro no existe o no se pudo encontrar.");
+	        return "redirect:/InterfazDocente/foros";
+	    }
+
+	    Foro foro = foroOpt.get();
+	    
+	    // Verificar que el usuario sea el dueño del foro
+	    if (!foro.getDocente().getId().equals(idUsuario)) {
+	        redirectAttrs.addFlashAttribute("error", "No tienes permiso para editar este foro.");
+	        return "redirect:/InterfazDocente/foros";
+	    }
+
+	    foro.setTitulo(titulo);
+	    foro.setDescripcion(descripcion);
+	    foroRepository.save(foro);
+
+	    redirectAttrs.addFlashAttribute("mensaje", "Foro actualizado correctamente.");
+	    return "redirect:/InterfazDocente/foros";
 	}
 
     @GetMapping("/mis-cursos")
