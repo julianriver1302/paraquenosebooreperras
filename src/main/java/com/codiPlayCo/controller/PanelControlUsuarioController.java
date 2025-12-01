@@ -26,297 +26,232 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class PanelControlUsuarioController {
 
-    @Autowired
-    private IUsuarioService usuarioService;
+	@Autowired
+	private IUsuarioService usuarioService;
 
-    @Autowired
-    private ICursoService cursoService; // ✅ Servicio para manejar cursos
+	@Autowired
+	private ICursoService cursoService; // ✅ Servicio para manejar cursos
 
-    @Autowired
-    private ForoRepository foroRepository;
+	@Autowired
+	private ForoRepository foroRepository;
 
-    @Autowired
-    private ForoRespuestaRepository foroRespuestaRepository;
+	@Autowired
+	private ForoRespuestaRepository foroRespuestaRepository;
 
-    @GetMapping("/PanelControlUsuario/inicio")
-    public String inicio(HttpSession session, Model model) {
-        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+	@GetMapping("/PanelControlUsuario/inicio")
+	public String inicio(HttpSession session, Model model) {
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
 
-        if (idUsuario != null) {
-            Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
-            if (usuarioOpt.isPresent()) {
-                Usuario usuario = usuarioOpt.get();
-                model.addAttribute("usuario", usuario);
-            }
-        }
-        return "PanelControlUsuario/inicio";
-    }
+		if (idUsuario != null) {
+			Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
+			if (usuarioOpt.isPresent()) {
+				Usuario usuario = usuarioOpt.get();
+				model.addAttribute("usuario", usuario);
+			}
+		}
+		return "PanelControlUsuario/inicio";
+	}
 
-    @GetMapping("/PanelControlUsuario/editar-perfil")
-    public String editarPerfil(HttpSession session, Model model) {
-        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+	@GetMapping("/PanelControlUsuario/editar-perfil")
+	public String editarPerfil(HttpSession session, Model model) {
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
 
-        Usuario usuario = new Usuario();
+		Usuario usuario = new Usuario();
 
-        if (idUsuario != null) {
-            Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
-            if (usuarioOpt.isPresent()) {
-                usuario = usuarioOpt.get();
-            }
-        }
+		if (idUsuario != null) {
+			Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
+			if (usuarioOpt.isPresent()) {
+				usuario = usuarioOpt.get();
+			}
+		}
 
-        model.addAttribute("usuario", usuario);
-        return "PanelControlUsuario/editar-perfil";
-    }
+		model.addAttribute("usuario", usuario);
+		return "PanelControlUsuario/editar-perfil";
+	}
 
-    @PostMapping("/PanelControlUsuario/editar-perfil")
-    public String actualizarPerfil(@ModelAttribute Usuario usuario, HttpSession session,
-            RedirectAttributes redirectAttrs, MultipartFile avatarFile) {
-        try {
-            Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+	@PostMapping("/PanelControlUsuario/editar-perfil")
+	public String actualizarPerfil(@ModelAttribute Usuario usuario, HttpSession session,
+			RedirectAttributes redirectAttrs, MultipartFile avatarFile) {
+		try {
+			Integer idUsuario = (Integer) session.getAttribute("idUsuario");
 
-            if (idUsuario != null) {
-                Optional<Usuario> usuarioExistenteOpt = usuarioService.findById(idUsuario);
-                if (usuarioExistenteOpt.isPresent()) {
-                    Usuario usuarioExistente = usuarioExistenteOpt.get();
+			if (idUsuario != null) {
+				Optional<Usuario> usuarioExistenteOpt = usuarioService.findById(idUsuario);
+				if (usuarioExistenteOpt.isPresent()) {
+					Usuario usuarioExistente = usuarioExistenteOpt.get();
 
-                    usuarioExistente.setNombre(usuario.getNombre());
-                    usuarioExistente.setApellido(usuario.getApellido());
-                    usuarioExistente.setEmail(usuario.getEmail());
-                    usuarioExistente.setCelular(usuario.getCelular());
-                    usuarioExistente.setDocumento(usuario.getDocumento());
+					usuarioExistente.setNombre(usuario.getNombre());
+					usuarioExistente.setApellido(usuario.getApellido());
+					usuarioExistente.setEmail(usuario.getEmail());
+					usuarioExistente.setCelular(usuario.getCelular());
+					usuarioExistente.setDocumento(usuario.getDocumento());
 
-                    if (avatarFile != null && !avatarFile.isEmpty()) {
-                        String contentType = avatarFile.getContentType();
-                        if (contentType != null && contentType.startsWith("image/")) {
-                            if (avatarFile.getSize() <= 2 * 1024 * 1024) {
-                                Path uploadDir = Paths.get("target/classes/static/uploads/avatars");
-                                if (!Files.exists(uploadDir)) {
-                                    Files.createDirectories(uploadDir);
-                                }
+					if (avatarFile != null && !avatarFile.isEmpty()) {
+						String contentType = avatarFile.getContentType();
+						if (contentType != null && contentType.startsWith("image/")) {
+							if (avatarFile.getSize() <= 2 * 1024 * 1024) {
+								Path uploadDir = Paths.get("target/classes/static/uploads/avatars");
+								if (!Files.exists(uploadDir)) {
+									Files.createDirectories(uploadDir);
+								}
 
-                                String originalFilename = avatarFile.getOriginalFilename();
-                                String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-                                String newFilename = UUID.randomUUID().toString() + extension;
+								String originalFilename = avatarFile.getOriginalFilename();
+								String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+								String newFilename = UUID.randomUUID().toString() + extension;
 
-                                Path filePath = uploadDir.resolve(newFilename);
-                                Files.copy(avatarFile.getInputStream(), filePath);
+								Path filePath = uploadDir.resolve(newFilename);
+								Files.copy(avatarFile.getInputStream(), filePath);
 
-                                usuarioExistente.setAvatar(newFilename);
-                            } else {
-                                redirectAttrs.addFlashAttribute("error", "El archivo es demasiado grande. Máximo 2MB.");
-                                return "redirect:/PanelControlUsuario/editar-perfil";
-                            }
-                        } else {
-                            redirectAttrs.addFlashAttribute("error", "Solo se permiten archivos de imagen.");
-                            return "redirect:/PanelControlUsuario/editar-perfil";
-                        }
-                    }
+								usuarioExistente.setAvatar(newFilename);
+							} else {
+								redirectAttrs.addFlashAttribute("error", "El archivo es demasiado grande. Máximo 2MB.");
+								return "redirect:/PanelControlUsuario/editar-perfil";
+							}
+						} else {
+							redirectAttrs.addFlashAttribute("error", "Solo se permiten archivos de imagen.");
+							return "redirect:/PanelControlUsuario/editar-perfil";
+						}
+					}
 
-                    usuarioService.save(usuarioExistente);
-                    redirectAttrs.addFlashAttribute("mensaje", "Perfil actualizado exitosamente.");
-                }
-            }
+					usuarioService.save(usuarioExistente);
+					redirectAttrs.addFlashAttribute("mensaje", "Perfil actualizado exitosamente.");
+				}
+			}
 
-            return "redirect:/PanelControlUsuario/editar-perfil";
+			return "redirect:/PanelControlUsuario/editar-perfil";
 
-        } catch (IOException e) {
-            redirectAttrs.addFlashAttribute("error", "Error al subir la imagen. Inténtalo de nuevo.");
-            return "redirect:/PanelControlUsuario/editar-perfil";
-        } catch (Exception e) {
-            redirectAttrs.addFlashAttribute("error", "Error al actualizar el perfil. Inténtalo de nuevo.");
-            return "redirect:/PanelControlUsuario/editar-perfil";
-        }
-    }
+		} catch (IOException e) {
+			redirectAttrs.addFlashAttribute("error", "Error al subir la imagen. Inténtalo de nuevo.");
+			return "redirect:/PanelControlUsuario/editar-perfil";
+		} catch (Exception e) {
+			redirectAttrs.addFlashAttribute("error", "Error al actualizar el perfil. Inténtalo de nuevo.");
+			return "redirect:/PanelControlUsuario/editar-perfil";
+		}
+	}
 
-    // ✅ NUEVO MÉTODO: muestra los cursos del usuario autenticado
-    @GetMapping("/PanelControlUsuario/mis_cursos")
-    public String misCursos(Model model, HttpSession session) {
-        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+	// ✅ NUEVO MÉTODO: muestra los cursos del usuario autenticado
+	@GetMapping("/PanelControlUsuario/mis_cursos")
+	public String misCursos(Model model, HttpSession session) {
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
 
-        if (idUsuario == null) {
-            return "redirect:/login";
-        }
+		if (idUsuario == null) {
+			return "redirect:/login";
+		}
 
-        Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
+		Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
 
-        if (usuarioOpt.isPresent()) {
-            Usuario usuario = usuarioOpt.get();
-            model.addAttribute("usuario", usuario);
+		if (usuarioOpt.isPresent()) {
+			Usuario usuario = usuarioOpt.get();
+			model.addAttribute("usuario", usuario);
 
-            // 🔥 Obtiene los cursos del usuario desde la BD
-            List<Curso> cursos = cursoService.findByUsuarioId(usuario.getId());
-            model.addAttribute("cursos", cursos);
-        }
+			// 🔥 Obtiene los cursos del usuario desde la BD
+			List<Curso> cursos = cursoService.findByUsuarioId(usuario.getId());
+			model.addAttribute("cursos", cursos);
+		}
 
-        return "PanelControlUsuario/mis_cursos";
-    }
+		return "PanelControlUsuario/mis_cursos";
+	}
 
-    @GetMapping("/PanelControlUsuario/mis_logros")
-    public String misLogros(Model model, HttpSession session) {
-        Object usuario = session.getAttribute("usuario");
-        if (usuario == null) {
-            return "/PanelControlUsuario/mis_logros";
-        }
-        model.addAttribute("usuario", usuario);
-        return "PanelControlUsuario/mis_logros";
-    }
+	@GetMapping("/PanelControlUsuario/mis_logros")
+	public String misLogros(Model model, HttpSession session) {
+		Object usuario = session.getAttribute("usuario");
+		if (usuario == null) {
+			return "/PanelControlUsuario/mis_logros";
+		}
+		model.addAttribute("usuario", usuario);
+		return "PanelControlUsuario/mis_logros";
+	}
 
-    @GetMapping("/PanelControlUsuario/modulo1")
-    public String modulo1() {
-        return "PanelControlUsuario/modulo1";
-    }
+	@GetMapping("/PanelControlUsuario/modulo1")
+	public String modulo1() {
+		return "PanelControlUsuario/modulo1";
+	}
 
-    @GetMapping("/PanelControlUsuario/modulo2")
-    public String modulo2(HttpSession session, Model model) {
-        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+	@GetMapping("/PanelControlUsuario/modulo2")
+	public String modulo2(HttpSession session, Model model) {
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
 
-        boolean lesson1Completed = false;
+		boolean lesson1Completed = false;
 
-        if (idUsuario != null) {
-            Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
-            if (usuarioOpt.isPresent()) {
-                Usuario usuario = usuarioOpt.get();
-                model.addAttribute("usuario", usuario);
-                lesson1Completed = Boolean.TRUE.equals(usuario.getMod2L1Completada());
-            }
-        }
+		if (idUsuario != null) {
+			Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
+			if (usuarioOpt.isPresent()) {
+				Usuario usuario = usuarioOpt.get();
+				model.addAttribute("usuario", usuario);
+				lesson1Completed = Boolean.TRUE.equals(usuario.getMod2L1Completada());
+			}
+		}
 
-        model.addAttribute("lesson1Completed", lesson1Completed);
-        return "PanelControlUsuario/modulo2";
-    }
+		model.addAttribute("lesson1Completed", lesson1Completed);
+		return "PanelControlUsuario/modulo2";
+	}
 
-    @GetMapping("/PanelControlUsuario/bandeja")
-    public String bandeja(HttpSession session, Model model) {
-        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-        if (idUsuario != null) {
-            usuarioService.findById(idUsuario).ifPresent(u -> model.addAttribute("usuario", u));
-        }
-        return "PanelControlUsuario/bandeja";
-    }
+	@GetMapping("/PanelControlUsuario/bandeja")
+	public String bandeja(HttpSession session, Model model) {
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+		if (idUsuario != null) {
+			usuarioService.findById(idUsuario).ifPresent(u -> model.addAttribute("usuario", u));
+		}
+		return "PanelControlUsuario/bandeja";
+	}
 
-    @PostMapping("/PanelControlUsuario/modulo2/leccion1/completar")
-    public String completarLeccion1(HttpSession session) {
-        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-        if (idUsuario == null) {
-            return "redirect:/login";
-        }
+	@PostMapping("/PanelControlUsuario/modulo2/leccion1/completar")
+	public String completarLeccion1(HttpSession session) {
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+		if (idUsuario == null) {
+			return "redirect:/login";
+		}
 
-        usuarioService.findById(idUsuario).ifPresent(u -> {
-            u.setMod2L1Completada(true);
-            usuarioService.save(u);
-        });
+		usuarioService.findById(idUsuario).ifPresent(u -> {
+			u.setMod2L1Completada(true);
+			usuarioService.save(u);
+		});
 
-        return "redirect:/PanelControlUsuario/modulo2";
-    }
+		return "redirect:/PanelControlUsuario/modulo2";
+	}
 
-    @GetMapping("/PanelControlUsuario/modulo3")
-    public String modulo3() {
-        return "PanelControlUsuario/modulo3";
-    }
+	@GetMapping("/PanelControlUsuario/modulo3")
+	public String modulo3() {
+		return "PanelControlUsuario/modulo3";
+	}
 
-    @GetMapping("/PanelControlUsuario/modulo4")
-    public String modulo4() {
-        return "PanelControlUsuario/modulo4";
-    }
+	@GetMapping("/PanelControlUsuario/modulo4")
+	public String modulo4() {
+		return "PanelControlUsuario/modulo4";
+	}
 
-    @GetMapping("/PanelControlUsuario/soporte")
-    public String soporte() {
-        return "PanelControlUsuario/soporte";
-    }
+	@GetMapping("/PanelControlUsuario/soporte")
+	public String soporte() {
+		return "PanelControlUsuario/soporte";
+	}
 
-    @GetMapping("/PanelControlUsuario/foros")
-    public String forosEstudiante(HttpSession session, Model model) {
-        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-        Integer rol = (Integer) session.getAttribute("rol");
+	@GetMapping("/PanelControlUsuario/foros/{foroId}")
+	public String detalleForoEstudiante(@PathVariable("foroId") Integer foroId, HttpSession session, Model model) {
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+		Integer rol = (Integer) session.getAttribute("rol");
 
-        if (idUsuario == null || rol == null || rol != 3) {
-            return "redirect:/iniciosesion?error=acceso_denegado";
-        }
+		if (idUsuario == null || rol == null || rol != 3) {
+			return "redirect:/iniciosesion?error=acceso_denegado";
+		}
 
-        Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
-        if (usuario == null) {
-            return "redirect:/iniciosesion?error=acceso_denegado";
-        }
+		Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
+		Optional<Foro> foroOpt = foroRepository.findById(foroId);
+		if (usuario == null || foroOpt.isEmpty()) {
+			return "redirect:/PanelControlUsuario/foros";
+		}
 
-        List<Curso> cursos = cursoService.findByUsuarioId(idUsuario);
-        Map<Integer, List<Foro>> forosPorCurso = new HashMap<>();
+		Foro foro = foroOpt.get();
+		List<ForoRespuesta> respuestas = foroRespuestaRepository.findByForoId(foroId);
 
-        for (Curso curso : cursos) {
-            List<Foro> forosCurso = foroRepository.findByCursoId(curso.getId());
-            forosPorCurso.put(curso.getId(), forosCurso);
-        }
+		model.addAttribute("usuario", usuario);
+		model.addAttribute("foro", foro);
+		model.addAttribute("respuestas", respuestas);
+		return "PanelControlUsuario/foro-detalle";
+	}
 
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("cursos", cursos);
-        model.addAttribute("forosPorCurso", forosPorCurso);
-        return "PanelControlUsuario/foros";
-    }
-
-    @GetMapping("/PanelControlUsuario/foros/{foroId}")
-    public String detalleForoEstudiante(@PathVariable("foroId") Integer foroId,
-            HttpSession session,
-            Model model) {
-        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-        Integer rol = (Integer) session.getAttribute("rol");
-
-        if (idUsuario == null || rol == null || rol != 3) {
-            return "redirect:/iniciosesion?error=acceso_denegado";
-        }
-
-        Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
-        Optional<Foro> foroOpt = foroRepository.findById(foroId);
-        if (usuario == null || foroOpt.isEmpty()) {
-            return "redirect:/PanelControlUsuario/foros";
-        }
-
-        Foro foro = foroOpt.get();
-        List<ForoRespuesta> respuestas = foroRespuestaRepository.findByForoId(foroId);
-
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("foro", foro);
-        model.addAttribute("respuestas", respuestas);
-        return "PanelControlUsuario/foro-detalle";
-    }
-
-    @PostMapping("/PanelControlUsuario/foros/{foroId}/responder")
-    public String responderForo(@PathVariable("foroId") Integer foroId,
-            @RequestParam("mensaje") String mensaje,
-            HttpSession session,
-            RedirectAttributes redirectAttrs) {
-        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-        Integer rol = (Integer) session.getAttribute("rol");
-
-        if (idUsuario == null || rol == null || rol != 3) {
-            return "redirect:/iniciosesion?error=acceso_denegado";
-        }
-
-        Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
-        Optional<Foro> foroOpt = foroRepository.findById(foroId);
-        if (usuario == null || foroOpt.isEmpty()) {
-            redirectAttrs.addFlashAttribute("error", "No se pudo enviar la respuesta.");
-            return "redirect:/PanelControlUsuario/foros";
-        }
-
-        if (mensaje == null || mensaje.trim().isEmpty()) {
-            redirectAttrs.addFlashAttribute("error", "El mensaje no puede estar vacío.");
-            return "redirect:/PanelControlUsuario/foros/" + foroId;
-        }
-
-        ForoRespuesta respuesta = new ForoRespuesta();
-        respuesta.setForo(foroOpt.get());
-        respuesta.setAutor(usuario);
-        respuesta.setMensaje(mensaje.trim());
-        respuesta.setFechaCreacion(LocalDateTime.now());
-        foroRespuestaRepository.save(respuesta);
-
-        redirectAttrs.addFlashAttribute("mensaje", "Respuesta enviada correctamente.");
-        return "redirect:/PanelControlUsuario/foros/" + foroId;
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
-    }
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
+	}
 }
