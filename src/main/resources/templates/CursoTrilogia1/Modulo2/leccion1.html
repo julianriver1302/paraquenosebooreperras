@@ -710,7 +710,9 @@ body {
 									para convertir colores en poder!
 							</p>
 							<div class="step-actions">
-								<button type="button" class="step-next" data-next>He terminado mi misión de hoy ✅</button>
+								<form method="post" action="/PanelControlUsuario/modulo2/leccion1/completar">
+									<button type="submit" class="step-next">He terminado mi misión de hoy ✅</button>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -724,11 +726,11 @@ body {
 						</div>
 					</div>
 
-					<a href="/CursoTrilogia1/modulo2/leccion2"
+					<a href="/PanelControlUsuario/modulo2?l1=done"
 					   class="btn-next"
 					   id="next-lesson-btn"
 					   style="display:none;">
-						Siguiente ➜
+						Ver lecciones del módulo ➜
 					</a>
 
 				</div>
@@ -758,7 +760,7 @@ body {
 			];
 			let currentStep = 0;
 			const stepCompleted = new Array(steps.length).fill(false);
-			let quizCompleted = false;
+			let quizCompleted = false; // ya no se usa el mini quiz para avanzar
 
 			function updateProgress(index) {
 				if (!progressFill || steps.length === 0) return;
@@ -863,20 +865,11 @@ body {
 						return;
 					}
 					
-					// Si estamos en el último paso, lanzamos el minijuego
+					// Si estamos en el último paso, ya no redirigimos por JS; el formulario hará el POST
 					if (currentStep === steps.length - 1) {
-						if (!quizCompleted) {
-							startCssQuiz().then(() => {
-								if (quizCompleted) {
-									nextLessonBtn.style.display = 'inline-block';
-								}
-							});
-						} else {
-							nextLessonBtn.style.display = 'inline-block';
-						}
 						return;
 					}
-
+				
 					if (currentStep < steps.length - 1) currentStep++;
 					showStep(currentStep);
 				});
