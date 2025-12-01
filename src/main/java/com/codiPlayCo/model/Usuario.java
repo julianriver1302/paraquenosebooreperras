@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,6 +33,10 @@ public class Usuario {
 	private Date ultimoAcceso;
 	private String activo;
 	private String avatar;
+
+	// Progreso de curso: si el usuario completó la lección 1 del módulo 2
+	@Column(name = "mod2L1Completada")
+	private Boolean mod2L1Completada = false;
 
 	@OneToMany(mappedBy = "usuario")
 	private List<ActividadesEstudiantes> actividadesEstudiantes;
@@ -225,6 +230,14 @@ public class Usuario {
 
 	public void setCursosComprados(List<Curso> cursosComprados) {
 		this.cursosComprados = cursosComprados;
+	}
+
+	public Boolean getMod2L1Completada() {
+		return mod2L1Completada;
+	}
+
+	public void setMod2L1Completada(Boolean mod2L1Completada) {
+		this.mod2L1Completada = mod2L1Completada;
 	}
 
 	@Override

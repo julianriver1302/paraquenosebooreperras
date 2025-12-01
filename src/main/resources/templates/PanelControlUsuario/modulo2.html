@@ -5,6 +5,19 @@
 	<meta charset="UTF-8" />
 	<title>Módulo 2</title>
 	<link rel="stylesheet" th:href="@{/assetsPanelUsuaario/styleUsuario.css}" />
+	<style>
+		/* Tarjeta marcada como completada (lección 1) */
+		.right-panel .card.completed {
+			/* mantenemos fondo blanco, solo resaltamos el borde */
+			border: 2px solid #16a34a;
+		}
+
+		.right-panel .card.completed .card-button {
+			background: #16a34a !important; /* botón verde intenso */
+			border-color: #16a34a !important;
+			color: #f9fafb !important;
+		}
+	</style>
 </head>
 
 <body>
@@ -24,13 +37,13 @@
 				Plan de Clases Clase Tema Descripción de la clase Actividad en casa
 			</p>
 
-			<div class="card">
+			<div class="card [[${lesson1Completed} ? 'completed' : '']]">
 				<div class="card-content">
 					<br>
 					<h3>Introducción a CSS ¿Qué es CSS? Cómo se conecta al HTML</h3>
 					<p>Probar colores de fondo en su página.</p>
 				</div>
-				<a href="/CursoTrilogia1/modulo2/leccion1" class="card-button">Iniciar</a>
+				<a href="/CursoTrilogia1/modulo2/leccion1" class="card-button" id="mod2-lesson1-btn">[[${lesson1Completed} ? 'Repetir lección' : 'Iniciar']]</a>
 
 			</div>
 
@@ -70,7 +83,6 @@
 				<a th:href="@{/}" class="card-button">Iniciar</a>
 			</div>
 
-
 			<div class="card">
 				<div class="card-content">
 					<br>
@@ -80,9 +92,9 @@
 				<a th:href="@{/}" class="card-button">Iniciar</a>
 			</div>
 
-
 		</div>
 	</div>
+
 </body>
 
 </html>

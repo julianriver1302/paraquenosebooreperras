@@ -168,8 +168,46 @@ public class PanelControlUsuarioController {
     }
 
     @GetMapping("/PanelControlUsuario/modulo2")
-    public String modulo2() {
+    public String modulo2(HttpSession session, Model model) {
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+
+        boolean lesson1Completed = false;
+
+        if (idUsuario != null) {
+            Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
+            if (usuarioOpt.isPresent()) {
+                Usuario usuario = usuarioOpt.get();
+                model.addAttribute("usuario", usuario);
+                lesson1Completed = Boolean.TRUE.equals(usuario.getMod2L1Completada());
+            }
+        }
+
+        model.addAttribute("lesson1Completed", lesson1Completed);
         return "PanelControlUsuario/modulo2";
+    }
+
+    @GetMapping("/PanelControlUsuario/bandeja")
+    public String bandeja(HttpSession session, Model model) {
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        if (idUsuario != null) {
+            usuarioService.findById(idUsuario).ifPresent(u -> model.addAttribute("usuario", u));
+        }
+        return "PanelControlUsuario/bandeja";
+    }
+
+    @PostMapping("/PanelControlUsuario/modulo2/leccion1/completar")
+    public String completarLeccion1(HttpSession session) {
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        if (idUsuario == null) {
+            return "redirect:/login";
+        }
+
+        usuarioService.findById(idUsuario).ifPresent(u -> {
+            u.setMod2L1Completada(true);
+            usuarioService.save(u);
+        });
+
+        return "redirect:/PanelControlUsuario/modulo2";
     }
 
     @GetMapping("/PanelControlUsuario/modulo3")
