@@ -151,6 +151,30 @@ public class PanelControlUsuarioController {
         return "PanelControlUsuario/mis_logros";
     }
 
+    @GetMapping("/PanelControlUsuario/modulo1")
+    public String modulo1() {
+        return "PanelControlUsuario/modulo1";
+    }
+
+    @GetMapping("/PanelControlUsuario/modulo2")
+    public String modulo2(HttpSession session, Model model) {
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+
+        boolean lesson1Completed = false;
+
+        if (idUsuario != null) {
+            Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
+            if (usuarioOpt.isPresent()) {
+                Usuario usuario = usuarioOpt.get();
+                model.addAttribute("usuario", usuario);
+                lesson1Completed = Boolean.TRUE.equals(usuario.getMod2L1Completada());
+            }
+        }
+
+        model.addAttribute("lesson1Completed", lesson1Completed);
+        return "PanelControlUsuario/modulo2";
+    }
+
     @GetMapping("/PanelControlUsuario/bandeja")
     public String bandeja(HttpSession session, Model model) {
         Integer idUsuario = (Integer) session.getAttribute("idUsuario");
