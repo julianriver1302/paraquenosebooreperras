@@ -151,14 +151,28 @@ public class PanelControlUsuarioController {
         return "PanelControlUsuario/mis_logros";
     }
 
-    @GetMapping("/PanelControlUsuario/modulo1")
-    public String modulo1() {
-        return "PanelControlUsuario/modulo1";
+    @GetMapping("/PanelControlUsuario/bandeja")
+    public String bandeja(HttpSession session, Model model) {
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        if (idUsuario != null) {
+            usuarioService.findById(idUsuario).ifPresent(u -> model.addAttribute("usuario", u));
+        }
+        return "PanelControlUsuario/bandeja";
     }
 
-    @GetMapping("/PanelControlUsuario/modulo2")
-    public String modulo2() {
-        return "PanelControlUsuario/modulo2";
+    @PostMapping("/PanelControlUsuario/modulo2/leccion1/completar")
+    public String completarLeccion1(HttpSession session) {
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        if (idUsuario == null) {
+            return "redirect:/login";
+        }
+
+        usuarioService.findById(idUsuario).ifPresent(u -> {
+            u.setMod2L1Completada(true);
+            usuarioService.save(u);
+        });
+
+        return "redirect:/PanelControlUsuario/modulo2";
     }
 
     @GetMapping("/PanelControlUsuario/modulo3")
