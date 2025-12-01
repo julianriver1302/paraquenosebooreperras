@@ -2,6 +2,7 @@ package com.codiPlayCo.controller;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.codiPlayCo.model.Usuario;
 import com.codiPlayCo.model.Curso;
+import com.codiPlayCo.model.Foro;
+import com.codiPlayCo.model.ForoRespuesta;
 import com.codiPlayCo.service.IUsuarioService;
 import com.codiPlayCo.service.ICursoService;
+import com.codiPlayCo.repository.ForoRepository;
+import com.codiPlayCo.repository.ForoRespuestaRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -26,6 +31,12 @@ public class PanelControlUsuarioController {
 
     @Autowired
     private ICursoService cursoService; // ✅ Servicio para manejar cursos
+
+    @Autowired
+    private ForoRepository foroRepository;
+
+    @Autowired
+    private ForoRespuestaRepository foroRespuestaRepository;
 
     @GetMapping("/PanelControlUsuario/inicio")
     public String inicio(HttpSession session, Model model) {
@@ -212,6 +223,95 @@ public class PanelControlUsuarioController {
     @GetMapping("/PanelControlUsuario/soporte")
     public String soporte() {
         return "PanelControlUsuario/soporte";
+    }
+
+    @GetMapping("/PanelControlUsuario/foros")
+    public String forosEstudiante(HttpSession session, Model model) {
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        Integer rol = (Integer) session.getAttribute("rol");
+
+        if (idUsuario == null || rol == null || rol != 3) {
+            return "redirect:/iniciosesion?error=acceso_denegado";
+        }
+
+        Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            return "redirect:/iniciosesion?error=acceso_denegado";
+        }
+
+        List<Curso> cursos = cursoService.findByUsuarioId(idUsuario);
+        Map<Integer, List<Foro>> forosPorCurso = new HashMap<>();
+
+        for (Curso curso : cursos) {
+            List<Foro> forosCurso = foroRepository.findByCursoId(curso.getId());
+            forosPorCurso.put(curso.getId(), forosCurso);
+        }
+
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("cursos", cursos);
+        model.addAttribute("forosPorCurso", forosPorCurso);
+        return "PanelControlUsuario/foros";
+    }
+
+    @GetMapping("/PanelControlUsuario/foros/{foroId}")
+    public String detalleForoEstudiante(@PathVariable("foroId") Integer foroId,
+            HttpSession session,
+            Model model) {
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        Integer rol = (Integer) session.getAttribute("rol");
+
+        if (idUsuario == null || rol == null || rol != 3) {
+            return "redirect:/iniciosesion?error=acceso_denegado";
+        }
+
+        Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
+        Optional<Foro> foroOpt = foroRepository.findById(foroId);
+        if (usuario == null || foroOpt.isEmpty()) {
+            return "redirect:/PanelControlUsuario/foros";
+        }
+
+        Foro foro = foroOpt.get();
+        List<ForoRespuesta> respuestas = foroRespuestaRepository.findByForoId(foroId);
+
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("foro", foro);
+        model.addAttribute("respuestas", respuestas);
+        return "PanelControlUsuario/foro-detalle";
+    }
+
+    @PostMapping("/PanelControlUsuario/foros/{foroId}/responder")
+    public String responderForo(@PathVariable("foroId") Integer foroId,
+            @RequestParam("mensaje") String mensaje,
+            HttpSession session,
+            RedirectAttributes redirectAttrs) {
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        Integer rol = (Integer) session.getAttribute("rol");
+
+        if (idUsuario == null || rol == null || rol != 3) {
+            return "redirect:/iniciosesion?error=acceso_denegado";
+        }
+
+        Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
+        Optional<Foro> foroOpt = foroRepository.findById(foroId);
+        if (usuario == null || foroOpt.isEmpty()) {
+            redirectAttrs.addFlashAttribute("error", "No se pudo enviar la respuesta.");
+            return "redirect:/PanelControlUsuario/foros";
+        }
+
+        if (mensaje == null || mensaje.trim().isEmpty()) {
+            redirectAttrs.addFlashAttribute("error", "El mensaje no puede estar vacío.");
+            return "redirect:/PanelControlUsuario/foros/" + foroId;
+        }
+
+        ForoRespuesta respuesta = new ForoRespuesta();
+        respuesta.setForo(foroOpt.get());
+        respuesta.setAutor(usuario);
+        respuesta.setMensaje(mensaje.trim());
+        respuesta.setFechaCreacion(LocalDateTime.now());
+        foroRespuestaRepository.save(respuesta);
+
+        redirectAttrs.addFlashAttribute("mensaje", "Respuesta enviada correctamente.");
+        return "redirect:/PanelControlUsuario/foros/" + foroId;
     }
 
     @GetMapping("/logout")

@@ -1,67 +1,51 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Foros | Codiplay Dashboard</title>
-	<link rel="stylesheet" th:href="@{/assetsPanelUsuaario/styleUsuario.css}" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Foros</title>
+    <link rel="stylesheet" th:href="@{/assetsPanelUsuaario/stylespanelusuario.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 </head>
 <body>
-	<div class="dashboard-container">
-		<aside class="sidebar">
-			<div class="logo">
-				<a th:href="@{/PanelControlUsuario/inicio}">
-					<img th:src="@{/assetsPanelUsuaario/unnamed-removebg-preview.PNG}" alt="Logo Codiplay" />
-				</a>
-				<span class="logo-text"></span>
-			</div>
-			<nav class="main-nav">
-				<ul>
-					<li class="nav-item">
-						<a th:href="@{/PanelControlUsuario/inicio}"><i class="fas fa-home"></i> Inicio</a>
-					</li>
-					<li class="nav-item">
-						<a th:href="@{/PanelControlUsuario/mis_cursos}"><i class="fas fa-book"></i> Mis cursos</a>
-					</li>
-					<li class="nav-item">
-						<a th:href="@{/PanelControlUsuario/mis_logros}"><i class="fas fa-medal"></i> Mis logros</a>
-					</li>
-					<li class="nav-item">
-						<a th:href="@{/PanelControlUsuario/bandeja}"><i class="fas fa-inbox"></i> Bandeja</a>
-					</li>
-					<li class="nav-item active">
-						<a th:href="@{/PanelControlUsuario/foros}"><i class="fas fa-comments"></i> Foros</a>
-					</li>
-				</ul>
-			</nav>
-			<div class="support-section">
-				<a th:href="@{/PanelControlUsuario/soporte}"><i class="fas fa-life-ring"></i> Soporte</a>
-			</div>
-		</aside>
+<div class="main-layout">
+    <header>
+        <div class="header-logo-title">
+            <h1 class="titulo-blanco"><span class="panel-icon"><i class="fa-solid fa-comments"></i></span>Foros</h1>
+        </div>
+    </header>
 
-		<main class="main-content">
-			<header class="top-bar">
-				<header class="h1eader">
-					<h1>Foros</h1>
-				</header>
-			</header>
+    <div class="container">
+        <div class="panel" th:if="${cursos == null or #lists.isEmpty(cursos)}">
+            <h2><span class="panel-icon"><i class="fa-solid fa-comment-dots"></i></span>Foros</h2>
+            <p>No tienes cursos inscritos todavía, por lo tanto no hay foros disponibles.</p>
+        </div>
 
-			<section class="modules-section">
-				<div class="module-cards-wrapper" style="flex-direction: column; gap: 24px;">
-					<div class="module-card">
-						<h3>Temas recientes</h3>
-						<div th:if="${#lists.isEmpty(temas)}">
-							<p>Aún no hay temas en el foro. ¡Sé el primero en publicar uno!</p>
-						</div>
-						<div th:each="tema : ${temas}" class="forum-topic-item">
-							<h4 th:text="${tema.titulo}">Título del tema</h4>
-							<p th:text="${tema.contenido}">Contenido del tema</p>
-							<small th:text="${tema.modulo}">general</small>
-						</div>
-					</div>
-				</div>
-			</section>
-		</main>
-	</div>
+        <div class="panel" th:if="${cursos != null and !#lists.isEmpty(cursos)}">
+            <h2><span class="panel-icon"><i class="fa-solid fa-comment-dots"></i></span>Foros de mis cursos</h2>
+
+            <div th:each="curso : ${cursos}" class="foro-curso-bloque">
+                <h3 th:text="${curso.curso}">Nombre curso</h3>
+
+                <div th:if="${#maps.containsKey(forosPorCurso, curso.id) and !#lists.isEmpty(forosPorCurso[curso.id])}">
+                    <ul class="lista-foros">
+                        <li th:each="foro : ${forosPorCurso[curso.id]}">
+                            <div class="foro-item">
+                                <strong th:text="${foro.titulo}">Título foro</strong><br />
+                                <span th:text="${foro.descripcion}">Descripción</span><br />
+                                <small th:text="${#temporals.format(foro.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</small><br />
+                                <a th:href="@{'/PanelControlUsuario/foros/' + ${foro.id}}" class="btn">Ver y responder</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div th:if="${!#maps.containsKey(forosPorCurso, curso.id) || #lists.isEmpty(forosPorCurso[curso.id])}">
+                    <p>No hay foros para este curso aún.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

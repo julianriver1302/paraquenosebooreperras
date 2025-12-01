@@ -6,64 +6,77 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "foro_respuesta")
+@Table(name = "foro_respuestas")
 public class ForoRespuesta {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    private String contenido;
+	@ManyToOne
+	@JoinColumn(name = "foro_id")
+	private Foro foro;
 
-    private LocalDateTime fechaCreacion;
+	@ManyToOne
+	@JoinColumn(name = "autor_id")
+	private Usuario autor;
 
-    @ManyToOne
-    private Usuario autor;
+	private String mensaje;
 
-    @ManyToOne
-    private ForoTema tema;
+	private LocalDateTime fechaCreacion;
 
-    public Integer getId() {
-        return id;
-    }
+	public ForoRespuesta() {
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public ForoRespuesta(Foro foro, Usuario autor, String mensaje, LocalDateTime fechaCreacion) {
+		this.foro = foro;
+		this.autor = autor;
+		this.mensaje = mensaje;
+		this.fechaCreacion = fechaCreacion;
+	}
 
-    public String getContenido() {
-        return contenido;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
+	public Foro getForo() {
+		return foro;
+	}
 
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
+	public void setForo(Foro foro) {
+		this.foro = foro;
+	}
 
-    public Usuario getAutor() {
-        return autor;
-    }
+	public Usuario getAutor() {
+		return autor;
+	}
 
-    public void setAutor(Usuario autor) {
-        this.autor = autor;
-    }
+	public void setAutor(Usuario autor) {
+		this.autor = autor;
+	}
 
-    public ForoTema getTema() {
-        return tema;
-    }
+	public String getMensaje() {
+		return mensaje;
+	}
 
-    public void setTema(ForoTema tema) {
-        this.tema = tema;
-    }
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
+
+	public LocalDateTime getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(LocalDateTime fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
 }
