@@ -44,14 +44,29 @@ public class IndexController {
 	}
 
 	@GetMapping("/registropago")
-	public String registropago(@RequestParam(name = "cursoId", required = false) Integer cursoId,
-	                          HttpSession session,
-	                          Model model) {
+	public String registropago(@RequestParam(name = "cursoId", required = false) Integer cursoId, HttpSession session,
+			Model model) {
+
 		if (cursoId != null) {
+
+			// Guardarlo en la sesión
 			session.setAttribute("cursoIdSeleccionado", cursoId);
+
+			// Buscar el curso
+			Optional<Curso> cursoOpt = cursoService.get(cursoId);
+
+			if (cursoOpt.isEmpty()) {
+				return "redirect:/error";
+			}
+
+			Curso curso = cursoOpt.get();
+
+			// Enviar curso al HTML
+			model.addAttribute("curso", curso);
 			model.addAttribute("cursoId", cursoId);
 		}
-		return "registropago";
+
+		return "registropago"; // esta vista ahora sí tendrá "curso"
 	}
 
 	@GetMapping("/gracias")
