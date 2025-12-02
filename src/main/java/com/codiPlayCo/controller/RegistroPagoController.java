@@ -23,14 +23,15 @@ public class RegistroPagoController {
 	@GetMapping("/{idCurso}")
 	public String registrarPago(@PathVariable Integer idCurso, Model model) {
 
-		Optional<Curso> curso = cursoService.findById(idCurso);
+	    Optional<Curso> curso = cursoService.findById(idCurso);
 
-		if (curso == null) {
-			return "redirect:/error"; // por si no existe
-		}
+	    if (curso.isEmpty()) {
+	        return "redirect:/error";
+	    }
 
-		model.addAttribute("curso", curso);
-
-		return "registro_pago";
+	    model.addAttribute("curso", curso.get());
+	    return "registro_pago";
 	}
 }
+
+
