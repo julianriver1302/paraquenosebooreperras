@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalle del Foro</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap">
+    <link rel="stylesheet" th:href="@{/assetsDocente/stylespanel.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+</head>
+<body>
+<nav>
+    <div class="nav-logo">
+        <img th:src="@{/assetsDocente/img/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}" alt="CodiPlayCo Logo" />
+    </div>
+    <button class="toggle-mode-btn" title="Cambiar modo"
+            style="margin:0 auto 0.5rem auto; display:block; background:#fff2; border:none; color:#fff; font-size:1.7rem; border-radius:50%; width:44px; height:44px; box-shadow:0 2px 8px #0002; cursor:pointer; transition:background 0.2s, color 0.2s; display:flex; align-items:center; justify-content:center;"><i
+            class="fa-solid fa-moon"></i></button>
+    <a th:href="@{/InterfazDocente/paneldocente}"><span class="nav-icon"><i
+            class="fa-solid fa-house"></i></span>Inicio</a>
+    <a th:href="@{/InterfazDocente/mis-cursos}"><span class="nav-icon"><i class="fa-solid fa-book"></i></span>Mis
+        Cursos</a>
+    <a th:href="@{/InterfazDocente/tareas}"><span class="nav-icon"><i
+            class="fa-solid fa-clipboard-list"></i></span>Tareas</a>
+    <a th:href="@{/InterfazDocente/foros}"><span class="nav-icon"><i
+            class="fa-solid fa-comments"></i></span>Foros</a>
+    <a th:href="@{/InterfazDocente/mensajes}"><span class="nav-icon"><i
+            class="fa-solid fa-envelope"></i></span>Mensajes</a>
+</nav>
+<div class="main-layout">
+    <header>
+        <div class="header-logo-title">
+            <h1 class="titulo-blanco"><span class="panel-icon"><i class="fa-solid fa-comments"></i></span>Detalle del foro</h1>
+        </div>
+        <div class="topbar-right">
+            <div class="notificaciones" title="Notificaciones"><i class="fa-solid fa-bell"></i></div>
+            <div class="perfil">
+                <i class="fa-solid fa-user"></i>
+                <span th:if="${docente != null}" th:text="${docente.nombre}">Docente</span>
+                <span th:if="${docente == null}">Docente</span>
+                <div class="submenu">
+                    <p th:if="${docente != null}"><strong>Nombre:</strong> <span
+                            th:text="${docente.nombre + ' ' + docente.apellido}">Nombre Completo</span></p>
+                    <p th:if="${docente == null}"><strong>Nombre:</strong> No disponible</p>
+                    <p><strong>Rol:</strong> Docente</p>
+                    <a th:href="@{/InterfazDocente/logout}" style="color: inherit; text-decoration: none;">
+                        <button><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="panel">
+            <a th:href="@{/InterfazDocente/foros}" class="btn-volver" style="margin-bottom:1rem; display:inline-block;">
+                <i class="fa-solid fa-arrow-left"></i> Volver a foros
+            </a>
+
+            <h2><span class="panel-icon"><i class="fa-solid fa-comment-dots"></i></span>
+                <span th:text="${foro.titulo}">Título foro</span>
+            </h2>
+            <p th:text="${foro.descripcion}">Descripción del foro</p>
+            <small th:text="${#temporals.format(foro.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</small>
+        </div>
+
+        <div class="panel">
+            <h3><span class="panel-icon"><i class="fa-solid fa-comments"></i></span> Respuestas de estudiantes</h3>
+
+            <div th:if="${respuestas == null or #lists.isEmpty(respuestas)}">
+                <p>No hay respuestas todavía en este foro.</p>
+            </div>
+
+            <div th:if="${respuestas != null and !#lists.isEmpty(respuestas)}">
+                <ul class="lista-foros">
+                    <li th:each="resp : ${respuestas}" class="foro-item">
+                        <div class="foro-header">
+                            <strong th:text="${resp.autor != null ? resp.autor.nombre + ' ' + resp.autor.apellido : 'Estudiante'}">Estudiante</strong>
+                            <small th:text="${#temporals.format(resp.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</small>
+                        </div>
+                        <p th:text="${resp.mensaje}">Mensaje de la respuesta</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

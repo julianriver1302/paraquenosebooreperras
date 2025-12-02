@@ -29,4 +29,9 @@ public interface ActividadesEstudiantesRepository extends JpaRepository<Activida
     // Todas las entregas de un estudiante (para panel del niño)
     @Query("SELECT ae FROM ActividadesEstudiantes ae WHERE ae.idEstudiante = :idEstudiante")
     List<ActividadesEstudiantes> findByIdEstudiante(@Param("idEstudiante") Integer idEstudiante);
+
+    // Verificar si un estudiante tiene una entrega COMPLETADA para una actividad concreta
+    @Query("SELECT COUNT(ae) > 0 FROM ActividadesEstudiantes ae WHERE ae.idEstudiante = :idEstudiante AND ae.actividades.id = :actividadId AND UPPER(ae.estado) = 'COMPLETADO'")
+    boolean existsCompletadaByEstudianteAndActividad(@Param("idEstudiante") Integer idEstudiante,
+                                                   @Param("actividadId") Integer actividadId);
 }
