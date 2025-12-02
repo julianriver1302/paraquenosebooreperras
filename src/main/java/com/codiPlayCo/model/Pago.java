@@ -11,11 +11,11 @@ public class Pago {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer precio;
+    private Integer precio;               // precio en pesos (Integer)
 
-    private String stripePaymentId;
+    private String stripePaymentId;       // PaymentIntent.id
 
-    private String estado;
+    private String estado;                // "succeeded", "requires_payment_method", "failed", "pending"
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaPago = new Date();
@@ -28,67 +28,33 @@ public class Pago {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-	public Integer getId() {
-		return id;
-	}
+    public Pago() {}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    // getters / setters (incluyendo curso y usuario)
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-	public Integer getPrecio() {
-		return precio;
-	}
+    public Integer getPrecio() { return precio; }
+    public void setPrecio(Integer precio) { this.precio = precio; }
 
-	public void setPrecio(Integer precio) {
-		this.precio = precio;
-	}
+    public String getStripePaymentId() { return stripePaymentId; }
+    public void setStripePaymentId(String stripePaymentId) { this.stripePaymentId = stripePaymentId; }
 
-	public String getStripePaymentId() {
-		return stripePaymentId;
-	}
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
-	public void setStripePaymentId(String stripePaymentId) {
-		this.stripePaymentId = stripePaymentId;
-	}
+    public Date getFechaPago() { return fechaPago; }
+    public void setFechaPago(Date fechaPago) { this.fechaPago = fechaPago; }
 
-	public String getEstado() {
-		return estado;
-	}
+    public Curso getCurso() { return curso; }
+    public void setCurso(Curso curso) { this.curso = curso; }
 
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 
-	public Date getFechaPago() {
-		return fechaPago;
-	}
-
-	public void setFechaPago(Date fechaPago) {
-		this.fechaPago = fechaPago;
-	}
-
-	public Pago() {
-		
-	}
-
-	public Pago(Integer id, Integer precio, String stripePaymentId, String estado, Date fechaPago, Curso curso,
-			Usuario usuario) {
-		super();
-		this.id = id;
-		this.precio = precio;
-		this.stripePaymentId = stripePaymentId;
-		this.estado = estado;
-		this.fechaPago = fechaPago;
-		this.curso = curso;
-		this.usuario = usuario;
-	}
-
-	@Override
-	public String toString() {
-		return "Pago [id=" + id + ", precio=" + precio + ", stripePaymentId=" + stripePaymentId + ", estado=" + estado
-				+ ", fechaPago=" + fechaPago + "]";
-	}
-
-    
+    @Override
+    public String toString() {
+        return "Pago [id=" + id + ", precio=" + precio + ", stripePaymentId=" + stripePaymentId + ", estado=" + estado
+                + ", fechaPago=" + fechaPago + "]";
+    }
 }
