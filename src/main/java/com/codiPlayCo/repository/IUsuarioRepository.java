@@ -21,4 +21,8 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Integer> {
     // Buscar usuarios por nombre de rol (Ej: "Docente", "Estudiante")
     @Query("SELECT u FROM Usuario u JOIN u.rol r WHERE r.nombre = :rolNombre")
     List<Usuario> findByRolNombre(@Param("rolNombre") String rolNombre);
+
+    // Usuarios inscritos/compradores de un curso concreto (relación ManyToMany cursosComprados)
+    @Query("SELECT DISTINCT u FROM Usuario u JOIN u.cursosComprados c WHERE c.id = :cursoId")
+    List<Usuario> findByCursoComprado(@Param("cursoId") Integer cursoId);
 }

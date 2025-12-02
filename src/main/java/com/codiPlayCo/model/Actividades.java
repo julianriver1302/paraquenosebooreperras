@@ -21,6 +21,10 @@ public class Actividades {
 	private String fechaEntrega;
 	private Integer Curso;
 
+	// Módulo y lección a la que pertenece esta actividad
+	private Integer modulo;
+	private Integer leccion;
+
 	@ManyToOne
 	private Usuario usuario;
 
@@ -31,7 +35,7 @@ public class Actividades {
 
 	}
 
-	public Actividades(Integer id, String fecha, String tarea, String fechaEntrega, Integer curso, Usuario usuario,
+	public Actividades(Integer id, String fecha, String tarea, String fechaEntrega, Integer curso, Integer modulo, Integer leccion, Usuario usuario,
 			List<ActividadesEstudiantes> actividadesEstuduiantes) {
 		super();
 		this.id = id;
@@ -39,6 +43,8 @@ public class Actividades {
 		this.tarea = tarea;
 		this.fechaEntrega = fechaEntrega;
 		Curso = curso;
+		this.modulo = modulo;
+		this.leccion = leccion;
 		this.usuario = usuario;
 		this.actividadesEstuduiantes = actividadesEstuduiantes;
 	}
@@ -81,6 +87,22 @@ public class Actividades {
 
 	public void setCurso(Integer curso) {
 		Curso = curso;
+	}
+
+	public Integer getModulo() {
+		return modulo;
+	}
+
+	public void setModulo(Integer modulo) {
+		this.modulo = modulo;
+	}
+
+	public Integer getLeccion() {
+		return leccion;
+	}
+
+	public void setLeccion(Integer leccion) {
+		this.leccion = leccion;
 	}
 
 	public Usuario getUsuario() {

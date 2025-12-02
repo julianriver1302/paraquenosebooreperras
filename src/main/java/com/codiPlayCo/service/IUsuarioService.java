@@ -13,4 +13,6 @@ public interface IUsuarioService {
     boolean existsByEmail(String email);
     List<Usuario> findByRol(String rolNombre);
     List<Usuario> findDocentesActivos();
+    List<Usuario> findByCursoComprado(Integer cursoId);
+    void inscribirEnCurso(Integer idEstudiante, Integer idCurso);
 }
