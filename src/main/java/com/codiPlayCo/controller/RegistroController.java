@@ -58,7 +58,7 @@ public class RegistroController {
 
 			Rol rolEstudiante = new Rol();
 			rolEstudiante.setId(3);
-			usuario.setRol(rolEstudiante);
+			usuario.setRol(rolEstudiante); 	
 
 			usuarioServiceImplement.save(usuario);
 

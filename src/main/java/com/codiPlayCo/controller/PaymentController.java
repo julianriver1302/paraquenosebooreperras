@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.codiPlayCo.dto.PaymentRequest;
 import com.codiPlayCo.model.Pago;
+import com.codiPlayCo.repository.ICursoRepository; // si lo usas
 import com.codiPlayCo.service.PaymentService;
 
 @RestController
@@ -17,28 +18,26 @@ public class PaymentController {
 	@Autowired
 	private PaymentService paymentService;
 
-	/**
-	 * 1️⃣ Crear el PaymentIntent en Stripe
-	 */
+	// 1) Crear PaymentIntent
 	@PostMapping("/create-payment-intent")
 	public ResponseEntity<?> createPaymentIntent(@RequestBody PaymentRequest request) {
 		try {
-			return ResponseEntity.ok(paymentService.createPaymentIntent(request));
+			Map<String, Object> resp = paymentService.createPaymentIntent(request);
+			return ResponseEntity.ok(resp);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
 		}
 	}
 
-	/**
-	 * 2️⃣ Confirmar el pago y guardarlo en BD Este endpoint lo llama el front
-	 * cuando Stripe confirma el pago.
-	 */
+	// 2) Confirmar y guardar pago
+	// El front enviará { registroId, precio, stripePaymentId, estado, cursoId,
+	// usuarioId(optional) }
 	@PostMapping("/confirm")
-	public ResponseEntity<?> confirmarPago(@RequestBody Pago pago) {
+	public ResponseEntity<?> confirmarPago(@RequestBody Pago pago,
+			@RequestParam(name = "registroId", required = false) Integer registroId) {
 		try {
-			Pago pagoGuardado = paymentService.guardar(pago);
-			return ResponseEntity
-					.ok(Map.of("status", "success", "message", "Pago guardado exitosamente", "data", pagoGuardado));
+			Pago pagoGuardado = paymentService.guardarPago(pago, registroId);
+			return ResponseEntity.ok(Map.of("status", "success", "data", pagoGuardado));
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(Map.of("status", "error", "message", e.getMessage()));
 		}

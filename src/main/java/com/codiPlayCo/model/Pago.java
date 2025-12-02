@@ -20,75 +20,59 @@ public class Pago {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaPago = new Date();
 
+    // 🔥 Campos que pediste para asociar registros
+    @Column(name = "usuario_id")
+    private Integer usuarioId;
+
+    @Column(name = "curso_id")
+    private Integer cursoId;
+
+    // 🔥 Relaciones opcionales si las necesitas
     @ManyToOne
-    @JoinColumn(name = "curso_id")
+    @JoinColumn(name = "curso_id", insertable = false, updatable = false)
     private Curso curso;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_id", insertable = false, updatable = false)
     private Usuario usuario;
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Integer getPrecio() { return precio; }
+    public void setPrecio(Integer precio) { this.precio = precio; }
 
-	public Integer getPrecio() {
-		return precio;
-	}
+    public String getStripePaymentId() { return stripePaymentId; }
+    public void setStripePaymentId(String stripePaymentId) { this.stripePaymentId = stripePaymentId; }
 
-	public void setPrecio(Integer precio) {
-		this.precio = precio;
-	}
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
-	public String getStripePaymentId() {
-		return stripePaymentId;
-	}
+    public Date getFechaPago() { return fechaPago; }
+    public void setFechaPago(Date fechaPago) { this.fechaPago = fechaPago; }
 
-	public void setStripePaymentId(String stripePaymentId) {
-		this.stripePaymentId = stripePaymentId;
-	}
+    public Integer getUsuarioId() { return usuarioId; }
+    public void setUsuarioId(Integer usuarioId) { this.usuarioId = usuarioId; }
 
-	public String getEstado() {
-		return estado;
-	}
+    public Integer getCursoId() { return cursoId; }
+    public void setCursoId(Integer cursoId) { this.cursoId = cursoId; }
 
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
+    public Pago() {}
 
-	public Date getFechaPago() {
-		return fechaPago;
-	}
+    public Pago(Integer id, Integer precio, String stripePaymentId, String estado, Date fechaPago, Integer cursoId, Integer usuarioId) {
+        this.id = id;
+        this.precio = precio;
+        this.stripePaymentId = stripePaymentId;
+        this.estado = estado;
+        this.fechaPago = fechaPago;
+        this.cursoId = cursoId;
+        this.usuarioId = usuarioId;
+    }
 
-	public void setFechaPago(Date fechaPago) {
-		this.fechaPago = fechaPago;
-	}
-
-	public Pago() {
-		
-	}
-
-	public Pago(Integer id, Integer precio, String stripePaymentId, String estado, Date fechaPago, Curso curso,
-			Usuario usuario) {
-		super();
-		this.id = id;
-		this.precio = precio;
-		this.stripePaymentId = stripePaymentId;
-		this.estado = estado;
-		this.fechaPago = fechaPago;
-		this.curso = curso;
-		this.usuario = usuario;
-	}
-
-	@Override
-	public String toString() {
-		return "Pago [id=" + id + ", precio=" + precio + ", stripePaymentId=" + stripePaymentId + ", estado=" + estado
-				+ ", fechaPago=" + fechaPago + "]";
-	}
-
-    
+    @Override
+    public String toString() {
+        return "Pago [id=" + id + ", precio=" + precio + ", stripePaymentId=" + stripePaymentId +
+                ", estado=" + estado + ", fechaPago=" + fechaPago +
+                ", usuarioId=" + usuarioId + ", cursoId=" + cursoId + "]";
+    }
 }
