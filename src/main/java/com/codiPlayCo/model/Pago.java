@@ -11,26 +11,31 @@ public class Pago {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer precio;               // precio en pesos (Integer)
+    private Integer precio;
 
-    private String stripePaymentId;       // PaymentIntent.id
+    private String stripePaymentId;
 
-    private String estado;                // "succeeded", "requires_payment_method", "failed", "pending"
+    private String estado;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaPago = new Date();
 
+    // 🔥 Campos que pediste para asociar registros
+    @Column(name = "usuario_id")
+    private Integer usuarioId;
+
+    @Column(name = "curso_id")
+    private Integer cursoId;
+
+    // 🔥 Relaciones opcionales si las necesitas
     @ManyToOne
-    @JoinColumn(name = "curso_id")
+    @JoinColumn(name = "curso_id", insertable = false, updatable = false)
     private Curso curso;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_id", insertable = false, updatable = false)
     private Usuario usuario;
 
-    public Pago() {}
-
-    // getters / setters (incluyendo curso y usuario)
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
@@ -46,15 +51,28 @@ public class Pago {
     public Date getFechaPago() { return fechaPago; }
     public void setFechaPago(Date fechaPago) { this.fechaPago = fechaPago; }
 
-    public Curso getCurso() { return curso; }
-    public void setCurso(Curso curso) { this.curso = curso; }
+    public Integer getUsuarioId() { return usuarioId; }
+    public void setUsuarioId(Integer usuarioId) { this.usuarioId = usuarioId; }
 
-    public Usuario getUsuario() { return usuario; }
-    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+    public Integer getCursoId() { return cursoId; }
+    public void setCursoId(Integer cursoId) { this.cursoId = cursoId; }
+
+    public Pago() {}
+
+    public Pago(Integer id, Integer precio, String stripePaymentId, String estado, Date fechaPago, Integer cursoId, Integer usuarioId) {
+        this.id = id;
+        this.precio = precio;
+        this.stripePaymentId = stripePaymentId;
+        this.estado = estado;
+        this.fechaPago = fechaPago;
+        this.cursoId = cursoId;
+        this.usuarioId = usuarioId;
+    }
 
     @Override
     public String toString() {
-        return "Pago [id=" + id + ", precio=" + precio + ", stripePaymentId=" + stripePaymentId + ", estado=" + estado
-                + ", fechaPago=" + fechaPago + "]";
+        return "Pago [id=" + id + ", precio=" + precio + ", stripePaymentId=" + stripePaymentId +
+                ", estado=" + estado + ", fechaPago=" + fechaPago +
+                ", usuarioId=" + usuarioId + ", cursoId=" + cursoId + "]";
     }
 }
