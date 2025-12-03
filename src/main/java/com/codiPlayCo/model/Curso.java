@@ -116,6 +116,14 @@ public class Curso {
 		this.usuarios = usuarios;
 	}
 
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
 	@Override
 	public String toString() {
 		return "Curso [id=" + id + ", curso=" + curso + ", estado=" + estado + ", descripcion=" + descripcion
