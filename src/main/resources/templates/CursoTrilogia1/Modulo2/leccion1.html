@@ -132,6 +132,37 @@
 			-ms-overflow-style: none;       /* IE y Edge antiguos */
 		}
 
+		.exit-bar {
+			display: flex;
+			justify-content: flex-end;
+			margin-bottom: 12px;
+		}
+
+		.exit-button {
+			padding: 10px 22px;
+			border-radius: 999px;
+			border: 1px solid rgba(248,250,252,0.7);
+			background: linear-gradient(135deg, #f97316, #fb923c);
+			color: #0b1120;
+			font-size: 14px;
+			font-weight: 600;
+			cursor: pointer;
+			letter-spacing: 0.02em;
+			transition: background 0.15s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-out;
+			box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+		}
+
+		.exit-button:hover {
+			background: linear-gradient(135deg, #fdba74, #fb923c);
+			transform: translateY(-1px) scale(1.02);
+			box-shadow: 0 12px 24px rgba(0,0,0,0.7);
+		}
+
+		.exit-button:active {
+			transform: translateY(0) scale(0.98);
+			box-shadow: 0 6px 14px rgba(0,0,0,0.55);
+		}
+
 		.card::-webkit-scrollbar {
 			display: none;                  /* Chrome, Safari y derivados */
 		}
@@ -514,6 +545,9 @@
 
 			<div class="right-panel">
 				<div class="card">
+					<div class="exit-bar">
+						<button type="button" class="exit-button" id="exit-lesson-btn">Salir de la lección</button>
+					</div>
 
 					<div class="progress-wrapper">
 						<div class="progress-label">Progreso de la misión</div>
@@ -761,6 +795,27 @@ body {
 			let currentStep = 0;
 			const stepCompleted = new Array(steps.length).fill(false);
 			let quizCompleted = false; // ya no se usa el mini quiz para avanzar
+
+			const exitLessonBtn = document.getElementById('exit-lesson-btn');
+
+			if (exitLessonBtn && window.Swal) {
+				exitLessonBtn.addEventListener('click', () => {
+					Swal.fire({
+						title: '¿Estás seguro de salir?',
+						text: 'Si sales ahora, no se contará el progreso de la lección.',
+						icon: 'warning',
+						showCancelButton: true,
+						confirmButtonText: 'Sí, salir',
+						cancelButtonText: 'Cancelar',
+						background: '#020617',
+						color: '#e5e7eb'
+					}).then((result) => {
+						if (result.isConfirmed) {
+							window.location.href = '/PanelControlUsuario/modulo2';
+						}
+					});
+				});
+			}
 
 			function updateProgress(index) {
 				if (!progressFill || steps.length === 0) return;

@@ -1,238 +1,1566 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <title>Lección 2 - Conectar CSS al HTML</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌈 Lección 2: ¡Colorea tu Mundo con CSS!</title>
 
     <style>
-        body {
-            margin: 0;
-            padding: 40px 20px;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(145deg, #0c0f1a, #080a0f);
-            color: #e9f5ff;
-            overflow-x: hidden;
+        :root {
+            --bg-main-from: #020617;
+            --bg-main-via: #0f172a;
+            --bg-main-to: #020617;
+            --slate-900: #020617;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-600: #475569;
+            --slate-300: #cbd5f5;
+            --yellow-400: #facc15;
+            --yellow-500: #eab308;
+            --yellow-900: #422006;
+            --orange-500: #f97316;
+            --orange-600: #ea580c;
+            --green-500: #22c55e;
+            --green-900: #052e16;
+            --purple-500: #a855f7;
+            --purple-900: #312e81;
+            --pink-500: #ec4899;
+            --pink-900: #4c0519;
+            --blue-500: #3b82f6;
+            --blue-900: #0f172a;
+            --cyan-500: #06b6d4;
+            --emerald-900: #064e3b;
+            --shadow-xl: 0 20px 25px -5px rgba(15,23,42,0.7), 0 10px 10px -5px rgba(15,23,42,0.6);
         }
 
-        /* TARJETA */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            min-height: 100vh;
+            background: radial-gradient(circle at top, #1e293b 0, #020617 50%, #000 100%);
+            color: #e5e7eb;
+        }
+
+        .page-container {
+            min-height: 100vh;
+            padding: 1.5rem 3vw;
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .page-inner {
+            width: 100%;
+            max-width: 1400px;
+            display: grid;
+            grid-template-columns: 320px minmax(0, 1.5fr);
+            gap: 1.75rem;
+            height: auto;
+        }
+
+        @media (max-width: 1024px) {
+            .page-inner {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 1.25rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-container {
+                padding: 1rem;
+            }
+        }
+
         .card {
-            width: 95%;
-            max-width: 900px;
-            margin: auto;
-            padding: 50px;
-            background: #10141f;
-            border-radius: 25px;
-            box-shadow:
-                10px 10px 25px rgba(0,0,0,0.6),
-                -5px -5px 20px rgba(255,255,255,0.05);
-            position: relative;
+            background: rgba(15,23,42,0.9);
+            backdrop-filter: blur(18px);
+            border-radius: 24px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid rgba(51,65,85,0.7);
+        }
+
+        .sidebar {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title h1 {
+            color: var(--yellow-400);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .sidebar-mascot-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-mascot {
+            width: 8rem;
+            height: 8rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #3b82f6, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .sidebar-description {
+            color: #e2e8f0;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .highlight {
+            color: var(--yellow-400);
+            font-weight: 600;
+        }
+
+        .sidebar-sections {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .sidebar-button {
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-radius: 14px;
+            border: 1px solid rgba(75,85,99,0.5);
+            background: rgba(51,65,85,0.4);
+            color: #cbd5f5;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.18s ease-out;
+        }
+
+        .sidebar-button:hover {
+            background: rgba(51,65,85,0.7);
+        }
+
+        .sidebar-button span.emoji {
+            font-size: 1.25rem;
+        }
+
+        .sidebar-button span.label {
+            flex: 1;
+        }
+
+        .sidebar-button span.check {
+            color: #4ade80;
+        }
+
+        .sidebar-button.active {
+            background: rgba(250,204,21,0.12);
+            border: 2px solid rgba(250,204,21,0.6);
+            color: var(--yellow-400);
+        }
+
+        .sidebar-button.completed:not(.active) {
+            background: rgba(22,163,74,0.08);
+            border: 1px solid rgba(34,197,94,0.5);
+            color: #4ade80;
+        }
+
+        .sidebar-button.completed:not(.active):hover {
+            background: rgba(22,163,74,0.16);
+        }
+
+        /* Main panel */
+        .main-panel {
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
         }
 
-        /* DECORACIONES */
-        .blob {
-            position: absolute;
-            width: 190px;
-            height: 190px;
-            background: radial-gradient(circle, #00ffe7, #006d6c);
-            filter: blur(80px);
-            opacity: 0.4;
-            top: -40px;
-            right: -25px;
-            z-index: 0;
-            animation: float 6s ease-in-out infinite alternate;
-        }
-
-        .blob2 {
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, #4da3ff, #1c3aff);
-            filter: blur(90px);
-            opacity: 0.35;
-            bottom: -60px;
-            left: -35px;
-            z-index: 0;
-            animation: float 7s ease-in-out infinite alternate-reverse;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px) }
-            100% { transform: translateY(18px) }
-        }
-
-        /* TÍTULO */
-        h1 {
-            text-align: center;
-            font-size: 35px;
-            font-weight: 800;
-            margin-bottom: 25px;
-            background: linear-gradient(90deg, #4dfff6, #63a0ff);
-            -webkit-background-clip: text;
-            color: transparent;
-            position: relative;
-            z-index: 5;
-        }
-
-        .emoji {
-            font-size: 45px;
-            margin: 10px 0 25px 0;
-            text-align: center;
-            z-index: 5;
-            position: relative;
-        }
-
-        p {
-            font-size: 19px;
-            line-height: 1.7;
-            position: relative;
-            z-index: 5;
-        }
-
-        pre {
-            background: rgba(0,255,255,0.06);
-            padding: 18px;
-            font-size: 18px;
-            border-radius: 12px;
-            border: 1px solid rgba(0,255,255,0.15);
-            position: relative;
-            z-index: 5;
-        }
-
-        /* BOTONES */
-        .nav-buttons {
-            margin-top: 35px;
+        .main-header {
+            padding: 0.9rem 1.5rem;
+            border-bottom: 1px solid rgba(51,65,85,0.8);
+            background: rgba(15,23,42,0.9);
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            z-index: 5;
-            position: relative;
+            gap: 1.5rem;
         }
 
-        .btn-back, .btn-next {
-            padding: 14px 20px;
-            border-radius: 12px;
-            text-decoration: none;
+        .header-label {
+            color: #9ca3af;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.25rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background: rgba(30,41,59,0.9);
+            border-radius: 999px;
+            height: 0.4rem;
+            overflow: hidden;
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            width: 0%;
+            background-image: linear-gradient(to right, #facc15, #f97316);
+            transition: width 0.4s ease-out;
+        }
+
+        .exit-button {
+            margin-left: auto;
+            padding: 0.6rem 1.6rem;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
             font-weight: 700;
-            color: #ffffff;
-            transition: 0.2s;
+            font-size: 0.9rem;
+            color: #fff;
+            background-image: linear-gradient(to right, var(--orange-500), var(--orange-600));
+            box-shadow: 0 8px 18px rgba(248, 113, 113, 0.35);
+            transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
         }
 
-        .btn-back {
-            background: #445566;
-        }
-        .btn-back:hover {
-            background: #556677;
-            transform: scale(1.07);
+        .exit-button:hover {
+            transform: translateY(-1px) scale(1.03);
+            box-shadow: 0 10px 20px rgba(248, 113, 113, 0.45);
         }
 
-        .btn-next {
-            background: #00d4ff;
-            color: black;
-        }
-        .btn-next:hover {
-            background: #53e1ff;
-            transform: scale(1.07);
-            box-shadow: 0 0 20px #00eaff;
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.75rem;
         }
 
-        /* BLOQUE EDUCATIVO */
-        .mini-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-            padding: 20px;
-            margin-top: 25px;
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-number {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 999px;
+            background-image: linear-gradient(to bottom right, var(--yellow-500), var(--orange-500));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .section-title {
+            color: var(--yellow-400);
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .card-gradient {
+            border-radius: 18px;
+            padding: 1.5rem;
+            border: 1px solid rgba(147,197,253,0.3);
+            background: radial-gradient(circle at top left, rgba(129,140,248,0.3), rgba(17,24,39,1));
+        }
+
+        .card-gradient-alt {
+            border-radius: 18px;
+            padding: 1.5rem;
+            border: 1px solid rgba(250,204,21,0.35);
+            background: radial-gradient(circle at top left, rgba(250,204,21,0.12), rgba(15,23,42,1));
+        }
+
+        .bot-card {
+            border-radius: 18px;
+            padding: 1.25rem;
+            border: 1px solid rgba(250,204,21,0.4);
+            background: rgba(15,23,42,0.9);
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .bot-avatar {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 999px;
+            background-image: linear-gradient(to bottom right, #3b82f6, #22c55e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.6rem;
+        }
+
+        .bot-title {
+            color: var(--yellow-400);
+            font-weight: 600;
+            margin-bottom: 0.15rem;
+        }
+
+        .bot-text {
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        .big-primary-button {
+            width: 100%;
             border-radius: 14px;
-            z-index: 5;
+            border: none;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+            background-image: linear-gradient(to right, var(--yellow-500), var(--orange-500));
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
+            box-shadow: 0 10px 25px rgba(245,158,11,0.35);
+        }
+
+        .big-primary-button:hover {
+            transform: translateY(-1px) scale(1.03);
+            box-shadow: 0 14px 30px rgba(245,158,11,0.5);
+        }
+
+        /* Color changing text */
+        .color-changer {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            transition: color 0.5s ease;
+        }
+
+        /* Code editor layout */
+        .code-editor {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .code-editor-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 1rem;
+        }
+
+        @media (max-width: 800px) {
+            .code-editor-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .editor-label-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            gap: 0.5rem;
+        }
+
+        .editor-label {
+            color: var(--yellow-400);
+            font-size: 0.9rem;
+        }
+
+        .reset-button {
+            border: none;
+            background: transparent;
+            color: #9ca3af;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .reset-button:hover {
+            color: #e5e7eb;
+        }
+
+        .editor-textarea {
+            width: 100%;
+            min-height: 160px;
+            padding: 0.75rem;
+            border-radius: 14px;
+            border: 2px solid rgba(71,85,105,0.6);
+            background: rgba(15,23,42,0.9);
+            color: #e5e7eb;
+            font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.8rem;
+            outline: none;
+            resize: none;
+        }
+
+        .editor-textarea:focus {
+            border-color: rgba(250,204,21,0.65);
+        }
+
+        .editor-run {
+            margin-top: 0.75rem;
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            color: #f9fafb;
+            background-image: linear-gradient(to right, #22c55e, #10b981);
+            transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
+            box-shadow: 0 10px 25px rgba(34,197,94,0.35);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .editor-run:hover {
+            transform: translateY(-1px) scale(1.03);
+            box-shadow: 0 14px 30px rgba(34,197,94,0.5);
+        }
+
+        .preview-label {
+            color: var(--yellow-400);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .preview-container {
+            border-radius: 14px;
+            border: 2px solid rgba(71,85,105,0.6);
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .preview-frame {
+            width: 100%;
+            height: 260px;
+            border: none;
+        }
+
+        .success-message {
+            margin-top: 0.9rem;
+            border-radius: 14px;
+            padding: 0.9rem 1rem;
+            text-align: center;
+            font-size: 0.95rem;
+            background-image: linear-gradient(to right, #22c55e, #16a34a);
+            color: #f9fafb;
+            animation: pulse 1s infinite;
+            display: none;
+        }
+
+        .success-message.visible {
+            display: block;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* tip */
+        .tip-card {
+            border-radius: 14px;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            margin-top: 0.75rem;
+            border: 1px solid rgba(250,204,21,0.45);
+            background: rgba(250,204,21,0.08);
+            color: var(--yellow-400);
+        }
+
+        .tip-card code {
+            background: rgba(30,41,59,0.9);
+            padding: 0.12rem 0.4rem;
+            border-radius: 8px;
+        }
+
+        /* Palette */
+        .palette-card {
+            margin-top: 1rem;
+            border-radius: 18px;
+            padding: 1.25rem;
+            background: rgba(30,41,59,0.7);
+            border: 1px solid rgba(71,85,105,0.7);
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+
+        .palette-option {
+            border-radius: 14px;
+            padding: 1rem;
+            border: none;
+            cursor: pointer;
             position: relative;
+            overflow: hidden;
+            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
         }
 
-        .mini-card h3 {
-            margin: 0 0 10px 0;
-            font-size: 22px;
-            color: #76c9ff;
+        .palette-option:hover {
+            transform: translateY(-1px) scale(1.03);
+            box-shadow: 0 10px 24px rgba(15,23,42,0.7);
         }
 
-        .code-example {
-            background: rgba(0,255,255,0.08);
-            padding: 12px;
+        .palette-option.selected {
+            box-shadow: 0 0 0 4px rgba(250,204,21,0.9);
+        }
+
+        .palette-option code {
+            background: rgba(0,0,0,0.3);
+            padding: 0.15rem 0.4rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+        }
+
+        .palette-custom {
+            margin-top: 1rem;
+            padding-top: 0.9rem;
+            border-top: 2px solid rgba(71,85,105,0.8);
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .palette-color-input {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 16px;
+            border: 2px solid rgba(71,85,105,0.8);
+            padding: 0;
+        }
+
+        .palette-hex-input {
+            flex: 1;
+            min-width: 160px;
+            padding: 0.65rem 0.75rem;
+            border-radius: 12px;
+            border: 2px solid rgba(71,85,105,0.8);
+            background: rgba(15,23,42,0.9);
+            color: #e5e7eb;
+            font-family: monospace;
+            font-size: 0.8rem;
+            outline: none;
+        }
+
+        .palette-hex-input:focus {
+            border-color: rgba(250,204,21,0.7);
+        }
+
+        .palette-apply {
+            width: 100%;
+            margin-top: 0.4rem;
+            padding: 0.6rem 0.75rem;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            background-image: linear-gradient(to right, var(--purple-500), var(--pink-500));
+            color: #fff;
+            font-weight: 600;
+            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+        }
+
+        .palette-apply:hover {
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 10px 22px rgba(129,140,248,0.4);
+        }
+
+        .palette-feedback {
+            margin-top: 0.9rem;
+            border-radius: 14px;
+            padding: 0.75rem;
+            border: 1px solid rgba(250,204,21,0.5);
+            background: rgba(133,77,14,0.35);
+            text-align: center;
+            color: var(--yellow-400);
+            display: none;
+        }
+
+        .palette-feedback.visible {
+            display: block;
+        }
+
+        /* Background picker */
+        .bg-picker-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+
+        .bg-picker-btn {
+            border-radius: 14px;
+            padding: 1.3rem;
+            border: none;
+            cursor: pointer;
+            color: #f9fafb;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+            box-shadow: 0 8px 20px rgba(15,23,42,0.7);
+        }
+
+        .bg-picker-btn:hover {
+            transform: translateY(-1px) scale(1.03);
+            box-shadow: 0 12px 26px rgba(15,23,42,0.9);
+        }
+
+        .bg-picker-btn.selected {
+            box-shadow: 0 0 0 4px rgba(250,204,21,0.9);
+        }
+
+        .bg-picker-feedback {
+            margin-top: 0.75rem;
+            border-radius: 14px;
+            padding: 0.8rem;
+            border: 1px solid rgba(34,197,94,0.6);
+            background: rgba(5,46,22,0.6);
+            text-align: center;
+            color: #4ade80;
+            display: none;
+        }
+
+        .bg-picker-feedback.visible {
+            display: block;
+        }
+
+        /* Mini cards */
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+
+        .mini-card {
+            border-radius: 14px;
+            padding: 0.9rem;
+            color: #fff;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .mini-card code {
+            font-size: 0.75rem;
+        }
+
+        /* Checklist */
+        .checklist {
+            border-radius: 14px;
+            padding: 1rem;
+            background: rgba(30,41,59,0.8);
+            border: 1px solid rgba(71,85,105,0.8);
+        }
+
+        .checklist ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .checklist li {
+            margin-bottom: 0.4rem;
+            color: #e5e7eb;
+            font-size: 0.9rem;
+        }
+
+        .checklist code {
+            background: rgba(15,23,42,0.9);
+            padding: 0.1rem 0.35rem;
+            border-radius: 8px;
+        }
+
+        /* Final teaser */
+        .teaser-card {
+            border-radius: 18px;
+            padding: 2rem 1.5rem;
+            background: radial-gradient(circle at top, rgba(59,130,246,0.4), rgba(15,23,42,1));
+            border: 1px solid rgba(59,130,246,0.4);
+            text-align: center;
+        }
+
+        .teaser-title {
+            color: var(--yellow-400);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .teaser-text {
+            color: #e5e7eb;
+            font-size: 1rem;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(51, 65, 85, 0.3);
             border-radius: 10px;
-            border: 1px solid rgba(0,255,255,0.15);
-            font-size: 16px;
-            margin-top: 8px;
         }
 
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.5);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.7);
+        }
     </style>
 </head>
-
 <body>
+<div class="page-container">
+    <div class="page-inner">
+        <!-- SIDEBAR -->
+        <aside class="card sidebar">
+            <div class="sidebar-title">
+                <h1>Introducción a<br>CSS</h1>
+                <div class="sidebar-mascot-wrapper">
+                    <div class="sidebar-mascot">🤖</div>
+                </div>
+                <p class="sidebar-description">
+                    CSS es como la ropa, los peinados y los accesorios de una página web. HTML pone el cuerpo...
+                    <span class="highlight">¡y CSS la viste para la fiesta!</span> ✨
+                </p>
+            </div>
 
-<div class="card">
+            <div class="sidebar-sections" id="sidebar-sections">
+                <!-- Buttons generated by HTML directly -->
+                <button class="sidebar-button active" data-section="1">
+                    <span class="emoji">✨</span>
+                    <span class="label">Bienvenida a la misión</span>
+                    <span class="check" style="display:none;">✓</span>
+                </button>
+                <button class="sidebar-button" data-section="2">
+                    <span class="emoji">🎨</span>
+                    <span class="label">Propiedad color</span>
+                    <span class="check" style="display:none;">✓</span>
+                </button>
+                <button class="sidebar-button" data-section="3">
+                    <span class="emoji">🌈</span>
+                    <span class="label">Tipos de colores</span>
+                    <span class="check" style="display:none;">✓</span>
+                </button>
+                <button class="sidebar-button" data-section="4">
+                    <span class="emoji">🖌️</span>
+                    <span class="label">background-color</span>
+                    <span class="check" style="display:none;">✓</span>
+                </button>
+                <button class="sidebar-button" data-section="5">
+                    <span class="emoji">🖼️</span>
+                    <span class="label">background-image</span>
+                    <span class="check" style="display:none;">✓</span>
+                </button>
+                <button class="sidebar-button" data-section="6">
+                    <span class="emoji">⚙️</span>
+                    <span class="label">Ajustar el fondo</span>
+                    <span class="check" style="display:none;">✓</span>
+                </button>
+                <button class="sidebar-button" data-section="7">
+                    <span class="emoji">🧪</span>
+                    <span class="label">Minilaboratorio</span>
+                    <span class="check" style="display:none;">✓</span>
+                </button>
+            </div>
+        </aside>
 
-    <div class="blob"></div>
-    <div class="blob2"></div>
+        <!-- MAIN PANEL -->
+        <main class="card main-panel">
+            <div class="main-header">
+                <div style="flex:1;">
+                    <div class="header-label">Progreso de la misión</div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" id="progress-bar-inner"></div>
+                    </div>
+                </div>
+                <button class="exit-button" id="exit-button">Salir de la lección</button>
+            </div>
 
-    <h1>🔗 Lección 2 – Conectar CSS al HTML</h1>
+            <div class="main-content">
+                <!-- SECTION 1 -->
+                <section class="section active" id="section-1" data-section="1">
+                    <div class="section-header">
+                        <div class="section-number">1</div>
+                        <h2 class="section-title">Bienvenida a la misión: "Pintores del Código"</h2>
+                    </div>
 
-    <div class="emoji">🎨🧩</div>
+                    <div class="card-gradient">
+                        <p style="font-size:1.05rem; line-height:1.6;">
+                            “Hoy te convertirás en un artista del código. Verás cómo un sitio web puede cambiar de color…
+                            ¡como un camaleón! 🦎✨”
+                        </p>
+                    </div>
 
-    <p>
-        Para que tu página pueda <strong>verse hermosa, ordenada y colorida</strong>,  
-        debemos enseñarle a HTML a usar un archivo llamado <b>CSS</b>.
-    </p>
+                    <div style="margin-top:1.25rem;" class="card-gradient-alt">
+                        <h3 style="color:var(--yellow-400); margin-bottom:1rem; font-weight:600;">¡Mira este texto cambiar de color! 🎨</h3>
+                        <h2 class="color-changer" id="color-changer">¡Soy un camaleón de colores! 🦎</h2>
+                    </div>
 
-    <p>
-        Esta es la etiqueta mágica que conecta ambos mundos:
-    </p>
+                    <div style="margin-top:1.25rem;" class="bot-card">
+                        <div class="bot-avatar">🤖</div>
+                        <div>
+                            <div class="bot-title">😊 ¡Estoy listo para acompañarte en esta misión!</div>
+                            <p class="bot-text">
+                                CSS es como <span class="highlight">pintar con superpoderes</span> 🌟🖌️
+                            </p>
+                        </div>
+                    </div>
 
-<pre>
-&lt;link rel="stylesheet" href="styles.css"&gt;
-</pre>
+                    <button class="big-primary-button" data-next-from="1">
+                        Parece divertido, ¡vamos! →
+                    </button>
+                </section>
 
-    <div class="mini-card">
-        <h3>¿Qué significa esto? 🤔</h3>
+                <!-- SECTION 2 -->
+                <section class="section" id="section-2" data-section="2">
+                    <div class="section-header">
+                        <div class="section-number">2</div>
+                        <h2 class="section-title">¿Qué es la propiedad color?</h2>
+                    </div>
 
-        <p><strong>&lt;link&gt;</strong> → Le dice al navegador que queremos cargar un archivo externo.</p>
+                    <div class="card-gradient">
+                        <p style="font-size:1.02rem; line-height:1.6;">
+                            “La propiedad
+                            <code style="background:#1f2937; padding:0.15rem 0.4rem; border-radius:8px; color:var(--yellow-400);">color</code>
+                            es como elegir el color de tu lápiz. Sirve para colorear palabras, títulos o párrafos.”
+                        </p>
+                    </div>
 
-        <p><strong>rel="stylesheet"</strong> → Explica que el archivo es una hoja de estilos.</p>
+                    <div class="code-editor" data-section="2" data-lab="false">
+                        <div class="code-editor-grid">
+                            <div>
+                                <div class="editor-label-row">
+                                    <span class="editor-label">🎨 CSS (Estilos)</span>
+                                    <button type="button" class="reset-button">↻ Resetear</button>
+                                </div>
+                                <textarea class="editor-textarea css-editor">
+h1 {
+  color: red;
+}
+                                </textarea>
+                            </div>
+                            <div>
+                                <div class="editor-label-row">
+                                    <span class="editor-label">📝 HTML (Contenido)</span>
+                                </div>
+                                <textarea class="editor-textarea html-editor"><h1>¡Hola Mundo!</h1></textarea>
+                            </div>
+                        </div>
 
-        <p><strong>href="styles.css"</strong> → Es el nombre del archivo donde está tu diseño.</p>
+                        <button type="button" class="editor-run">▶️ Ejecutar código</button>
 
-        <div class="code-example">
-            <strong>TIP:</strong> Siempre va dentro del &lt;head&gt; del HTML.
-        </div>
+                        <div class="preview-label">👁️ Vista Previa</div>
+                        <div class="preview-container">
+                            <iframe class="preview-frame" sandbox="allow-scripts"></iframe>
+                        </div>
+
+                        <div class="success-message">
+                            ✨ ¡Excelente! ¡Sigue explorando los colores!
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        ✨ ¡Prueba cambiando
+                        <code>red</code>
+                        por: pink, lime, gold, cyan!
+                    </div>
+
+                    <button class="big-primary-button" data-next-from="2">
+                        ¡Continuar! →
+                    </button>
+                </section>
+
+                <!-- SECTION 3 -->
+                <section class="section" id="section-3" data-section="3">
+                    <div class="section-header">
+                        <div class="section-number">3</div>
+                        <h2 class="section-title">Tipos de colores en CSS</h2>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; margin-bottom:1rem;">
+                        <div style="background:rgba(30,41,59,0.85); border-radius:18px; padding:1.1rem; border:1px solid rgba(71,85,105,0.85);">
+                            <div style="font-size:1.6rem; margin-bottom:0.5rem;">🖍️</div>
+                            <h4 style="color:var(--yellow-400); font-weight:600; margin-bottom:0.4rem;">Color por nombre</h4>
+                            <p style="color:#e5e7eb; font-size:0.85rem; margin-bottom:0.6rem;">Son colores comunes, como crayolas mágicas.</p>
+                            <div style="display:flex; flex-direction:column; gap:0.35rem;">
+                                <div style="display:flex; align-items:center; gap:0.4rem;">
+                                    <div style="width:1.5rem; height:1.5rem; border-radius:6px; background:red;"></div>
+                                    <code style="font-size:0.8rem;">red</code>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:0.4rem;">
+                                    <div style="width:1.5rem; height:1.5rem; border-radius:6px; background:blue;"></div>
+                                    <code style="font-size:0.8rem;">blue</code>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:0.4rem;">
+                                    <div style="width:1.5rem; height:1.5rem; border-radius:6px; background:orange;"></div>
+                                    <code style="font-size:0.8rem;">orange</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background:rgba(30,41,59,0.85); border-radius:18px; padding:1.1rem; border:1px solid rgba(71,85,105,0.85);">
+                            <div style="font-size:1.6rem; margin-bottom:0.5rem;">🥷</div>
+                            <h4 style="color:var(--yellow-400); font-weight:600; margin-bottom:0.4rem;">Colores HEX</h4>
+                            <p style="color:#e5e7eb; font-size:0.85rem; margin-bottom:0.6rem;">Códigos ninja secretos de programadores.</p>
+                            <div style="display:flex; flex-direction:column; gap:0.35rem;">
+                                <div style="display:flex; align-items:center; gap:0.4rem;">
+                                    <div style="width:1.5rem; height:1.5rem; border-radius:6px; background:#ff5733;"></div>
+                                    <code style="font-size:0.8rem;">#ff5733</code>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:0.4rem;">
+                                    <div style="width:1.5rem; height:1.5rem; border-radius:6px; background:#33ff57;"></div>
+                                    <code style="font-size:0.8rem;">#33ff57</code>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:0.4rem;">
+                                    <div style="width:1.5rem; height:1.5rem; border-radius:6px; background:#3357ff;"></div>
+                                    <code style="font-size:0.8rem;">#3357ff</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background:rgba(30,41,59,0.85); border-radius:18px; padding:1.1rem; border:1px solid rgba(71,85,105,0.85);">
+                            <div style="font-size:1.6rem; margin-bottom:0.5rem;">🔦</div>
+                            <h4 style="color:var(--yellow-400); font-weight:600; margin-bottom:0.4rem;">Colores RGB</h4>
+                            <p style="color:#e5e7eb; font-size:0.85rem; margin-bottom:0.6rem;">Mezcla de LUZ: Rojo + Verde + Azul.</p>
+                            <div style="display:flex; flex-direction:column; gap:0.35rem;">
+                                <div style="display:flex; align-items:center; gap:0.4rem;">
+                                    <div style="width:1.5rem; height:1.5rem; border-radius:6px; background:rgb(255,0,0);"></div>
+                                    <code style="font-size:0.8rem;">rgb(255,0,0)</code>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:0.4rem;">
+                                    <div style="width:1.5rem; height:1.5rem; border-radius:6px; background:rgb(0,255,200);"></div>
+                                    <code style="font-size:0.8rem;">rgb(0,255,200)</code>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:0.4rem;">
+                                    <div style="width:1.5rem; height:1.5rem; border-radius:6px; background:rgb(255,200,0);"></div>
+                                    <code style="font-size:0.8rem;">rgb(255,200,0)</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="palette-card color-palette" data-section="3">
+                        <h4 style="color:var(--yellow-400); margin-bottom:0.75rem;">🎮 Actividad: ¿Puedes crear un color de animal? 🐡</h4>
+                        <div class="palette-grid">
+                            <button type="button" class="palette-option" data-name="🐡 Pez Globo" data-hex="#FFD700"
+                                    style="background:#FFD700;">
+                                <div style="color:#111827; font-size:0.85rem;">🐡 Pez Globo</div>
+                                <div style="margin-top:0.3rem;">
+                                    <code>#FFD700</code>
+                                </div>
+                            </button>
+                            <button type="button" class="palette-option" data-name="🦜 Loro Tropical" data-hex="#FF6B6B"
+                                    style="background:#FF6B6B;">
+                                <div style="color:#111827; font-size:0.85rem;">🦜 Loro Tropical</div>
+                                <div style="margin-top:0.3rem;">
+                                    <code>#FF6B6B</code>
+                                </div>
+                            </button>
+                            <button type="button" class="palette-option" data-name="🐢 Tortuga Marina" data-hex="#4ECDC4"
+                                    style="background:#4ECDC4;">
+                                <div style="color:#111827; font-size:0.85rem;">🐢 Tortuga Marina</div>
+                                <div style="margin-top:0.3rem;">
+                                    <code>#4ECDC4</code>
+                                </div>
+                            </button>
+                            <button type="button" class="palette-option" data-name="🦋 Mariposa Azul" data-hex="#95E1D3"
+                                    style="background:#95E1D3;">
+                                <div style="color:#111827; font-size:0.85rem;">🦋 Mariposa Azul</div>
+                                <div style="margin-top:0.3rem;">
+                                    <code>#95E1D3</code>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div class="palette-custom">
+                            <input type="color" class="palette-color-input" value="#ff5733">
+                            <div style="flex:1; min-width:0;">
+                                <input type="text" class="palette-hex-input" value="#ff5733">
+                                <button type="button" class="palette-apply">¡Usar este color! ✨</button>
+                            </div>
+                        </div>
+
+                        <div class="palette-feedback">
+                            🎉 ¡Perfecto! Seleccionaste: <strong class="palette-selected-name"></strong>
+                        </div>
+                    </div>
+
+                    <button class="big-primary-button" data-next-from="3">
+                        ¡Siguiente! →
+                    </button>
+                </section>
+
+                <!-- SECTION 4 -->
+                <section class="section" id="section-4" data-section="4">
+                    <div class="section-header">
+                        <div class="section-number">4</div>
+                        <h2 class="section-title">¿Qué es background-color?</h2>
+                    </div>
+
+                    <div class="card-gradient">
+                        <p style="font-size:1.02rem; line-height:1.6;">
+                            “Es como pintar la pared detrás de un dibujo. Sirve para colorear el fondo de una caja,
+                            un botón o la página entera.”
+                        </p>
+                    </div>
+
+                    <div class="code-editor" data-section="4" data-lab="false">
+                        <div class="code-editor-grid">
+                            <div>
+                                <div class="editor-label-row">
+                                    <span class="editor-label">🎨 CSS (Estilos)</span>
+                                    <button type="button" class="reset-button">↻ Resetear</button>
+                                </div>
+                                <textarea class="editor-textarea css-editor">
+body {
+  background-color: lightblue;
+}
+                                </textarea>
+                            </div>
+                            <div>
+                                <div class="editor-label-row">
+                                    <span class="editor-label">📝 HTML (Contenido)</span>
+                                </div>
+                                <textarea class="editor-textarea html-editor"><h1>¡Mi página tiene fondo!</h1></textarea>
+                            </div>
+                        </div>
+
+                        <button type="button" class="editor-run">▶️ Ejecutar código</button>
+
+                        <div class="preview-label">👁️ Vista Previa</div>
+                        <div class="preview-container">
+                            <iframe class="preview-frame" sandbox="allow-scripts"></iframe>
+                        </div>
+
+                        <div class="success-message">
+                            ✨ ¡Excelente! ¡Sigue explorando los colores!
+                        </div>
+                    </div>
+
+                    <div style="margin-top:1rem;" class="card-gradient-alt">
+                        <h4 style="color:var(--yellow-400); margin-bottom:0.75rem; font-weight:600;">🎮 Actividad Express: Pinta diferentes ambientes</h4>
+                        <div class="mini-grid">
+                            <div class="mini-card" style="background-image:linear-gradient(to bottom right,#4c1d95,#1d4ed8);">
+                                🌌 Galaxia<br>
+                                <code>purple, darkblue</code>
+                            </div>
+                            <div class="mini-card" style="background-image:linear-gradient(to bottom right,#22c55e,#16a34a);">
+                                🍃 Bosque<br>
+                                <code>lightgreen</code>
+                            </div>
+                            <div class="mini-card" style="background-image:linear-gradient(to bottom right,#ef4444,#f97316);">
+                                🔥 Volcán<br>
+                                <code>red, orange</code>
+                            </div>
+                            <div class="mini-card" style="background-image:linear-gradient(to right,#f97316,#facc15,#22c55e);">
+                                🌈 Arcoíris<br>
+                                <code>gradient</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="big-primary-button" data-next-from="4">
+                        ¡Continuar! →
+                    </button>
+                </section>
+
+                <!-- SECTION 5 -->
+                <section class="section" id="section-5" data-section="5">
+                    <div class="section-header">
+                        <div class="section-number">5</div>
+                        <h2 class="section-title">¿Qué es background-image?</h2>
+                    </div>
+
+                    <div class="card-gradient">
+                        <p style="font-size:1.02rem; line-height:1.6;">
+                            “Es poner una imagen de fondo, como un póster gigante en tu pared.”
+                        </p>
+                    </div>
+
+                    <div style="margin-top:1rem; background:rgba(30,41,59,0.9); border-radius:18px; padding:1.2rem; border:1px solid rgba(71,85,105,0.9);">
+                        <h4 style="color:var(--yellow-400); margin-bottom:0.75rem; font-weight:600;">🎨 Elige un fondo para tu página:</h4>
+                        <div class="bg-picker-grid bg-picker" data-section="5">
+                            <button type="button" class="bg-picker-btn" data-value="space"
+                                    style="background-image:linear-gradient(to bottom right,#1e1b4b,#1e3a8a);">
+                                🌌 Espacio
+                            </button>
+                            <button type="button" class="bg-picker-btn" data-value="forest"
+                                    style="background-image:linear-gradient(to bottom right,#166534,#052e16);">
+                                🌳 Bosque
+                            </button>
+                            <button type="button" class="bg-picker-btn" data-value="ocean"
+                                    style="background-image:linear-gradient(to bottom right,#0ea5e9,#1d4ed8);">
+                                🌊 Mar
+                            </button>
+                            <button type="button" class="bg-picker-btn" data-value="robots"
+                                    style="background-image:linear-gradient(to bottom right,#4b5563,#111827);">
+                                🤖 Robots
+                            </button>
+                        </div>
+                        <div class="bg-picker-feedback">
+                            ✨ ¡Genial! Elegiste: <span class="bg-picker-selected-name"></span>
+                        </div>
+                    </div>
+
+                    <button class="big-primary-button" data-next-from="5">
+                        ¡Siguiente! →
+                    </button>
+                </section>
+
+                <!-- SECTION 6 -->
+                <section class="section" id="section-6" data-section="6">
+                    <div class="section-header">
+                        <div class="section-number">6</div>
+                        <h2 class="section-title">Ajustar el fondo</h2>
+                    </div>
+
+                    <div class="card-gradient">
+                        <p style="font-size:1.05rem;">¡Controles como un videojuego! 🎮</p>
+                    </div>
+
+                    <div style="margin-top:1rem; display:flex; flex-direction:column; gap:0.6rem;">
+                        <div style="background:rgba(30,41,59,0.9); padding:0.8rem 1rem; border-radius:14px; border:1px solid rgba(71,85,105,0.9);">
+                            <h4 style="color:var(--yellow-400); margin:0 0 0.2rem; font-size:0.95rem;">background-size: cover;</h4>
+                            <p style="color:#e5e7eb; font-size:0.85rem;">“¡La imagen llena toda la pantalla!”</p>
+                        </div>
+                        <div style="background:rgba(30,41,59,0.9); padding:0.8rem 1rem; border-radius:14px; border:1px solid rgba(71,85,105,0.9);">
+                            <h4 style="color:var(--yellow-400); margin:0 0 0.2rem; font-size:0.95rem;">background-repeat: no-repeat;</h4>
+                            <p style="color:#e5e7eb; font-size:0.85rem;">“Evita que la imagen se repita como un mosaico.”</p>
+                        </div>
+                        <div style="background:rgba(30,41,59,0.9); padding:0.8rem 1rem; border-radius:14px; border:1px solid rgba(71,85,105,0.9);">
+                            <h4 style="color:var(--yellow-400); margin:0 0 0.2rem; font-size:0.95rem;">background-position: center;</h4>
+                            <p style="color:#e5e7eb; font-size:0.85rem;">“Centra tu póster.”</p>
+                        </div>
+                    </div>
+
+                    <div class="code-editor" data-section="6" data-lab="false">
+                        <div class="code-editor-grid">
+                            <div>
+                                <div class="editor-label-row">
+                                    <span class="editor-label">🎨 CSS (Estilos)</span>
+                                    <button type="button" class="reset-button">↻ Resetear</button>
+                                </div>
+                                <textarea class="editor-textarea css-editor">
+body {
+  background-image: url("space.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+                                </textarea>
+                            </div>
+                            <div>
+                                <div class="editor-label-row">
+                                    <span class="editor-label">📝 HTML (Contenido)</span>
+                                </div>
+                                <textarea class="editor-textarea html-editor"><h1 style="color:white;">¡Mi fondo perfecto!</h1></textarea>
+                            </div>
+                        </div>
+
+                        <button type="button" class="editor-run">▶️ Ejecutar código</button>
+
+                        <div class="preview-label">👁️ Vista Previa</div>
+                        <div class="preview-container">
+                            <iframe class="preview-frame" sandbox="allow-scripts"></iframe>
+                        </div>
+
+                        <div class="success-message">
+                            ✨ ¡Excelente! ¡Sigue explorando los colores!
+                        </div>
+                    </div>
+
+                    <button class="big-primary-button" data-next-from="6">
+                        ¡A la misión final! →
+                    </button>
+                </section>
+
+                <!-- SECTION 7 -->
+                <section class="section" id="section-7" data-section="7">
+                    <div class="section-header">
+                        <div class="section-number">7</div>
+                        <h2 class="section-title">Minilaboratorio: Decora tu página personal</h2>
+                    </div>
+
+                    <div class="card-gradient" style="background-image:linear-gradient(to right,#422006,#4c0519,#312e81);">
+                        <p style="font-size:1.02rem; line-height:1.6;">
+                            🎮 MISIÓN: Crear una tarjeta de presentación<br>
+                            ¡Combina todo lo aprendido y hazla épica!
+                        </p>
+                    </div>
+
+                    <div style="margin-top:1rem;" class="checklist">
+                        <ul>
+                            <li>✔ Usa la propiedad <code>color</code></li>
+                            <li>✔ Usa <code>background-color</code></li>
+                            <li>✔ Añade <code>background-image</code></li>
+                            <li>✔ Ajusta el fondo perfectamente</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-editor" data-section="7" data-lab="true">
+                        <div class="code-editor-grid">
+                            <div>
+                                <div class="editor-label-row">
+                                    <span class="editor-label">🎨 CSS (Estilos)</span>
+                                    <button type="button" class="reset-button">↻ Resetear</button>
+                                </div>
+                                <textarea class="editor-textarea css-editor">
+.card {
+  background-color: lightblue;
+  color: darkblue;
+  padding: 20px;
+  border-radius: 15px;
+}
+                                </textarea>
+                            </div>
+                            <div>
+                                <div class="editor-label-row">
+                                    <span class="editor-label">📝 HTML (Contenido)</span>
+                                </div>
+                                <textarea class="editor-textarea html-editor"><div class="card">
+  <h1>👤 Tu Personaje</h1>
+  <p>🎨 Mis colores favoritos</p>
+  <p>✨ Artista del código</p>
+</div></textarea>
+                            </div>
+                        </div>
+
+                        <button type="button" class="editor-run">▶️ ✨ ¡Ver mi creación!</button>
+
+                        <div class="preview-label">👁️ Vista Previa</div>
+                        <div class="preview-container">
+                            <iframe class="preview-frame" sandbox="allow-scripts"></iframe>
+                        </div>
+
+                        <div class="success-message">
+                            🎉 ¡Wow! ¡Eres mejor que un arcoíris con superpoderes!
+                        </div>
+                    </div>
+
+                    <button class="big-primary-button" data-next-from="7">
+                        ¡Ver próxima misión! 🚀
+                    </button>
+                </section>
+
+                <!-- SECTION 8 (teaser) -->
+                <section class="section" id="section-8" data-section="8">
+                    <div class="teaser-card">
+                        <div style="font-size:3rem; margin-bottom:0.75rem;">🚀</div>
+                        <h2 class="teaser-title">🚀 Próxima Misión</h2>
+                        <p class="teaser-text">
+                            “En la próxima misión aprenderás los superpoderes del TEXTO:
+                            tamaño, estilo, tipos de letras… ¡Como elegir el traje de tu sitio!”
+                        </p>
+                    </div>
+                </section>
+            </div>
+        </main>
     </div>
-
-    <div class="mini-card">
-        <h3>¿Por qué es importante conectarlo? 🌟</h3>
-
-        <p>Imagina que HTML es una persona.  
-        Sin CSS estaría sin ropa, sin colores y sin estilo.</p>
-
-        <p>CSS es su <strong>closet lleno de estilos</strong>:  
-        colores, tamaños, bordes, animaciones ¡y mucho más!</p>
-    </div>
-
-    <div class="mini-card">
-        <h3>Ejemplo práctico 🧪</h3>
-
-        <pre>
-&lt;head&gt;
-    &lt;link rel="stylesheet" href="styles.css"&gt;
-&lt;/head&gt;
-        </pre>
-
-        <p>Así tu página aprenderá a verse increíble.</p>
-    </div>
-
-    <div class="nav-buttons">
-        <a class="btn-back" th:href="@{/CursoTrilogia1/modulo2/leccion1}">⬅ Volver</a>
-        <a class="btn-next" th:href="@{/CursoTrilogia1/modulo2/leccion3}">Siguiente ➜</a>
-    </div>
-
 </div>
 
+<script>
+    (function () {
+        // ----- STATE -----
+        var currentSection = 1;
+        var completedSections = [];
+        var totalSections = 7; // las 7 misiones
+
+        // ----- HELPERS -----
+        function inArray(arr, value) {
+            return arr.indexOf(value) !== -1;
+        }
+
+        function addUnique(arr, value) {
+            if (!inArray(arr, value)) {
+                arr.push(value);
+            }
+        }
+
+        function updateProgress() {
+            var progressBar = document.getElementById('progress-bar-inner');
+            if (!progressBar) return;
+            var percent = (completedSections.length / totalSections) * 100;
+            progressBar.style.width = percent + '%';
+        }
+
+        function updateSidebar() {
+            var buttons = document.querySelectorAll('.sidebar-button');
+            buttons.forEach(function (btn) {
+                var sectionId = parseInt(btn.getAttribute('data-section'), 10);
+                btn.classList.toggle('active', sectionId === currentSection);
+                var completed = inArray(completedSections, sectionId);
+                btn.classList.toggle('completed', completed);
+                var checkSpan = btn.querySelector('.check');
+                if (checkSpan) {
+                    checkSpan.style.display = completed ? '' : 'none';
+                }
+            });
+        }
+
+        function showSection(sectionId) {
+            var sections = document.querySelectorAll('.section');
+            sections.forEach(function (sec) {
+                var sid = parseInt(sec.getAttribute('data-section'), 10);
+                sec.classList.toggle('active', sid === sectionId);
+            });
+            currentSection = sectionId;
+            updateSidebar();
+            updateProgress();
+        }
+
+        function completeSection(sectionId) {
+            addUnique(completedSections, sectionId);
+            updateSidebar();
+            updateProgress();
+        }
+
+        // ----- COLOR CHANGER -----
+        function initColorChanger() {
+            var el = document.getElementById('color-changer');
+            if (!el) return;
+            var colors = ['#ff5733', '#33ff57', '#3357ff', '#ff33f5', '#f5ff33', '#33f5ff'];
+            var index = 0;
+            el.style.color = colors[index];
+            setInterval(function () {
+                index = (index + 1) % colors.length;
+                el.style.color = colors[index];
+            }, 1000);
+        }
+
+        // ----- CODE EDITORS -----
+        function initCodeEditors() {
+            var editors = document.querySelectorAll('.code-editor');
+            editors.forEach(function (editor) {
+                var cssArea = editor.querySelector('.css-editor');
+                var htmlArea = editor.querySelector('.html-editor');
+                var runBtn = editor.querySelector('.editor-run');
+                var resetBtn = editor.querySelector('.reset-button');
+                var iframe = editor.querySelector('.preview-frame');
+                var successMsg = editor.querySelector('.success-message');
+                var sectionId = parseInt(editor.getAttribute('data-section'), 10);
+                var isLab = editor.getAttribute('data-lab') === 'true';
+
+                if (!cssArea || !htmlArea || !runBtn || !iframe) return;
+
+                // guardar valores iniciales
+                editor.dataset.initialCss = cssArea.value;
+                editor.dataset.initialHtml = htmlArea.value;
+
+                function run() {
+                    var cssCode = cssArea.value;
+                    var htmlCode = htmlArea.value;
+                    var doc = '<!DOCTYPE html>' +
+                        '<html><head><style>body{' +
+                        'margin:0;padding:20px;font-family:system-ui,-apple-system,sans-serif;' +
+                        'min-height:200px;display:flex;align-items:center;justify-content:center;' +
+                        '}' + cssCode + '</style></head><body>' +
+                        htmlCode + '</body></html>';
+
+                    iframe.srcdoc = doc;
+
+                    if (successMsg) {
+                        successMsg.classList.add('visible');
+                        setTimeout(function () {
+                            successMsg.classList.remove('visible');
+                            completeSection(sectionId);
+                        }, 1500);
+                    } else {
+                        completeSection(sectionId);
+                    }
+                }
+
+                function reset() {
+                    cssArea.value = editor.dataset.initialCss || '';
+                    htmlArea.value = editor.dataset.initialHtml || '';
+                }
+
+                runBtn.addEventListener('click', run);
+                if (resetBtn) resetBtn.addEventListener('click', reset);
+
+                // Nota: ya no ejecutamos "run()" automáticamente aquí.
+                // Así, la sección solo se marca como completada
+                // cuando el estudiante hace clic en "Ejecutar código".
+            });
+        }
+
+        // ----- COLOR PALETTE -----
+        function initColorPalette() {
+            var palette = document.querySelector('.color-palette');
+            if (!palette) return;
+            var sectionId = parseInt(palette.getAttribute('data-section'), 10);
+            var options = palette.querySelectorAll('.palette-option');
+            var colorInput = palette.querySelector('.palette-color-input');
+            var hexInput = palette.querySelector('.palette-hex-input');
+            var applyBtn = palette.querySelector('.palette-apply');
+            var feedback = palette.querySelector('.palette-feedback');
+            var feedbackName = palette.querySelector('.palette-selected-name');
+
+            function selectOption(name) {
+                options.forEach(function (opt) {
+                    opt.classList.toggle('selected', opt.getAttribute('data-name') === name);
+                });
+                if (feedback && feedbackName) {
+                    feedbackName.textContent = name;
+                    feedback.classList.add('visible');
+                }
+                completeSection(sectionId);
+            }
+
+            options.forEach(function (opt) {
+                opt.addEventListener('click', function () {
+                    var name = opt.getAttribute('data-name');
+                    var hex = opt.getAttribute('data-hex');
+                    if (colorInput) colorInput.value = hex;
+                    if (hexInput) hexInput.value = hex;
+                    selectOption(name);
+                });
+            });
+
+            if (colorInput && hexInput) {
+                colorInput.addEventListener('input', function () {
+                    hexInput.value = colorInput.value;
+                });
+                hexInput.addEventListener('input', function () {
+                    colorInput.value = hexInput.value;
+                });
+            }
+
+            if (applyBtn) {
+                applyBtn.addEventListener('click', function () {
+                    var name = 'Mi color personalizado';
+                    selectOption(name);
+                });
+            }
+        }
+
+        // ----- BACKGROUND PICKER -----
+        function initBackgroundPicker() {
+            var picker = document.querySelector('.bg-picker');
+            if (!picker) return;
+            var sectionId = parseInt(picker.getAttribute('data-section'), 10);
+            var buttons = picker.querySelectorAll('.bg-picker-btn');
+            var feedback = document.querySelector('.bg-picker-feedback');
+            var nameSpan = feedback ? feedback.querySelector('.bg-picker-selected-name') : null;
+
+            buttons.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var value = btn.getAttribute('data-value');
+                    buttons.forEach(function (b) {
+                        b.classList.toggle('selected', b === btn);
+                    });
+
+                    if (feedback && nameSpan) {
+                        nameSpan.textContent = btn.textContent.trim();
+                        feedback.classList.add('visible');
+                    }
+
+                    completeSection(sectionId);
+                });
+            });
+        }
+
+        // ----- SIDEBAR NAV & NEXT BUTTONS -----
+        function initNavigation() {
+            // Secciones que REALMENTE tienen reto/ejercicio interactivo
+            var sectionsRequiringExercise = [2, 3, 4, 5, 6, 7];
+            var sidebarButtons = document.querySelectorAll('.sidebar-button');
+            sidebarButtons.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var sectionId = parseInt(btn.getAttribute('data-section'), 10);
+
+                    // Si intenta saltar hacia adelante, verificamos que
+                    // todas las secciones ANTERIORES que tienen reto estén completadas.
+                    if (sectionId > currentSection) {
+                        for (var i = 1; i < sectionId; i++) {
+                            if (sectionsRequiringExercise.indexOf(i) !== -1 && !inArray(completedSections, i)) {
+                                alert('Primero completa los ejercicios anteriores antes de pasar a esta parte de la lección.');
+                                return;
+                            }
+                        }
+                    }
+
+                    showSection(sectionId);
+                });
+            });
+
+            var nextButtons = document.querySelectorAll('[data-next-from]');
+            nextButtons.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var from = parseInt(btn.getAttribute('data-next-from'), 10);
+                    var next = from + 1;
+                    if (next > 8) next = 8;
+
+                    // Solo validamos las secciones que tienen reto.
+                    if (sectionsRequiringExercise.indexOf(from) !== -1 && !inArray(completedSections, from)) {
+                        alert('Primero completa el ejercicio de esta parte de la lección (usa el botón de Ejecutar o la actividad interactiva).');
+                        return;
+                    }
+
+                    showSection(next);
+                });
+            });
+
+            var exitButton = document.getElementById('exit-button');
+            if (exitButton) {
+                exitButton.addEventListener('click', function () {
+                    alert('¡Has salido de la lección! (Aquí podrías redirigir a otra página).');
+                });
+            }
+        }
+
+        // ----- INIT -----
+        document.addEventListener('DOMContentLoaded', function () {
+            initColorChanger();
+            initCodeEditors();
+            initColorPalette();
+            initBackgroundPicker();
+            initNavigation();
+            updateSidebar();
+            updateProgress();
+        });
+    })();
+</script>
 </body>
 </html>

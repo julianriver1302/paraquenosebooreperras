@@ -36,6 +36,6 @@ public class ForoController {
         // Por ahora mostramos todos los temas, luego se puede filtrar por módulo
         List<ForoTema> temas = foroTemaRepository.findAll();
         model.addAttribute("temas", temas);
-        return "PanelControlUsuario/foros";
+        return "PanelControlUsuario/forosListado";
     }
 }
