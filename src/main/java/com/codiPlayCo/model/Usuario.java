@@ -49,6 +49,8 @@ public class Usuario {
 
 	@ManyToOne
 	private Rol rol;
+	@OneToMany(mappedBy = "usuario")
+	private List<Curso> curso;
 
 	// 🔹 Nueva relación con los cursos comprados
 	@ManyToMany

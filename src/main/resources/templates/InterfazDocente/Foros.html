@@ -38,11 +38,16 @@
 			<div class="topbar-right">
 				<div class="notificaciones" title="Notificaciones"><i class="fa-solid fa-bell"></i></div>
 				<div class="perfil">
-					<i class="fa-solid fa-user"></i> Docente
+					<i class="fa-solid fa-user"></i>
+					<span th:if="${docente != null}" th:text="${docente.nombre}">Docente</span>
+					<span th:if="${docente == null}">Docente</span>
 					<div class="submenu">
-						<p><strong>Nombre:</strong></p>
+						<p th:if="${docente != null}"><strong>Nombre:</strong> <span th:text="${docente.nombre + ' ' + docente.apellido}">Nombre Completo</span></p>
+						<p th:if="${docente == null}"><strong>Nombre:</strong> No disponible</p>
 						<p><strong>Rol:</strong> Docente</p>
-						<button><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
+						<a th:href="@{/InterfazDocente/logout}" style="color: inherit; text-decoration: none;">
+							<button><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -83,6 +88,18 @@
 												th:data-descripcion="${foro.descripcion}">
 											<i class="fas fa-edit"></i>
 										</button>
+										<a th:href="@{/InterfazDocente/foros/detalle(foroId=${foro.id})}"
+										   class="btn-ver-respuestas" title="Ver respuestas">
+											<i class="fa-solid fa-comments"></i>
+										</a>
+										<form th:action="@{/InterfazDocente/foros/eliminar}"
+										      method="post" style="display:inline;"
+										      onsubmit="return confirm('¿Seguro que quieres eliminar este foro y todas sus respuestas?');">
+											<input type="hidden" name="foroId" th:value="${foro.id}" />
+											<button type="submit" class="btn-eliminar" title="Eliminar foro">
+												<i class="fa-solid fa-trash"></i>
+											</button>
+										</form>
 									</div>
 								</div>
 								<p th:text="${foro.descripcion}">Descripción</p>
@@ -236,6 +253,16 @@
 			margin-bottom: 8px;
 		}
 
+		.foro-header strong {
+			font-size: 1rem;
+			font-weight: 600;
+			color: #333;
+		}
+
+		.dark-mode .foro-header strong {
+			color: #fff;
+		}
+
 		.foro-actions {
 			display: flex;
 			gap: 5px;
@@ -253,6 +280,38 @@
 
 		.btn-editar:hover {
 			background: #45a049;
+		}
+
+		.btn-ver-respuestas {
+			background: #2196F3;
+			color: #fff;
+			border: none;
+			padding: 5px 10px;
+			border-radius: 4px;
+			cursor: pointer;
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			transition: background-color 0.3s;
+		}
+
+		.btn-ver-respuestas:hover {
+			background: #0b7dda;
+		}
+
+		.btn-eliminar {
+			background: #f44336;
+			color: #fff;
+			border: none;
+			padding: 5px 10px;
+			border-radius: 4px;
+			cursor: pointer;
+			transition: background-color 0.3s;
+		}
+
+		.btn-eliminar:hover {
+			background: #d32f2f;
 		}
 
 		/* Estilos del modal */

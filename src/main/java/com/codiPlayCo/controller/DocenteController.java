@@ -24,14 +24,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.codiPlayCo.model.Usuario;
 import com.codiPlayCo.model.Curso;
 import com.codiPlayCo.model.ProgresoEstudianteDTO;
+import com.codiPlayCo.model.ProgresoPorModuloDTO;
 import com.codiPlayCo.model.Actividades;
 import com.codiPlayCo.model.ActividadesEstudiantes;
 import com.codiPlayCo.model.Foro;
+import com.codiPlayCo.model.ForoRespuesta;
 import com.codiPlayCo.service.IUsuarioService;
 import com.codiPlayCo.service.ICursoService;
 import com.codiPlayCo.repository.ActividadesRepository;
 import com.codiPlayCo.repository.ActividadesEstudiantesRepository;
 import com.codiPlayCo.repository.ForoRepository;
+import com.codiPlayCo.repository.ForoRespuestaRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -53,6 +56,9 @@ public class DocenteController {
 
 	@Autowired
 	private ForoRepository foroRepository;
+
+	@Autowired
+	private ForoRespuestaRepository foroRespuestaRepository;
 
 	@GetMapping ("/paneldocente")
     public String panel(HttpSession session, Model model) {
@@ -196,115 +202,144 @@ public class DocenteController {
         return "redirect:/InterfazDocente/tareas";
     }
 
-   
-
     @GetMapping("/mensajes")
     public String mensajes() {
         return "InterfazDocente/Mensajes";
     }
 
     @GetMapping("/foros")
-	public String foros(HttpSession session, Model model) {
-		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-		Integer rol = (Integer) session.getAttribute("rol");
+    public String foros(HttpSession session, Model model) {
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        Integer rol = (Integer) session.getAttribute("rol");
+        if (idUsuario == null || rol == null || rol != 2) {
+            return "redirect:/iniciosesion?error=acceso_denegado";
+        }
 
-		if (idUsuario == null || rol == null || rol != 2) {
-			return "redirect:/iniciosesion?error=acceso_denegado";
-		}
+        Usuario docente = usuarioService.findById(idUsuario).orElse(null);
+        if (docente == null || docente.getRol() == null || docente.getRol().getId() != 2) {
+            return "redirect:/iniciosesion?error=acceso_denegado";
+        }
 
-		Usuario docente = usuarioService.findById(idUsuario).orElse(null);
-		if (docente == null || docente.getRol() == null || docente.getRol().getId() != 2) {
-			return "redirect:/iniciosesion?error=acceso_denegado";
-		}
+        List<Curso> cursosDocente = cursoService.findByDocenteId(idUsuario);
+        Map<Integer, List<Foro>> forosPorCurso = new HashMap<>();
+        Map<Integer, Integer> respuestasPorForo = new HashMap<>();
+        for (Curso curso : cursosDocente) {
+            List<Foro> forosCurso = foroRepository.findByCursoId(curso.getId());
+            forosPorCurso.put(curso.getId(), forosCurso);
+            for (Foro foro : forosCurso) {
+                int totalRespuestas = foroRespuestaRepository.findByForoId(foro.getId()).size();
+                respuestasPorForo.put(foro.getId(), totalRespuestas);
+            }
+        }
 
-		List<Curso> cursosDocente = cursoService.findByDocenteId(idUsuario);
-		Map<Integer, List<Foro>> forosPorCurso = new HashMap<>();
+        model.addAttribute("docente", docente);
+        model.addAttribute("cursos", cursosDocente);
+        model.addAttribute("forosPorCurso", forosPorCurso);
+        model.addAttribute("respuestasPorForo", respuestasPorForo);
+        return "InterfazDocente/Foros";
+    }
 
-		for (Curso curso : cursosDocente) {
-			List<Foro> forosCurso = foroRepository.findByCursoId(curso.getId());
-			forosPorCurso.put(curso.getId(), forosCurso);
-		}
+    @PostMapping("/foros/editar")
+    public String editarForo(@RequestParam("foroId") Integer foroId,
+                             @RequestParam("titulo") String titulo,
+                             @RequestParam("descripcion") String descripcion,
+                             HttpSession session,
+                             RedirectAttributes redirectAttrs) {
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        Integer rol = (Integer) session.getAttribute("rol");
+        if (idUsuario == null || rol == null || rol != 2) {
+            return "redirect:/iniciosesion?error=acceso_denegado";
+        }
 
-		model.addAttribute("docente", docente);
-		model.addAttribute("cursos", cursosDocente);
-		model.addAttribute("forosPorCurso", forosPorCurso);
+        Optional<Foro> foroOpt = foroRepository.findById(foroId);
+        if (foroOpt.isEmpty()) {
+            redirectAttrs.addFlashAttribute("error", "El foro no existe o no se pudo encontrar.");
+            return "redirect:/InterfazDocente/foros";
+        }
 
-		return "InterfazDocente/Foros";
-	}
+        Foro foro = foroOpt.get();
+        // Verificar que el usuario sea el dueño del foro
+        if (!foro.getDocente().getId().equals(idUsuario)) {
+            redirectAttrs.addFlashAttribute("error", "No tienes permiso para editar este foro.");
+            return "redirect:/InterfazDocente/foros";
+        }
 
-	@PostMapping("/foros/crear")
-	public String crearForo(@RequestParam("cursoId") Integer cursoId,
-	                      @RequestParam("titulo") String titulo,
-	                      @RequestParam("descripcion") String descripcion,
-	                      HttpSession session,
-	                      RedirectAttributes redirectAttrs) {
-		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-		Integer rol = (Integer) session.getAttribute("rol");
+        foro.setTitulo(titulo);
+        foro.setDescripcion(descripcion);
+        foroRepository.save(foro);
 
-		if (idUsuario == null || rol == null || rol != 2) {
-			return "redirect:/iniciosesion?error=acceso_denegado";
-		}
+        redirectAttrs.addFlashAttribute("mensaje", "Foro actualizado correctamente.");
+        return "redirect:/InterfazDocente/foros";
+    }
 
-		Usuario docente = usuarioService.findById(idUsuario).orElse(null);
-		Curso curso = cursoService.get(cursoId).orElse(null);
+    @GetMapping("/foros/detalle")
+    public String verDetalleForo(@RequestParam("foroId") Integer foroId,
+                                 HttpSession session,
+                                 Model model,
+                                 RedirectAttributes redirectAttrs) {
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        Integer rol = (Integer) session.getAttribute("rol");
+        if (idUsuario == null || rol == null || rol != 2) {
+            return "redirect:/iniciosesion?error=acceso_denegado";
+        }
 
-		if (docente == null || curso == null) {
-			redirectAttrs.addFlashAttribute("error", "No se pudo crear el foro. Verifique el curso seleccionado.");
-			return "redirect:/InterfazDocente/foros";
-		}
+        Optional<Foro> foroOpt = foroRepository.findById(foroId);
+        if (foroOpt.isEmpty()) {
+            redirectAttrs.addFlashAttribute("error", "El foro no existe o no se pudo encontrar.");
+            return "redirect:/InterfazDocente/foros";
+        }
 
-		Foro foro = new Foro();
-		foro.setTitulo(titulo);
-		foro.setDescripcion(descripcion);
-		foro.setFechaCreacion(LocalDateTime.now());
-		foro.setCurso(curso);
-		foro.setDocente(docente);
-		foroRepository.save(foro);
+        Foro foro = foroOpt.get();
+        if (foro.getDocente() == null || !foro.getDocente().getId().equals(idUsuario)) {
+            redirectAttrs.addFlashAttribute("error", "No tienes permiso para ver este foro.");
+            return "redirect:/InterfazDocente/foros";
+        }
 
-		redirectAttrs.addFlashAttribute("mensaje", "Foro creado correctamente.");
-		return "redirect:/InterfazDocente/foros";
-	}
-	
-	@PostMapping("/foros/editar")
-	public String editarForo(@RequestParam("foroId") Integer foroId,
-	                       @RequestParam("titulo") String titulo,
-	                       @RequestParam("descripcion") String descripcion,
-	                       HttpSession session,
-	                       RedirectAttributes redirectAttrs) {
-	    Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-	    Integer rol = (Integer) session.getAttribute("rol");
+        List<ForoRespuesta> respuestas = foroRespuestaRepository.findByForoId(foroId);
 
-	    if (idUsuario == null || rol == null || rol != 2) {
-	        return "redirect:/iniciosesion?error=acceso_denegado";
-	    }
+        model.addAttribute("foro", foro);
+        model.addAttribute("respuestas", respuestas);
 
-	    Optional<Foro> foroOpt = foroRepository.findById(foroId);
-	    if (foroOpt.isEmpty()) {
-	        redirectAttrs.addFlashAttribute("error", "El foro no existe o no se pudo encontrar.");
-	        return "redirect:/InterfazDocente/foros";
-	    }
+        return "InterfazDocente/ForoDetalle";
+    }
 
-	    Foro foro = foroOpt.get();
-	    
-	    // Verificar que el usuario sea el dueño del foro
-	    if (!foro.getDocente().getId().equals(idUsuario)) {
-	        redirectAttrs.addFlashAttribute("error", "No tienes permiso para editar este foro.");
-	        return "redirect:/InterfazDocente/foros";
-	    }
+    @PostMapping("/foros/eliminar")
+    public String eliminarForo(@RequestParam("foroId") Integer foroId,
+                               HttpSession session,
+                               RedirectAttributes redirectAttrs) {
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        Integer rol = (Integer) session.getAttribute("rol");
+        if (idUsuario == null || rol == null || rol != 2) {
+            return "redirect:/iniciosesion?error=acceso_denegado";
+        }
 
-	    foro.setTitulo(titulo);
-	    foro.setDescripcion(descripcion);
-	    foroRepository.save(foro);
+        Optional<Foro> foroOpt = foroRepository.findById(foroId);
+        if (foroOpt.isEmpty()) {
+            redirectAttrs.addFlashAttribute("error", "El foro no existe o no se pudo encontrar.");
+            return "redirect:/InterfazDocente/foros";
+        }
 
-	    redirectAttrs.addFlashAttribute("mensaje", "Foro actualizado correctamente.");
-	    return "redirect:/InterfazDocente/foros";
-	}
+        Foro foro = foroOpt.get();
+        if (foro.getDocente() == null || !foro.getDocente().getId().equals(idUsuario)) {
+            redirectAttrs.addFlashAttribute("error", "No tienes permiso para eliminar este foro.");
+            return "redirect:/InterfazDocente/foros";
+        }
+
+        // Primero eliminar respuestas asociadas para evitar problemas de FK
+        List<ForoRespuesta> respuestas = foroRespuestaRepository.findByForoId(foroId);
+        if (respuestas != null && !respuestas.isEmpty()) {
+            foroRespuestaRepository.deleteAll(respuestas);
+        }
+
+        foroRepository.delete(foro);
+        redirectAttrs.addFlashAttribute("mensaje", "Foro eliminado correctamente.");
+        return "redirect:/InterfazDocente/foros";
+    }
 
     @GetMapping("/mis-cursos")
     public String misCursos(HttpSession session, Model model) {
         Integer idUsuario = (Integer) session.getAttribute("idUsuario");
         Integer rol = (Integer) session.getAttribute("rol");
-
         if (idUsuario != null && rol != null && rol == 2) { // Rol 2 = Docente
             Usuario docente = usuarioService.findById(idUsuario).orElse(null);
             if (docente != null && docente.getRol() != null && docente.getRol().getId() == 2) {
@@ -312,16 +347,24 @@ public class DocenteController {
                 java.util.List<Curso> cursosDocente = cursoService.findByDocenteId(idUsuario);
                 model.addAttribute("docente", docente);
                 model.addAttribute("cursos", cursosDocente);
-
-                // Calcular progreso de estudiantes por curso
+                // Calcular progreso general de estudiantes por curso (porcentaje)
                 java.util.Map<Integer, java.util.List<ProgresoEstudianteDTO>> progresoPorCurso = new java.util.HashMap<>();
-
+                // Calcular progreso detallado por módulo / lección
+                java.util.Map<Integer, java.util.List<ProgresoPorModuloDTO>> progresoModulosPorCurso = new java.util.HashMap<>();
+                // Número real de lecciones por módulo, según las vistas del PanelControlUsuario
+                java.util.Map<Integer, Integer> leccionesPorModulo = new java.util.HashMap<>();
+                leccionesPorModulo.put(1, 9); // módulo 1: 9 tarjetas/lecciones en modulo1.html
+                leccionesPorModulo.put(2, 6); // módulo 2: 6 tarjetas/lecciones en modulo2.html
+                leccionesPorModulo.put(3, 10); // módulo 3: 10 tarjetas/lecciones en modulo3.html
+                leccionesPorModulo.put(4, 15); // módulo 4: 15 tarjetas/lecciones en modulo4.html
                 for (Curso curso : cursosDocente) {
-                    java.util.List<Usuario> estudiantesCurso = curso.getUsuarios();
-                    int totalActividades = actividadesRepository.findByCurso(curso.getId()).size();
+                    java.util.List<Usuario> estudiantesCurso = usuarioService.findByCursoComprado(curso.getId());
+                    java.util.List<Actividades> actividadesCurso = actividadesRepository.findByCurso(curso.getId());
+                    int totalActividades = actividadesCurso.size();
                     java.util.List<ProgresoEstudianteDTO> progresos = new java.util.ArrayList<>();
-
+                    java.util.List<ProgresoPorModuloDTO> progresosDetallados = new java.util.ArrayList<>();
                     for (Usuario est : estudiantesCurso) {
+                        // Progreso general
                         Long completadas = actividadesEstudiantesRepository
                                 .countCompletadasByEstudianteAndCurso(est.getId(), curso.getId());
                         double total = (double) (totalActividades <= 0 ? 1 : totalActividades);
@@ -329,19 +372,44 @@ public class DocenteController {
                         String nombreCompleto = (est.getNombre() != null ? est.getNombre() : "") + " "
                                 + (est.getApellido() != null ? est.getApellido() : "");
                         progresos.add(new ProgresoEstudianteDTO(est.getId(), nombreCompleto.trim(), porcentaje));
+                        // Progreso por módulo / lección: calcular último módulo y lección completados
+                        ProgresoPorModuloDTO progDet = new ProgresoPorModuloDTO(est.getId(), nombreCompleto.trim());
+                        Integer ultimoModulo = null;
+                        Integer ultimaLeccion = null;
+                        for (Actividades act : actividadesCurso) {
+                            Integer moduloAct = act.getModulo();
+                            Integer leccionAct = act.getLeccion();
+                            if (moduloAct == null || leccionAct == null) {
+                                continue;
+                            }
+                            boolean done = actividadesEstudiantesRepository
+                                    .existsCompletadaByEstudianteAndActividad(est.getId(), act.getId());
+                            progDet.marcarLeccion(moduloAct, leccionAct, done);
+                            if (done) {
+                                if (ultimoModulo == null
+                                        || moduloAct > ultimoModulo
+                                        || (moduloAct.equals(ultimoModulo) && leccionAct > ultimaLeccion)) {
+                                    ultimoModulo = moduloAct;
+                                    ultimaLeccion = leccionAct;
+                                }
+                            }
+                        }
+                        progDet.setModuloActual(ultimoModulo);
+                        progDet.setLeccionActual(ultimaLeccion);
+                        progresosDetallados.add(progDet);
                     }
-
                     progresoPorCurso.put(curso.getId(), progresos);
+                    progresoModulosPorCurso.put(curso.getId(), progresosDetallados);
                 }
-
                 model.addAttribute("progresoPorCurso", progresoPorCurso);
+                model.addAttribute("progresoModulosPorCurso", progresoModulosPorCurso);
+                model.addAttribute("leccionesPorModulo", leccionesPorModulo);
                 return "InterfazDocente/MisCursos";
             }
         }
-
         return "redirect:/iniciosesion?error=acceso_denegado";
     }
-    
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         // Invalidar la sesión

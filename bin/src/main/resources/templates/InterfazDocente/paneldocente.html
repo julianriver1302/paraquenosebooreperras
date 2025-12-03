@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://thymeLeaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title></title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap">
+	<link rel="stylesheet" th:href="@{/assetsDocente/stylespanel.css}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+</head>
+
+<body>
+	<nav>
+		<div class="nav-logo">
+			<img th:src="@{/assetsDocente/img/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}" alt="CodiPlayCo Logo" />
+		</div>
+		<button class="toggle-mode-btn" title="Cambiar modo"
+			style="margin:0 auto 0.5rem auto; display:block; background:#fff2; border:none; color:#fff; font-size:1.7rem; border-radius:50%; width:44px; height:44px; box-shadow:0 2px 8px #0002; cursor:pointer; transition:background 0.2s, color 0.2s; display:flex; align-items:center; justify-content:center;"><i
+				class="fa-solid fa-moon"></i></button>
+		<a th:href="@{/InterfazDocente/paneldocente}"><span class="nav-icon"><i
+					class="fa-solid fa-house"></i></span>Inicio</a>
+		<a th:href="@{/InterfazDocente/mis-cursos}"><span class="nav-icon"><i class="fa-solid fa-book"></i></span>Mis
+			Cursos</a>
+		<a th:href="@{/InterfazDocente/tareas}"><span class="nav-icon"><i
+					class="fa-solid fa-clipboard-list"></i></span>Tareas</a>
+		<a th:href="@{/InterfazDocente/foros}"><span class="nav-icon"><i
+					class="fa-solid fa-comments"></i></span>Foros</a>
+		<a th:href="@{/InterfazDocente/mensajes}"><span class="nav-icon"><i
+					class="fa-solid fa-envelope"></i></span>Mensajes</a>
+		
+	</nav>
+
+	<div class="main-layout">
+		<header>
+			<div class="header-logo-title">
+				<!-- Logo eliminado -->
+				<h1 class="titulo-blanco"><span class="panel-icon"><i
+							class="fa-solid fa-chalkboard-user"></i></span>Panel del Docente</h1>
+			</div>
+			<div class="topbar-right">
+				<!-- Botón de modo oscuro eliminado del header -->
+				<div class="notificaciones" title="Notificaciones"><i class="fa-solid fa-bell"></i></div>
+				<div class="perfil">
+					<i class="fa-solid fa-user"></i>
+					<span th:if="${docente != null}" th:text="${docente.nombre}">Docente</span>
+					<span th:if="${docente == null}">Docente</span>
+					<div class="submenu">
+						<p th:if="${docente != null}"><strong>Nombre:</strong> <span th:text="${docente.nombre + ' ' + docente.apellido}">Nombre Completo</span></p>
+						<p th:if="${docente == null}"><strong>Nombre:</strong> No disponible</p>
+						<p><strong>Rol:</strong> Docente</p>
+
+							<a th:href="@{/InterfazDocente/logout}" style="color: inherit; text-decoration: none;">
+								<button><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
+							</a>
+					</div>
+				</div>
+			</div>
+		</header>
+		<script>
+			// Mantener modo oscuro con localStorage
+			function setDarkMode(enabled) {
+				if (enabled) {
+					document.body.classList.add('dark-mode');
+					localStorage.setItem('theme', 'dark-mode');
+				} else {
+					document.body.classList.remove('dark-mode');
+					localStorage.setItem('theme', 'light-mode');
+				}
+			}
+			// Al cargar la página, aplicar preferencia
+			(function () {
+				const theme = localStorage.getItem('theme');
+				if (theme === 'dark-mode') {
+					document.body.classList.add('dark-mode');
+					const btn = document.querySelector('.toggle-mode-btn');
+					if (btn) {
+						const icon = btn.querySelector('i');
+						icon.classList.remove('fa-moon');
+						icon.classList.add('fa-sun');
+					}
+				}
+			})();
+			// Alternar icono luna/sol y modo oscuro
+			const btn = document.querySelector('.toggle-mode-btn');
+			if (btn) btn.addEventListener('click', function () {
+				const icon = btn.querySelector('i');
+				const isDark = !document.body.classList.contains('dark-mode');
+				setDarkMode(isDark);
+				if (isDark) {
+					icon.classList.remove('fa-moon');
+					icon.classList.add('fa-sun');
+				} else {
+					icon.classList.remove('fa-sun');
+					icon.classList.add('fa-moon');
+				}
+			});
+		</script>
+		
+		<div class="container">
+			<div class="panel-bienvenida-bg">
+				<div class="panel-bienvenida-content">
+					<div class="panel-bienvenida-left">
+						<div class="panel-bienvenida-foto">
+							<img th:if="${docente != null and docente.avatar != null and !#strings.isEmpty(docente.avatar)}"
+								 th:src="@{'/uploads/avatars/' + ${docente.avatar}}" alt="Foto docente" class="avatar-preview" />
+							<i th:unless="${docente != null and docente.avatar != null and !#strings.isEmpty(docente.avatar)}" class="fa-solid fa-user-circle"></i>
+						</div>
+						<div class="panel-bienvenida-texto">
+							<div class="panel-bienvenida-titulo">Bienvenido a CodiPlayCo</div>
+							<div class="panel-bienvenida-nombre" th:if="${docente != null}" th:text="${docente.nombre + ' ' + docente.apellido}">NOMBRE DOCENTE</div>
+							<div class="panel-bienvenida-nombre" th:if="${docente == null}">Docente</div>
+						</div>
+					</div>
+					<div class="panel-bienvenida-botimg bot-animado">
+						<img th:src="@{/assetsDocente/img/02baebb1-f087-4bee-bbdf-0af4f44d7563-removebg-preview.png}" alt="Docente Bot" />
+					</div>
+				</div>
+			</div>
+			
+			<div class="panel-bienvenida-datos">
+
+			    <h3 class="datos-titulo">Datos del Docente</h3>
+
+			    <!-- Error -->
+			    <div th:if="${error != null}" class="error-message">
+			        <i class="fa-solid fa-exclamation-triangle"></i>
+			        <span th:text="${error}">Error</span>
+			    </div>
+
+			    <!-- Datos del docente -->
+			    <div th:if="${docente != null}" class="datos-docente-wrapper">
+
+			        <div class="datos-docente-linea">
+
+			            <div class="dato-item">
+			                <span class="dato-label">DOCENTE:</span>
+			                <span class="dato-valor" th:text="${docente.nombre + ' ' + docente.apellido}">
+			                    Nombre docente
+			                </span>
+			            </div>
+
+			            <div class="dato-item">
+			                <span class="dato-label">EMAIL:</span>
+			                <span class="dato-valor" th:text="${docente.email}">
+			                    ejemplo@gmail.com
+			                </span>
+			            </div>
+
+			            <div class="dato-item">
+			                <span class="dato-label">CÉDULA </span>
+			                <span class="dato-valor" th:text="${docente.documento}">
+			                    0000000000
+			                </span>
+			            </div>
+
+			        </div>
+
+			        <!-- SUBIR IMAGEN -->
+			        <div class="subir-imagen">
+
+			            <label class="subir-imagen-label">Subir imagen:</label>
+
+			            <form th:action="@{/InterfazDocente/subir-foto}" 
+			                  method="post"
+			                  enctype="multipart/form-data"
+			                  class="subir-imagen-form">
+
+			                <input type="file" name="foto" accept="image/*" class="input-file">
+
+			                <button type="submit" class="btn-subir">
+			                    Subir
+			                </button>
+			            </form>
+
+			        </div>
+
+			    </div>
+				
+				<!-- Mensaje si no hay datos del docente -->
+				<div th:if="${docente == null && error == null}" class="no-data-message" style="background: #fff3e0; color: #ef6c00; padding: 1rem; border-radius: 8px; text-align: center;">
+					<i class="fa-solid fa-info-circle"></i> <span>Para ver los datos del docente, inicie sesión con un email válido</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

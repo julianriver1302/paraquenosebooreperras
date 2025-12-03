@@ -15,4 +15,12 @@ public interface ActividadesRepository extends JpaRepository<Actividades, Intege
     // Actividades asociadas a un curso (campo 'Curso' es el id del curso en la entidad)
     @Query("SELECT a FROM Actividades a WHERE a.Curso = :cursoId")
     List<Actividades> findByCurso(@Param("cursoId") Integer cursoId);
+
+    // Actividades de un curso y un módulo concreto ordenadas por número de lección
+    @Query("SELECT a FROM Actividades a WHERE a.Curso = :cursoId AND a.modulo = :modulo ORDER BY a.leccion ASC")
+    List<Actividades> findByCursoAndModulo(@Param("cursoId") Integer cursoId, @Param("modulo") Integer modulo);
+
+    // Módulos distintos que tiene un curso
+    @Query("SELECT DISTINCT a.modulo FROM Actividades a WHERE a.Curso = :cursoId ORDER BY a.modulo ASC")
+    List<Integer> findModulosByCurso(@Param("cursoId") Integer cursoId);
 }

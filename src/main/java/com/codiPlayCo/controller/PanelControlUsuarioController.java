@@ -249,6 +249,32 @@ public class PanelControlUsuarioController {
 		return "PanelControlUsuario/foro-detalle";
 	}
 
+	@PostMapping("/PanelControlUsuario/foros/{foroId}/responder")
+	public String responderForo(@PathVariable("foroId") Integer foroId,
+	                          @RequestParam("mensaje") String mensaje,
+	                          HttpSession session) {
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+		Integer rol = (Integer) session.getAttribute("rol");
+		if (idUsuario == null || rol == null || rol != 3) {
+			return "redirect:/iniciosesion?error=acceso_denegado";
+		}
+
+		Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
+		Foro foro = foroRepository.findById(foroId).orElse(null);
+		if (usuario == null || foro == null) {
+			return "redirect:/PanelControlUsuario/foros";
+		}
+
+		ForoRespuesta respuesta = new ForoRespuesta();
+		respuesta.setForo(foro);
+		respuesta.setAutor(usuario);
+		respuesta.setMensaje(mensaje);
+		respuesta.setFechaCreacion(LocalDateTime.now());
+		foroRespuestaRepository.save(respuesta);
+
+		return "redirect:/PanelControlUsuario/foros/" + foroId;
+	}
+
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Lección 2 - Conectar CSS al HTML</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 40px 20px;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(145deg, #0c0f1a, #080a0f);
+            color: #e9f5ff;
+            overflow-x: hidden;
+        }
+
+        /* TARJETA */
+        .card {
+            width: 95%;
+            max-width: 900px;
+            margin: auto;
+            padding: 50px;
+            background: #10141f;
+            border-radius: 25px;
+            box-shadow:
+                10px 10px 25px rgba(0,0,0,0.6),
+                -5px -5px 20px rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* DECORACIONES */
+        .blob {
+            position: absolute;
+            width: 190px;
+            height: 190px;
+            background: radial-gradient(circle, #00ffe7, #006d6c);
+            filter: blur(80px);
+            opacity: 0.4;
+            top: -40px;
+            right: -25px;
+            z-index: 0;
+            animation: float 6s ease-in-out infinite alternate;
+        }
+
+        .blob2 {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #4da3ff, #1c3aff);
+            filter: blur(90px);
+            opacity: 0.35;
+            bottom: -60px;
+            left: -35px;
+            z-index: 0;
+            animation: float 7s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) }
+            100% { transform: translateY(18px) }
+        }
+
+        /* TÍTULO */
+        h1 {
+            text-align: center;
+            font-size: 35px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            background: linear-gradient(90deg, #4dfff6, #63a0ff);
+            -webkit-background-clip: text;
+            color: transparent;
+            position: relative;
+            z-index: 5;
+        }
+
+        .emoji {
+            font-size: 45px;
+            margin: 10px 0 25px 0;
+            text-align: center;
+            z-index: 5;
+            position: relative;
+        }
+
+        p {
+            font-size: 19px;
+            line-height: 1.7;
+            position: relative;
+            z-index: 5;
+        }
+
+        pre {
+            background: rgba(0,255,255,0.06);
+            padding: 18px;
+            font-size: 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(0,255,255,0.15);
+            position: relative;
+            z-index: 5;
+        }
+
+        /* BOTONES */
+        .nav-buttons {
+            margin-top: 35px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 5;
+            position: relative;
+        }
+
+        .btn-back, .btn-next {
+            padding: 14px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            color: #ffffff;
+            transition: 0.2s;
+        }
+
+        .btn-back {
+            background: #445566;
+        }
+        .btn-back:hover {
+            background: #556677;
+            transform: scale(1.07);
+        }
+
+        .btn-next {
+            background: #00d4ff;
+            color: black;
+        }
+        .btn-next:hover {
+            background: #53e1ff;
+            transform: scale(1.07);
+            box-shadow: 0 0 20px #00eaff;
+        }
+
+        /* BLOQUE EDUCATIVO */
+        .mini-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 20px;
+            margin-top: 25px;
+            border-radius: 14px;
+            z-index: 5;
+            position: relative;
+        }
+
+        .mini-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 22px;
+            color: #76c9ff;
+        }
+
+        .code-example {
+            background: rgba(0,255,255,0.08);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,255,255,0.15);
+            font-size: 16px;
+            margin-top: 8px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="blob"></div>
+    <div class="blob2"></div>
+
+    <h1>🔗 Lección 2 – Conectar CSS al HTML</h1>
+
+    <div class="emoji">🎨🧩</div>
+
+    <p>
+        Para que tu página pueda <strong>verse hermosa, ordenada y colorida</strong>,  
+        debemos enseñarle a HTML a usar un archivo llamado <b>CSS</b>.
+    </p>
+
+    <p>
+        Esta es la etiqueta mágica que conecta ambos mundos:
+    </p>
+
+<pre>
+&lt;link rel="stylesheet" href="styles.css"&gt;
+</pre>
+
+    <div class="mini-card">
+        <h3>¿Qué significa esto? 🤔</h3>
+
+        <p><strong>&lt;link&gt;</strong> → Le dice al navegador que queremos cargar un archivo externo.</p>
+
+        <p><strong>rel="stylesheet"</strong> → Explica que el archivo es una hoja de estilos.</p>
+
+        <p><strong>href="styles.css"</strong> → Es el nombre del archivo donde está tu diseño.</p>
+
+        <div class="code-example">
+            <strong>TIP:</strong> Siempre va dentro del &lt;head&gt; del HTML.
+        </div>
+    </div>
+
+    <div class="mini-card">
+        <h3>¿Por qué es importante conectarlo? 🌟</h3>
+
+        <p>Imagina que HTML es una persona.  
+        Sin CSS estaría sin ropa, sin colores y sin estilo.</p>
+
+        <p>CSS es su <strong>closet lleno de estilos</strong>:  
+        colores, tamaños, bordes, animaciones ¡y mucho más!</p>
+    </div>
+
+    <div class="mini-card">
+        <h3>Ejemplo práctico 🧪</h3>
+
+        <pre>
+&lt;head&gt;
+    &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+        </pre>
+
+        <p>Así tu página aprenderá a verse increíble.</p>
+    </div>
+
+    <div class="nav-buttons">
+        <a class="btn-back" th:href="@{/CursoTrilogia1/modulo2/leccion1}">⬅ Volver</a>
+        <a class="btn-next" th:href="@{/CursoTrilogia1/modulo2/leccion3}">Siguiente ➜</a>
+    </div>
+
+</div>
+
+</body>
+</html>

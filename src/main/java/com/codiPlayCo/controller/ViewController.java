@@ -8,11 +8,11 @@ public class ViewController {
 
 	@GetMapping("/payment-success")
 	public String paymentSuccess() {
-		return "payment-success"; // templates/payment-success.html
+		return "payment-success";
 	}
 
 	@GetMapping("/payment-failed")
 	public String paymentFailed() {
-		return "payment-failed"; // templates/payment-failed.html
+		return "payment-failed";
 	}
 }

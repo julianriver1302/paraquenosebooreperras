@@ -25,6 +25,8 @@ public class Curso {
 	// 🔹 Relación inversa (usuarios que compraron este curso)
 	@ManyToMany(mappedBy = "cursosComprados")
 	private List<Usuario> usuarios;
+	@ManyToOne
+	private Usuario usuario;
 
 	public Curso() {
 	}

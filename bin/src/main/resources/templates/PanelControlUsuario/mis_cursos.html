@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Mis Cursos | Codiplay Dashboard</title>
+	<link rel="stylesheet" th:href="@{/assetsPanelUsuaario/styleUsuario.css}" />
+	<script src="https://kit.fontawesome.com/a2d9a6b8d0.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<div class="dashboard-container">
+		<aside class="sidebar">
+			<div class="logo">
+				<a th:href="@{/PanelControlUsuario/inicio}">
+					<img th:src="@{/assetsPanelUsuaario/unnamed-removebg-preview.PNG}" alt="Logo Codiplay" />
+				</a>
+				<span class="logo-text" th:unless="${usuario}"></span>
+			</div>
+
+			<nav class="main-nav">
+				<ul>
+					<li class="nav-item">
+						<a th:href="@{/PanelControlUsuario/inicio}"><i class="fas fa-home"></i> Inicio</a>
+					</li>
+					<li class="nav-item active">
+						<a th:href="@{/PanelControlUsuario/mis_cursos}"><i class="fas fa-book"></i> Mis cursos</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelControlUsuario/mis_logros}"><i class="fas fa-medal"></i> Mis logros</a>
+					</li>
+				</ul>
+			</nav>
+
+			<div class="support-section">
+				<a th:href="@{/PanelControlUsuario/soporte}"><i class="fas fa-life-ring"></i> Soporte</a>
+			</div>
+		</aside>
+
+		<main class="main-content">
+			<section class="modules-section">
+				<h2>Mis cursos</h2>
+				<p>Aquí se mostrarán los cursos registrados del usuario.</p>
+
+				<!-- ✅ Si el usuario no tiene cursos -->
+				<div th:if="${#lists.isEmpty(cursos)}" class="no-cursos">
+					<p>No estás inscrito en ningún curso todavía.</p>
+				</div>
+
+				<!-- ✅ Mostrar lista de cursos -->
+				<div class="cursos-lista" th:if="${!#lists.isEmpty(cursos)}">
+					<div class="curso-card" th:each="curso : ${cursos}">
+						<h3 th:text="${curso.nombre}">Nombre del curso</h3>
+						<p th:text="${curso.descripcion}">Descripción del curso</p>
+						<p><strong>Duración:</strong> <span th:text="${curso.duracion}">4 semanas</span></p>
+						<p><strong>Profesor:</strong> <span th:text="${curso.profesor}">Profesor X</span></p>
+					</div>
+				</div>
+			</section>
+		</main>
+	</div>
+</body>
+</html>

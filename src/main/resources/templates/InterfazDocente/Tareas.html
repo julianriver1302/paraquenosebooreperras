@@ -28,7 +28,7 @@
 					class="fa-solid fa-comments"></i></span>Foros</a>
 		<a th:href="@{/InterfazDocente/mensajes}"><span class="nav-icon"><i
 					class="fa-solid fa-envelope"></i></span>Mensajes</a>
-		
+
 	</nav>
 	<div class="main-layout">
 		<header>
@@ -37,16 +37,23 @@
 							class="fa-solid fa-clipboard-list"></i></span>Tareas</h1>
 			</div>
 			<div class="topbar-right">
+				<!-- Botón de modo oscuro eliminado del header -->
 				<div class="notificaciones" title="Notificaciones"><i class="fa-solid fa-bell"></i></div>
 				<div class="perfil">
-					<i class="fa-solid fa-user"></i> Docente
+					<i class="fa-solid fa-user"></i>
+					<span th:if="${docente != null}" th:text="${docente.nombre}">Docente</span>
+					<span th:if="${docente == null}">Docente</span>
 					<div class="submenu">
-						<p><strong>Nombre:</strong></p>
+						<p th:if="${docente != null}"><strong>Nombre:</strong> <span
+								th:text="${docente.nombre + ' ' + docente.apellido}">Nombre Completo</span></p>
+						<p th:if="${docente == null}"><strong>Nombre:</strong> No disponible</p>
 						<p><strong>Rol:</strong> Docente</p>
-						<button><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
+
+						<a th:href="@{/logout}" style="color: inherit; text-decoration: none;">
+							<button><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
+						</a>
 					</div>
 				</div>
-			</div>
 		</header>
 		<div class="container">
 			<div class="panel" th:if="${cursos == null || #lists.isEmpty(cursos)}">
@@ -79,19 +86,24 @@
 							</thead>
 							<tbody>
 								<tr th:each="entrega : ${entregasPorActividad[act.id]}">
-									<td th:text="${entrega.usuario != null ? entrega.usuario.nombre + ' ' + entrega.usuario.apellido : 'Estudiante'}">Nombre estudiante</td>
+									<td
+										th:text="${entrega.usuario != null ? entrega.usuario.nombre + ' ' + entrega.usuario.apellido : 'Estudiante'}">
+										Nombre estudiante</td>
 									<td th:text="${entrega.estado}">Estado</td>
 									<td th:text="${entrega.calificacion}">Calificación</td>
 									<td>
-										<form th:action="@{/InterfazDocente/tareas/calificar}" method="post" style="display:inline;">
+										<form th:action="@{/InterfazDocente/tareas/calificar}" method="post"
+											style="display:inline;">
 											<input type="hidden" name="entregaId" th:value="${entrega.id}" />
 											<input type="hidden" name="calificacion" value="Aprobado" />
 											<button type="submit" name="resultado" value="APROBADO">Aprobar</button>
 										</form>
-										<form th:action="@{/InterfazDocente/tareas/calificar}" method="post" style="display:inline; margin-left:0.5rem;">
+										<form th:action="@{/InterfazDocente/tareas/calificar}" method="post"
+											style="display:inline; margin-left:0.5rem;">
 											<input type="hidden" name="entregaId" th:value="${entrega.id}" />
 											<input type="hidden" name="calificacion" value="No aprobado" />
-											<button type="submit" name="resultado" value="NO_APROBADO">No aprobar</button>
+											<button type="submit" name="resultado" value="NO_APROBADO">No
+												aprobar</button>
 										</form>
 									</td>
 								</tr>
@@ -100,7 +112,8 @@
 					</div>
 				</div>
 
-				<div th:if="${!#maps.containsKey(actividadesPorCurso, curso.id) || #lists.isEmpty(actividadesPorCurso[curso.id])}">
+				<div
+					th:if="${!#maps.containsKey(actividadesPorCurso, curso.id) || #lists.isEmpty(actividadesPorCurso[curso.id])}">
 					<p>No hay actividades registradas para este curso.</p>
 				</div>
 			</div>

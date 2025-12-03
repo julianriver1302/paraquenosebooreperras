@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Editar Curso - CodiPlayCo</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+	<link rel="stylesheet" th:href="@{/assetsAdmin/css/panel_codiplay.css}">
+	<link th:href="@{/assets/loader.css}" rel="stylesheet" />
+</head>
+
+<body>
+	<div class="admin-container">
+		<!-- Sidebar -->
+		<nav class="sidebar">
+			<div class="sidebar-header">
+				<div class="logo-container">
+					<img th:src="@{/assetsAdmin/images/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}"
+						alt="CodiPlayCo Logo" class="logo">
+					<h2 class="brand-title">CodiPlayCo</h2>
+				</div>
+			</div>
+
+			<div class="sidebar-content">
+				<ul class="nav-menu">
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay}" class="nav-link">
+							<i class="fas fa-home"></i>
+							<span>Dashboard</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay/Admin/editar_usuarios}" class="nav-link">
+							<i class="fas fa-users-cog"></i>
+							<span>Gestionar Usuarios</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay/Admin/registrar_docentes}" class="nav-link">
+							<i class="fas fa-chalkboard-teacher"></i>
+							<span>Registrar Docentes</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay/Admin/proceso_estudiantes}" class="nav-link">
+							<i class="fas fa-chart-line"></i>
+							<span>Progreso Estudiantes</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay/Admin/crear_curso}" class="nav-link">
+							<i class="fas fa-plus-circle"></i>
+							<span>Crear Curso</span>
+						</a>
+					</li>
+					<li class="nav-item active">
+						<a th:href="@{/PanelCodiplay/Admin/listar_cursos}" class="nav-link">
+							<i class="fas fa-list"></i>
+							<span>Cursos Disponibles</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="sidebar-footer">
+				<a th:href="@{/logout}" class="logout-btn">
+					<i class="fas fa-sign-out-alt"></i>
+					<span>Cerrar Sesión</span>
+				</a>
+			</div>
+		</nav>
+
+		<!-- Main Content -->
+		<main class="main-content">
+			<header class="main-header">
+				<div class="header-content">
+					<div class="page-info">
+						<button th:onclick="window.history.back()" class="btn-back">
+							<i class="fas fa-arrow-left"></i>
+							<span>Volver</span>
+						</button>
+						<h1 class="page-title">
+							<i class="fas fa-edit"></i>
+							Editar Curso
+						</h1>
+					</div>
+					<div class="header-info">
+						<div class="admin-info">
+							<i class="fas fa-user-shield"></i>
+							<span>Administrador</span>
+						</div>
+						<div class="current-time" id="currentTime"></div>
+					</div>
+				</div>
+			</header>
+
+			<div class="form-container">
+				<div class="form-wrapper">
+					<!-- Formulario -->
+					<form class="course-form" th:action="@{/PanelCodiplay/Admin/actualizar_curso/{id}(id=${curso.id})}"
+						method="post">
+						<div class="form-header">
+							<div class="form-icon">
+								<i class="fas fa-book-open"></i>
+							</div>
+							<h2>Información del Curso</h2>
+							<p>Modifica los datos del curso seleccionado</p>
+						</div>
+
+						<div class="form-grid">
+							<!-- Información Básica -->
+							<div class="form-section">
+								<h3 class="section-title">
+									<i class="fas fa-info-circle"></i>
+									Información Básica
+								</h3>
+
+								<div class="form-row">
+									<div class="form-group">
+										<label for="curso">
+											<i class="fas fa-graduation-cap"></i>
+											Nombre del Curso *
+										</label>
+										<input type="text" id="curso" name="curso" th:value="${curso.curso}"
+											placeholder="Ej: HTML para Principiantes" required>
+									</div>
+									<div class="form-group">
+										<label for="dirigido">
+											<i class="fas fa-users"></i>
+											Dirigido a *
+										</label>
+										<input type="text" id="dirigido" name="dirigido" th:value="${curso.dirigido}"
+											placeholder="Ej: Niños de 8-12 años" required>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="descripcion">
+										<i class="fas fa-align-left"></i>
+										Descripción del Curso *
+									</label>
+									<textarea id="descripcion" name="descripcion" rows="4"
+										placeholder="Describe el contenido, objetivos y lo que aprenderán los estudiantes..."
+										th:text="${curso.descripcion}" required></textarea>
+									<small class="field-help">
+										<i class="fas fa-info-circle"></i>
+										Proporcione una descripción detallada del curso
+									</small>
+								</div>
+							</div>
+
+							<!-- Configuración del Curso -->
+							<div class="form-section">
+								<h3 class="section-title">
+									<i class="fas fa-cog"></i>
+									Configuración del Curso
+								</h3>
+
+								<div class="form-row">
+									<div class="form-group">
+										<label for="asignacionDocente">
+											<i class="fas fa-chalkboard-teacher"></i>
+											Docente Asignado *
+										</label>
+										<select id="asignacionDocente" name="asignacionDocente" required>
+											<option value="">Seleccionar docente...</option>
+											<option th:each="asignacion : ${asignaciones}"
+												th:value="${asignacion.id}"
+												th:selected="${curso.asignacionDocente != null and curso.asignacionDocente.id == asignacion.id}"
+												th:text="${asignacion.usuario.nombre + ' ' + asignacion.usuario.apellido}">
+											</option>
+										</select>
+
+										<div th:if="${#lists.isEmpty(asignaciones)}" class="alert alert-warning">
+											<i class="fas fa-exclamation-triangle"></i>
+											<span>No hay docentes asignados registrados. Primero registra una asignación docente.</span>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="precio">
+											<i class="fas fa-dollar-sign"></i>
+											Precio del Curso *
+										</label>
+										<div class="price-input-wrapper">
+											<span class="currency-symbol">$</span>
+											<input type="number" id="precio" name="precio" step="0.01"
+												th:value="${curso.precio}" placeholder="0.00" required>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						<!-- Nivel de Dificultad -->
+						<div class="form-section">
+							<h3 class="section-title">
+								<i class="fas fa-star"></i>
+								Nivel de Dificultad
+							</h3>
+
+							<div class="difficulty-container">
+								<div class="star-rating" id="starRating">
+									<span class="star" data-rating="1"
+										th:class="${curso.dificultad >= 1} ? 'active' : ''">
+										<i class="fas fa-star"></i>
+									</span>
+									<span class="star" data-rating="2"
+										th:class="${curso.dificultad >= 2} ? 'active' : ''">
+										<i class="fas fa-star"></i>
+									</span>
+									<span class="star" data-rating="3"
+										th:class="${curso.dificultad >= 3} ? 'active' : ''">
+										<i class="fas fa-star"></i>
+									</span>
+									<span class="star" data-rating="4"
+										th:class="${curso.dificultad >= 4} ? 'active' : ''">
+										<i class="fas fa-star"></i>
+									</span>
+									<span class="star" data-rating="5"
+										th:class="${curso.dificultad >= 5} ? 'active' : ''">
+										<i class="fas fa-star"></i>
+									</span>
+								</div>
+								<input type="hidden" id="dificultad" name="dificultad" th:value="${curso.dificultad}"
+									required>
+								<div class="difficulty-info">
+									<div class="difficulty-label" id="difficultyLabel">
+										<span th:switch="${curso.dificultad}">
+											<span th:case="1">Muy fácil</span>
+											<span th:case="2">Fácil</span>
+											<span th:case="3">Intermedio</span>
+											<span th:case="4">Difícil</span>
+											<span th:case="5">Muy difícil</span>
+										</span>
+									</div>
+									<div class="difficulty-description" id="difficultyDescription">
+										<span th:switch="${curso.dificultad}">
+											<span th:case="1">Ideal para principiantes sin experiencia previa</span>
+											<span th:case="2">Perfecto para estudiantes con conocimientos básicos</span>
+											<span th:case="3">Requiere conocimientos previos en el tema</span>
+											<span th:case="4">Para estudiantes con experiencia considerable</span>
+											<span th:case="5">Nivel avanzado para expertos</span>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+				</div>
+
+				<div class="form-actions">
+					<button type="button" th:onclick="window.history.back()" class="btn-secondary">
+						<i class="fas fa-times"></i>
+						Cancelar
+					</button>
+					<button type="submit" class="btn-primary" th:disabled="${#lists.isEmpty(asignaciones)}"
+						th:classappend="${#lists.isEmpty(asignaciones)} ? 'btn-disabled' : ''">
+						<i class="fas fa-save"></i>
+						Actualizar Curso
+					</button>
+				</div>
+				</form>
+			</div>
+	</div>
+	</main>
+	</div>
+
+	<script>
+		// Actualizar hora actual
+		function updateTime() {
+			const now = new Date();
+			const timeString = now.toLocaleString('es-ES', {
+				weekday: 'long',
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit'
+			});
+			document.getElementById('currentTime').textContent = timeString;
+		}
+
+		updateTime();
+		setInterval(updateTime, 60000);
+
+		// Sistema de estrellas
+		const stars = document.querySelectorAll('.star');
+		const difficultyInput = document.getElementById('dificultad');
+		const difficultyLabel = document.getElementById('difficultyLabel');
+		const difficultyDescription = document.getElementById('difficultyDescription');
+
+		const difficultyLevels = {
+			1: {label: 'Muy fácil', description: 'Ideal para principiantes sin experiencia previa'},
+			2: {label: 'Fácil', description: 'Perfecto para estudiantes con conocimientos básicos'},
+			3: {label: 'Intermedio', description: 'Requiere conocimientos previos en el tema'},
+			4: {label: 'Difícil', description: 'Para estudiantes con experiencia considerable'},
+			5: {label: 'Muy difícil', description: 'Nivel avanzado para expertos'}
+		};
+
+		stars.forEach((star, index) => {
+			star.addEventListener('click', () => {
+				const rating = index + 1;
+				difficultyInput.value = rating;
+				updateStars(rating);
+				updateDifficultyInfo(rating);
+			});
+
+			star.addEventListener('mouseenter', () => {
+				const rating = index + 1;
+				updateStars(rating);
+				updateDifficultyInfo(rating);
+			});
+		});
+
+		document.getElementById('starRating').addEventListener('mouseleave', () => {
+			const currentRating = parseInt(difficultyInput.value);
+			updateStars(currentRating);
+			updateDifficultyInfo(currentRating);
+		});
+
+		function updateStars(rating) {
+			stars.forEach((star, index) => {
+				if (index < rating) {
+					star.classList.add('active');
+				} else {
+					star.classList.remove('active');
+				}
+			});
+		}
+
+		function updateDifficultyInfo(rating) {
+			const level = difficultyLevels[rating];
+			difficultyLabel.textContent = level.label;
+			difficultyDescription.textContent = level.description;
+		}
+
+		// Form validation
+		document.querySelector('.course-form').addEventListener('submit', function (e) {
+			const requiredFields = this.querySelectorAll('input[required], select[required], textarea[required]');
+			let isValid = true;
+
+			requiredFields.forEach(field => {
+				if (!field.value.trim()) {
+					field.classList.add('error');
+					isValid = false;
+				} else {
+					field.classList.remove('error');
+				}
+			});
+
+			if (!isValid) {
+				e.preventDefault();
+				alert('Por favor, complete todos los campos obligatorios.');
+			}
+		});
+
+		// Remove error class on input
+		document.querySelectorAll('input, select, textarea').forEach(field => {
+			field.addEventListener('input', function () {
+				this.classList.remove('error');
+			});
+		});
+
+		// Efecto hover en tarjetas
+		document.querySelectorAll('.stat-card, .action-card').forEach(card => {
+			card.addEventListener('mouseenter', function () {
+				this.style.transform = 'translateY(-5px)';
+			});
+
+			card.addEventListener('mouseleave', function () {
+				this.style.transform = 'translateY(0)';
+			});
+		});
+	</script>
+
+	<style>
+		/* Estilos mejorados para el sistema de estrellas de dificultad */
+		.difficulty-container {
+			display: flex;
+			flex-direction: column;
+			gap: 15px;
+			padding: 20px;
+			background: #f8f9fa;
+			border-radius: 10px;
+			border: 2px solid #e9ecef;
+		}
+
+		.star-rating {
+			display: flex;
+			gap: 8px;
+			justify-content: center;
+			margin-bottom: 10px;
+		}
+
+		.star {
+			cursor: pointer;
+			font-size: 24px;
+			color: #E0E0E0;
+			transition: all 0.3s ease;
+			padding: 5px;
+			border-radius: 50%;
+		}
+
+		.star:hover {
+			transform: scale(1.2);
+			color: #FFD700;
+		}
+
+		.star.active {
+			color: #FFD700;
+			text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+		}
+
+		.star.active:hover {
+			color: #FFA500;
+			text-shadow: 0 0 15px rgba(255, 165, 0, 0.7);
+		}
+
+		.difficulty-info {
+			text-align: center;
+			padding: 15px;
+			background: white;
+			border-radius: 8px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+
+		.difficulty-label {
+			font-size: 18px;
+			font-weight: 600;
+			color: #333;
+			margin-bottom: 5px;
+		}
+
+		.difficulty-description {
+			font-size: 14px;
+			color: #666;
+			line-height: 1.4;
+		}
+
+		/* Animación de entrada para las estrellas */
+		.star {
+			animation: fadeInUp 0.5s ease forwards;
+		}
+
+		.star:nth-child(1) {
+			animation-delay: 0.1s;
+		}
+
+		.star:nth-child(2) {
+			animation-delay: 0.2s;
+		}
+
+		.star:nth-child(3) {
+			animation-delay: 0.3s;
+		}
+
+		.star:nth-child(4) {
+			animation-delay: 0.4s;
+		}
+
+		.star:nth-child(5) {
+			animation-delay: 0.5s;
+		}
+
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translateY(20px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		/* Mejorar el layout del formulario */
+		.form-section {
+			margin-bottom: 25px;
+		}
+
+		.section-title {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin-bottom: 15px;
+			color: #333;
+			font-size: 16px;
+			font-weight: 600;
+		}
+
+		.section-title i {
+			color: #667eea;
+		}
+
+		/* Estilos para alertas */
+		.alert {
+			padding: 12px 16px;
+			border-radius: 8px;
+			margin-top: 10px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			font-size: 14px;
+		}
+
+		.alert-warning {
+			background-color: #fff3cd;
+			border: 1px solid #ffeaa7;
+			color: #856404;
+		}
+
+		.alert-warning i {
+			color: #f39c12;
+		}
+
+		/* Mejorar el select de docentes */
+		.form-group select {
+			width: 100%;
+			padding: 12px 16px;
+			border: 2px solid #e9ecef;
+			border-radius: 8px;
+			background-color: white;
+			font-size: 14px;
+			transition: all 0.3s ease;
+		}
+
+		.form-group select:focus {
+			border-color: #667eea;
+			box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+			outline: none;
+		}
+
+		.form-group select:disabled {
+			background-color: #f8f9fa;
+			color: #6c757d;
+			cursor: not-allowed;
+		}
+
+		/* Estilos para botón deshabilitado */
+		.btn-disabled {
+			background-color: #6c757d !important;
+			color: white !important;
+			cursor: not-allowed !important;
+			opacity: 0.6 !important;
+		}
+
+		.btn-disabled:hover {
+			background-color: #6c757d !important;
+			transform: none !important;
+		}
+	</style>
+
+</body>
+
+</html>
