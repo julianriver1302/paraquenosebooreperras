@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalle Foro</title>
+    <link rel="stylesheet" th:href="@{/assetsPanelUsuaario/stylespanelusuario.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+</head>
+<body>
+<div class="main-layout">
+    <header>
+        <div class="header-logo-title">
+            <h1 class="titulo-blanco"><span class="panel-icon"><i class="fa-solid fa-comments"></i></span>Foro</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="panel">
+            <h2 th:text="${foro.titulo}">Título del foro</h2>
+            <p th:text="${foro.descripcion}">Descripción del foro</p>
+            <small th:text="${#temporals.format(foro.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</small>
+        </div>
+
+        <div class="panel">
+            <h3>Respuestas</h3>
+            <div th:if="${respuestas == null or #lists.isEmpty(respuestas)}">
+                <p>Aún no hay respuestas en este foro. ¡Sé el primero en responder!</p>
+            </div>
+            <div th:if="${respuestas != null and !#lists.isEmpty(respuestas)}">
+                <ul class="lista-respuestas">
+                    <li th:each="resp : ${respuestas}">
+                        <div class="respuesta-item">
+                            <strong th:text="${resp.autor.nombre}">Nombre autor</strong>
+                            <small th:text="${#temporals.format(resp.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</small>
+                            <p th:text="${resp.mensaje}">Mensaje</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Responder</h3>
+            <form th:action="@{'/PanelControlUsuario/foros/' + ${foro.id} + '/responder'}" method="post">
+                <textarea name="mensaje" rows="3" placeholder="Escribe tu respuesta..." required></textarea>
+                <button type="submit" class="btn">Enviar respuesta</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

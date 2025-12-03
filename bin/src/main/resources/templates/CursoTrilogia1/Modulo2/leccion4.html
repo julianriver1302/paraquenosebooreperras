@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso 1 - Introducción a CSS</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #eef6ff;
+            padding: 30px;
+        }
+
+        .contenedor-curso {
+            background: white;
+            padding: 30px;
+            width: 90%;
+            max-width: 900px;
+            margin: auto;
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #005bdf;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        .actividad-box {
+            margin-top: 25px;
+            background: #f0f7ff;
+            padding: 20px;
+            border-radius: 18px;
+        }
+
+        .editor-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .editor-card {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .editor-card textarea {
+            width: 100%;
+            height: 180px;
+            border-radius: 12px;
+            padding: 10px;
+            border: 2px solid #a3c4ff;
+            font-family: monospace;
+            font-size: 15px;
+        }
+
+        .botones-area {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+        }
+
+        .btn-ejecutar { background: #1d77ff; }
+        .btn-restaurar { background: #ff9800; }
+
+        .resultado-area iframe {
+            width: 100%;
+            height: 250px;
+            margin-top: 20px;
+            border-radius: 15px;
+            border: 2px solid #b8d0ff;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor-curso">
+
+    <h1>Curso 1 - Introducción a CSS</h1>
+    <p>
+        CSS es como la ropa y los colores de tu página web.  
+        En este curso aprenderás qué es CSS y cómo conectarlo con HTML.
+    </p>
+
+    <h2>🔥 ¿Qué es CSS?</h2>
+    <p>
+        CSS significa "Cascading Style Sheets".  
+        Sirve para cambiar colores, tamaños de letra, fondos, bordes y más.
+    </p>
+
+    <h2>🔗 ¿Cómo se conecta CSS al HTML?</h2>
+
+<pre>
+&lt;link rel="stylesheet" href="estilos.css"&gt;
+</pre>
+
+    <h2>🎯 Actividad</h2>
+    <p>Cambia el color de fondo usando CSS.</p>
+
+    <!-- 🧪 EDITOR INTERACTIVO -->
+    <div class="actividad-box">
+
+        <h3>🎮 ¡Prueba el código aquí!</h3>
+
+        <div class="editor-wrapper">
+
+            <!-- HTML -->
+            <div class="editor-card">
+                <h4>🟦 HTML</h4>
+                <textarea id="htmlCode">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mi página con CSS</title>
+</head>
+<body>
+    <h1>¡Hola Mundo!</h1>
+    <p>Quiero cambiar el color de fondo con CSS.</p>
+</body>
+</html>
+                </textarea>
+            </div>
+
+            <!-- CSS -->
+            <div class="editor-card">
+                <h4>🟩 CSS</h4>
+                <textarea id="cssCode">
+body {
+    background-color: lightblue;
+}
+
+h1 {
+    color: navy;
+}
+                </textarea>
+            </div>
+        </div>
+
+        <!-- BOTONES -->
+        <div class="botones-area">
+            <button class="btn btn-ejecutar" onclick="runCode()">▶ Ejecutar</button>
+            <button class="btn btn-restaurar" onclick="restoreCode()">🔄 Restaurar</button>
+        </div>
+
+        <!-- RESULTADO -->
+        <div class="resultado-area">
+            <h4>👀 Resultado aquí:</h4>
+            <iframe id="preview"></iframe>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- JS DEL EDITOR -->
+<script>
+    const defaultHTML = `<!DOCTYPE html>
+<html>
+<head>
+    <title>Mi página con CSS</title>
+</head>
+<body>
+    <h1>¡Hola Mundo!</h1>
+    <p>Quiero cambiar el color de fondo con CSS.</p>
+</body>
+</html>`;
+
+    const defaultCSS = `body {
+    background-color: lightblue;
+}
+
+h1 {
+    color: navy;
+}`;
+
+    window.onload = () => { runCode(); };
+
+    function runCode() {
+        const html = document.getElementById("htmlCode").value;
+        const css = "<style>" + document.getElementById("cssCode").value + "</style>";
+        const preview = document.getElementById("preview").contentWindow.document;
+
+        preview.open();
+        preview.write(css + html);
+        preview.close();
+    }
+
+    function restoreCode() {
+        document.getElementById("htmlCode").value = defaultHTML;
+        document.getElementById("cssCode").value = defaultCSS;
+        runCode();
+    }
+</script>
+
+</body>
+</html>

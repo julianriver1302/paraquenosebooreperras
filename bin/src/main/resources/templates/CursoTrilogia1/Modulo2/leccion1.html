@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Introducción a CSS</title>
+
+	<style>
+		body {
+			font-family: 'Radnika', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			background: radial-gradient(circle at top left, #1e293b 0, #020617 40%, #020617 100%);
+			color: #e5e7eb;
+			margin: 0;
+			padding: 0;
+			min-height: 100vh;
+			overflow: hidden;
+		}
+
+		/* ================================
+		   🎯 LAYOUT PROFESIONAL
+		================================ */
+		.container {
+			position: relative;
+			z-index: 4;
+			width: 100%;
+			height: 100vh;
+			padding: 24px 32px 16px 32px;
+			box-sizing: border-box;
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+		}
+
+		.layout-two-columns {
+			display: grid;
+			grid-template-columns: 380px 1fr;   /* IZQUIERDA FIJA — DERECHA FLEXIBLE */
+			gap: 50px;
+			width: 100%;
+			max-width: 1600px;
+			align-items: flex-start;
+		}
+
+		/* =============================
+		   PANEL IZQUIERDO
+		============================= */
+		.left-panel {
+			text-align: center;
+			margin-top: 100px;
+			opacity: 0;
+			animation: hero-bounce-in 0.9s ease-out forwards;
+		}
+
+		@keyframes hero-bounce-in {
+			0% {
+				opacity: 0;
+				transform: translateY(40px) scale(0.96);
+			}
+			60% {
+				opacity: 1;
+				transform: translateY(-10px) scale(1.02);
+			}
+			100% {
+				opacity: 1;
+				transform: translateY(0) scale(1);
+			}
+		}
+
+		/* Mensaje de error dentro del paso (validaciones de ejercicios) */
+		.step-error {
+			margin-top: 12px;
+			padding: 10px 14px;
+			border-radius: 14px;
+			background: rgba(248,113,113,0.16); /* rojo suave */
+			border: 1px solid rgba(248,113,113,0.9);
+			color: #fee2e2;
+			font-size: 14px;
+			line-height: 1.5;
+			box-shadow: 0 8px 18px rgba(0,0,0,0.45);
+		}
+
+		/* Mensaje de logro correcto dentro del paso */
+		.step-success {
+			margin-top: 12px;
+			padding: 10px 14px;
+			border-radius: 14px;
+			background: rgba(34,197,94,0.16); /* verde suave */
+			border: 1px solid rgba(34,197,94,0.9);
+			color: #bbf7d0;
+			font-size: 14px;
+			line-height: 1.5;
+			box-shadow: 0 8px 18px rgba(0,0,0,0.45);
+		}
+
+		h1 {
+			font-size: 48px;
+			font-weight: 700;
+			margin-bottom: 25px;
+			background: linear-gradient(90deg, #ffe36d, #ffb14d, #ffdc72);
+			background-clip: text;
+			-webkit-background-clip: text;
+			color: transparent;
+			text-shadow: 0 0 12px #ffe36d55;
+		}
+
+		.left-panel .intro-text {
+			max-width: 420px;
+			font-size: 18px;
+			line-height: 1.6;
+			margin: 0 auto;
+		}	
+
+		/* =============================
+		   PANEL DERECHO / TARJETA
+		============================= */
+		.right-panel {
+			display: flex;
+			justify-content: flex-start;
+		}
+
+		.card {
+			background: linear-gradient(to bottom right, rgba(15,23,42,0.98), rgba(15,23,42,0.96) 55%, rgba(30,64,175,0.55));
+			border-radius: 35px;
+			padding: 45px 45px;
+			box-shadow: 0 0 70px #000000b0;
+			width: 100%;  
+			height: calc(100vh - 150px);
+			box-sizing: border-box;
+			overflow-y: auto;
+			margin-top: 30px;
+			/* Ocultar barra de scroll pero mantener el desplazamiento */
+			scrollbar-width: none;           /* Firefox */
+			-ms-overflow-style: none;       /* IE y Edge antiguos */
+		}
+
+		.card::-webkit-scrollbar {
+			display: none;                  /* Chrome, Safari y derivados */
+		}
+
+		p {
+			font-size: 18px;
+			line-height: 1.7;
+		}
+
+		/* =============================
+		   ROADMAP / PASOS
+		============================= */
+		.roadmap {
+			margin-top: 20px;
+		}
+
+		.step {
+			background: radial-gradient(circle at top left, rgba(15,23,42,0.98), rgba(15,23,42,0.95));
+			border-radius: 26px;
+			padding: 26px 28px 26px;
+			display: none;
+			box-shadow: 0 0 18px #00000088;
+		}
+
+		.step.active {
+			display: block;
+			animation: step-slide-in 0.6s ease-out;
+		}
+
+		@keyframes step-slide-in {
+			0% {
+				opacity: 0;
+				transform: translateY(24px) scale(0.97);
+			}
+			60% {
+				opacity: 1;
+				transform: translateY(-6px) scale(1.01);
+			}
+			100% {
+				opacity: 1;
+				transform: translateY(0) scale(1);
+			}
+		}
+
+		.step-badge {
+			width: 40px;
+			height: 40px;
+			border-radius: 999px;
+			background: radial-gradient(circle at 30% 20%, #fff6c7, #ffb347);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-weight: 800;
+			color: #2b1900;
+			margin: 0 auto 10px;
+		}
+
+		.step-title {
+			font-size: 22px;
+			font-weight: 600;
+			margin-bottom: 12px;
+		}
+
+		.step-text {
+			margin: 0 0 10px;
+		}
+
+		/* Mini mascota guía dentro del paso */
+		.step-helper {
+			margin-top: 16px;
+			padding: 10px 14px;
+			border-radius: 18px;
+			background: rgba(15,23,42,0.9);
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			box-shadow: 0 8px 16px rgba(0,0,0,0.45);
+			animation: helper-float 2.4s ease-in-out infinite;
+		}
+
+		.step-helper-avatar {
+			width: 46px;
+			height: 46px;
+			border-radius: 999px;
+			overflow: hidden;
+			flex-shrink: 0;
+			background: radial-gradient(circle at 30% 20%, #22c55e, #065f46);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.step-helper-avatar img {
+			width: 48px;
+			height: auto;
+			transform: translateY(2px);
+		}
+
+		.step-helper-text {
+			font-size: 14px;
+			line-height: 1.4;
+			color: #e5e7eb;
+		}
+
+		.step-helper-text b {
+			color: #facc15;
+		}
+
+		@keyframes helper-float {
+			0%, 100% {
+				transform: translateY(0);
+			}
+			50% {
+				transform: translateY(-4px);
+			}
+		}
+
+		.step-next {
+			margin-top: 14px;
+			padding: 12px 26px;
+			border-radius: 999px;
+			border: none;
+			background: linear-gradient(135deg, #ffe36d, #ffb14d);
+			color: #1a1300;
+			font-weight: 700;
+			cursor: pointer;
+			box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+			transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, background 0.2s ease-out;
+		}
+
+		.step-next:hover {
+			transform: translateY(-2px) scale(1.02);
+			box-shadow: 0 10px 22px rgba(0,0,0,0.5);
+			background: linear-gradient(135deg, #fff19a, #ffc370);
+		}
+
+		.step-next:active {
+			transform: translateY(0) scale(0.98);
+			box-shadow: 0 5px 12px rgba(0,0,0,0.45);
+		}
+
+		/* Barra de progreso de la lección */
+		.progress-wrapper {
+			margin-bottom: 18px;
+		}
+
+		.progress-label {
+			font-size: 13px;
+			letter-spacing: 0.03em;
+			text-transform: uppercase;
+			color: #e5e7ebaa;
+			margin-bottom: 6px;
+		}
+
+		.progress-bar {
+			position: relative;
+			width: 100%;
+			height: 10px;
+			border-radius: 999px;
+			background: rgba(15,23,42,0.9);
+			overflow: hidden;
+		}
+
+		.progress-fill {
+			position: absolute;
+			inset: 0;
+			width: 0%;
+			border-radius: inherit;
+			background: linear-gradient(90deg, #22c55e, #a3e635, #facc15);
+			transition: width 0.35s ease-out;
+		}
+
+		/* Banda de guía con la mascota debajo de los pasos */
+		.guide-banner {
+			margin-top: 22px;
+			padding: 12px 16px;
+			border-radius: 20px;
+			background: radial-gradient(circle at top left, #0f172a, #020617);
+			display: flex;
+			align-items: center;
+			gap: 14px;
+			box-shadow: 0 10px 24px rgba(0,0,0,0.55);
+			animation: helper-float 2.4s ease-in-out infinite;
+		}
+
+		.guide-avatar {
+			width: 58px;
+			height: 58px;
+			border-radius: 999px;
+			overflow: hidden;
+			flex-shrink: 0;
+			background: radial-gradient(circle at 30% 20%, #22c55e, #065f46);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.guide-avatar img {
+			width: 64px;
+			height: auto;
+			transform: translateY(2px);
+		}
+
+		.guide-text {
+			font-size: 15px;
+			line-height: 1.5;
+			color: #e5e7eb;
+		}
+
+		.guide-text b {
+			color: #facc15;
+		}
+
+		/* Mini editor del paso 3 */
+		.code-lab {
+			display: grid;
+			grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+			gap: 14px;
+			margin-top: 8px;
+		}
+
+		.code-textarea {
+			width: 100%;
+			min-height: 110px;
+			resize: vertical;
+			border-radius: 12px;
+			border: 1px solid rgba(148,163,184,0.8);
+			padding: 10px 12px;
+			box-sizing: border-box;
+			background: rgba(15,23,42,0.8);
+			color: #e5e7eb;
+			font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+			font-size: 14px;
+		}
+
+		.code-hint-trigger {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			font-size: 12px;
+			color: #e5e7ebaa;
+			cursor: help;
+			margin-left: 6px;
+			position: relative;
+		}
+
+		.code-hint-dot {
+			width: 14px;
+			height: 14px;
+			border-radius: 999px;
+			background: radial-gradient(circle at 30% 20%, #facc15, #eab308);
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 10px;
+			color: #1e293b;
+			font-weight: 700;
+		}
+
+		.code-hint-tooltip {
+			position: absolute;
+			z-index: 20;
+			left: 0;
+			bottom: 130%;
+			min-width: 240px;
+			max-width: 320px;
+			padding: 8px 10px;
+			border-radius: 10px;
+			background: rgba(15,23,42,0.98);
+			font-size: 13px;
+			line-height: 1.5;
+			color: #e5e7ebcc;
+			border: 1px solid rgba(148,163,184,0.6);
+			box-shadow: 0 12px 24px rgba(0,0,0,0.7);
+			opacity: 0;
+			pointer-events: none;
+			transform: translateY(4px);
+			transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+		}
+
+		.code-hint-tooltip b {
+			color: #facc15;
+		}
+
+		.code-hint-trigger:hover .code-hint-tooltip {
+			opacity: 1;
+			transform: translateY(0);
+			pointer-events: auto;
+		}
+
+		.code-preview {
+			width: 100%;
+			min-height: 130px;
+			border-radius: 14px;
+			border: 1px solid rgba(148,163,184,0.7);
+			background: #020617;
+		}
+
+		.btn-next {
+			display: inline-block;
+			margin-top: 30px;
+			background: #ffe36d;
+			color: #000;
+			padding: 18px 40px;
+			border-radius: 50px;
+			font-size: 20px;
+			font-weight: 600;
+			text-decoration: none;
+		}
+
+		/* =============================
+		   FONDO Y DECORACIONES
+		============================= */
+		.background-grid {
+			position: fixed;
+			inset: 0;
+			background:
+				linear-gradient(to right, #ffffff06 1px, transparent 1px),
+				linear-gradient(to bottom, #ffffff06 1px, transparent 1px);
+			background-size: 70px 70px;
+			mask-image: radial-gradient(circle, black 60%, transparent 100%);
+		}
+
+		.robot {
+			position: absolute;
+			width: 260px;
+			opacity: 0.95;
+		}
+
+		.robot-left { left: -140px; top: 43%; }
+		.robot-right { right: -140px; top: 44%; }
+
+		/* =============================
+		   RESPONSIVE
+		============================= */
+		@media (max-width: 900px) {
+			.layout-two-columns {
+				grid-template-columns: 1fr;
+				text-align: center;
+			}
+
+			.right-panel {
+				justify-content: center;
+			}
+
+			.card {
+				width: 95%;
+				height: auto;
+			}
+		}
+
+	</style>
+</head>
+
+<body>
+
+	<!-- Fondo cuadriculado -->
+	<div class="background-grid"></div>
+
+	<!-- Robots decorativos -->
+	<img src="/mnt/data/7b40dc0a-4553-4951-8d7f-af4aa1ad9610.png" class="robot robot-left">
+	<img src="/mnt/data/a3c2c3c6-8a4c-43ae-b847-228240696039.png" class="robot robot-right">
+
+	<!-- =============================
+	     CONTENIDO REAL — NADA TOCADO
+	============================= -->
+	<div class="container">
+		<div class="layout-two-columns">
+
+			<div class="left-panel">
+				<h1>Introducción a CSS</h1>
+
+				<img src="/assetsCursoTrilogia/ChatGPT Image 27 nov 2025, 14_07_23-Photoroom.png" alt="Mascota Codiplay con logo CSS" style="width: 220px; max-width: 100%; margin-bottom: 10px;">
+
+				<p class="intro-text">
+					CSS es como la ropa, los peinados y los accesorios de una página web.
+					HTML pone el cuerpo… <b>¡y CSS lo viste para la fiesta! ✨</b>
+				</p>
+			</div>
+
+			<div class="right-panel">
+				<div class="card">
+
+					<div class="progress-wrapper">
+						<div class="progress-label">Progreso de la misión</div>
+						<div class="progress-bar">
+							<div class="progress-fill" id="lesson-progress-fill"></div>
+						</div>
+					</div>
+
+					<div class="roadmap">
+						<div class="step">
+							<div class="step-badge">1</div>
+							<div class="step-emoji">🧭</div>
+							<div class="step-title">Bienvenida a la misión</div>
+							<p class="step-text">
+								Imagina que una página web es una persona. HTML es su cuerpo y
+									CSS es toda su ropa y estilo. Sin CSS, la página se ve simple;
+									con CSS, se ve lista para la fiesta.
+							</p>
+							<div class="step-actions">
+								<button type="button" class="step-next" data-next>Parece divertido, ¡sigamos! ➜</button>
+							</div>
+						</div>
+
+						<div class="step">
+							<div class="step-badge">2</div>
+							<div class="step-emoji">🎨</div>
+							<div class="step-title">¿Qué puede hacer CSS?</div>
+							<p class="step-text">
+								CSS cambia colores, tamaños, fondos y formas. Es como tener
+									un súper lápiz mágico que convierte tu página en una obra de
+									arte digital.
+							</p>
+							<div class="step-actions">
+								<button type="button" class="step-next" data-next>Quiero ver cómo se ve ➜</button>
+							</div>
+						</div>
+
+						<div class="step">
+							<div class="step-badge">3</div>
+							<div class="step-emoji">🧪</div>
+							<div class="step-title">Tu primer cambio de color</div>
+							<p class="step-text">
+								Aquí tienes un pequeño laboratorio. Cambia el color en el código y pulsa el botón para ver qué pasa:
+							</p>
+
+							<div class="code-lab">
+								<div class="code-lab-editor">
+									<label for="css-lab-editor" class="step-text" style="display:block; margin-bottom:6px;">
+										Código CSS
+										<span class="code-hint-trigger">
+											<span class="code-hint-dot">?</span>
+											<span class="code-hint-tooltip">
+												<b>Consejo:</b> Busca la palabra <b>blue</b> dentro de las llaves <code>{ }</code> y cámbiala por <b>red</b>, <b>purple</b> o tu color favorito.
+											</span>
+										</span>
+									</label>
+									<textarea id="css-lab-editor" class="code-textarea">h1 {
+	color: blue; 
+}
+</textarea>
+									<button type="button" id="css-lab-run" class="step-next" style="margin-top:10px;">Probar código</button>
+								</div>
+								<div class="code-lab-preview">
+									<iframe id="css-lab-preview" title="Vista previa CSS" class="code-preview"></iframe>
+								</div>
+							</div>
+
+							<p class="step-text" style="margin-top:10px;">
+								Prueba cambiar <b>blue</b> por <b>red</b>, <b>purple</b> o <b>skyblue</b> y mira cómo cambia la página de ejemplo.
+							</p>
+							<div class="step-actions">
+								<button type="button" class="step-next" data-next>Ya probé cambiar el color ➜</button>
+							</div>
+						</div>
+
+						<div class="step">
+							<div class="step-badge">4</div>
+							<div class="step-emoji">💡</div>
+							<div class="step-title">Conectar CSS con HTML</div>
+							<p class="step-text">
+								Aprenderás la etiqueta que le dice a HTML dónde está su
+									armario de ropa (tu archivo CSS):
+							</p>
+							<pre class="step-text" style="text-align:left; font-family: monospace; font-size:14px;">
+&lt;&gt;
+								</pre>
+								<p class="step-text">
+									Verás que va dentro del &lt;head&gt;, donde la página se prepara
+										antes de salir al mundo.
+								</p>
+								<div class="code-lab" style="margin-top:10px; grid-template-columns: minmax(0, 1.3fr);">
+									<div class="code-lab-editor">
+										<label for="link-lab-editor" class="step-text" style="display:block; margin-bottom:6px;">
+											Escribe la etiqueta mágica
+											<span class="code-hint-trigger">
+												<span class="code-hint-dot">?</span>
+												<span class="code-hint-tooltip">
+													<b>Consejo:</b> Empieza con <code>&lt;link</code> y termina con <code>&gt;</code>. Dentro escribe <b>rel="stylesheet"</b> y en <b>href="..."</b> el nombre de tu archivo CSS.
+												</span>
+											</span>
+										</label>
+										<textarea id="link-lab-editor" class="code-textarea" spellcheck="false"></textarea>
+										<button type="button" id="link-lab-run" class="step-next" style="margin-top:10px;">Probar etiqueta</button>
+									</div>
+								</div>
+								<div class="step-actions">
+									<button type="button" class="step-next" data-next>Ya entiendo la etiqueta mágica ➜</button>
+								</div>
+							</div>
+
+							<div class="step">
+								<div class="step-badge">5</div>
+								<div class="step-emoji">🧩</div>
+								<div class="step-title">Reto de fiesta de colores</div>
+								<p class="step-text">
+									Imagina que tu página va a una fiesta. Tu misión será elegir
+										un color favorito y colorear el fondo con CSS:
+								</p>
+								<pre class="step-text" style="text-align:left; font-family: monospace; font-size:14px;">
+body {
+	background-color: lightblue;
+}
+								</pre>
+								<p class="step-text">
+									Probarás con <b>pink</b>, <b>gold</b>, <b>skyblue</b> o
+										<b>neon green</b>.
+								</p>
+								<div class="code-lab">
+									<div class="code-lab-editor">
+										<label for="css-bg-lab-editor" class="step-text" style="display:block; margin-bottom:6px;">
+											Prueba tu fondo de fiesta
+											<span class="code-hint-trigger">
+												<span class="code-hint-dot">?</span>
+												<span class="code-hint-tooltip">
+													<b>Consejo:</b> No borres <code>body</code> ni las llaves <code>{ }</code>. Solo cambia el nombre del color después de <b>background-color:</b> por <b>pink</b>, <b>gold</b>, etc.
+												</span>
+											</span>
+										</label>
+										<textarea id="css-bg-lab-editor" class="code-textarea">body {
+	background-color: lightblue; 
+}
+</textarea>
+										<button type="button" id="css-bg-lab-run" class="step-next" style="margin-top:10px;">Probar fondo</button>
+									</div>
+									<div class="code-lab-preview">
+										<iframe id="css-bg-lab-preview" title="Vista previa fondo" class="code-preview"></iframe>
+									</div>
+								</div>
+								<div class="step-actions">
+									<button type="button" class="step-next" data-next>Ya elegí un color para mi fiesta ➜</button>
+								</div>
+							</div>
+
+							<div class="step">
+								<div class="step-badge">6</div>
+								<div class="step-emoji">🎉</div>
+								<div class="step-title">CSS en tu vida diaria</div>
+								<p class="step-text">
+									Así como eliges tu ropa para ir a la escuela, al parque o a una
+										fiesta, una página también necesita un estilo diferente para
+										cada momento. <b>Tú serás su diseñador personal.</b>
+								</p>
+								<div class="step-actions">
+									<button type="button" class="step-next" data-next>Entendí la historia de CSS ➜</button>
+								</div>
+							</div>
+
+							<div class="step">
+								<div class="step-badge">7</div>
+								<div class="step-emoji">🏆</div>
+								<div class="step-title">Insignia desbloqueada</div>
+								<p class="step-text">
+									Cuando completes la misión, obtendrás la insignia
+										<b>"Explorador de Estilos CSS"</b>, porque no solo programaste,
+										también fuiste un artista digital.
+								</p>
+								<div class="step-actions">
+									<button type="button" class="step-next" data-next>Quiero ganar mi insignia ➜</button>
+								</div>
+								Cuando completes la misión, obtendrás la insignia
+									<b>"Explorador de Estilos CSS"</b>, porque no solo programaste,
+									también fuiste un artista digital.
+							</p>
+							
+						</div>
+
+						<div class="step">
+							<div class="step-badge">8</div>
+							<div class="step-emoji">🚀</div>
+							<div class="step-title">Preparación para la siguiente clase</div>
+							<p class="step-text">
+								En la próxima lección aprenderás los secretos del color y podrás
+									pintar tu página como si tuvieras una paleta mágica. ¡Prepárate
+									para convertir colores en poder!
+							</p>
+							<div class="step-actions">
+								<form method="post" action="/PanelControlUsuario/modulo2/leccion1/completar">
+									<button type="submit" class="step-next">He terminado mi misión de hoy ✅</button>
+								</form>
+							</div>
+						</div>
+					</div>
+
+					<div class="guide-banner">
+						<div class="guide-avatar">
+							<img src="/assetsCursoTrilogia/ChatGPT Image 27 nov 2025, 14_07_23-Photoroom.png" alt="Robot guía Codiplay">
+						</div>
+						<div class="guide-text" id="guide-text">
+							🤖 <b>¡Estoy listo para acompañarte en esta misión!</b> CSS es como <b>pintar con superpoderes</b> 🎨⚡
+						</div>
+					</div>
+
+					<a href="/PanelControlUsuario/modulo2?l1=done"
+					   class="btn-next"
+					   id="next-lesson-btn"
+					   style="display:none;">
+						Ver lecciones del módulo ➜
+					</a>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script>
+		(function() {
+			const steps = Array.from(document.querySelectorAll('.step'));
+			const nextButtons = document.querySelectorAll('.step-next[data-next]');
+			const nextLessonBtn = document.getElementById('next-lesson-btn');
+			const progressFill = document.getElementById('lesson-progress-fill');
+			const guideText = document.getElementById('guide-text');
+			const guideMessages = [
+				"🤖 <b>¡Estoy listo para acompañarte en esta misión!</b> CSS es como <b>pintar con superpoderes</b> 🎨⚡",
+				"🤖 <b>Los colores, tamaños y formas son tus pinceles mágicos.</b> ¡Pruébalos sin miedo! 🎨",
+				"🤖 <b>Un solo cambio de código puede transformar toda la página.</b> ¡Experimenta! ✨",
+				"🤖 <b>Esta etiqueta &lt;link&gt; es como el cable que conecta tu armario de ropa CSS.</b> 🧥",
+				"🤖 <b>Elige tu color favorito para esta fiesta de estilos.</b> ¡Tu página confía en tu gusto! 🎉",
+				"🤖 <b>Cada página necesita un look diferente.</b> Tú eres su diseñador de modas digital. 🧑‍🎨",
+				"🤖 <b>¡Ya casi ganas tu insignia!</b> Un buen estilo también es parte del código. 🏅",
+				"🤖 <b>Misión casi completa.</b> Prepárate para descubrir el poder de los colores en la próxima clase. 🚀"
+			];
+			let currentStep = 0;
+			const stepCompleted = new Array(steps.length).fill(false);
+			let quizCompleted = false; // ya no se usa el mini quiz para avanzar
+
+			function updateProgress(index) {
+				if (!progressFill || steps.length === 0) return;
+				const percent = ((index + 1) / steps.length) * 100;
+				progressFill.style.width = `${percent}%`;
+			}
+
+			function showStep(index) {
+				steps.forEach((step, i) =>
+					step.classList.toggle('active', i === index)
+				);
+				updateProgress(index);
+				if (guideText && guideMessages[index]) {
+					guideText.innerHTML = guideMessages[index];
+				}
+			}
+
+			function showStepError(index, message) {
+				const step = steps[index];
+				if (!step) return;
+				// Eliminar mensaje de éxito si lo hubiera
+				const oldSuccess = step.querySelector('.step-success');
+				if (oldSuccess) oldSuccess.remove();
+				let box = step.querySelector('.step-error');
+				if (!box) {
+					box = document.createElement('div');
+					box.className = 'step-error';
+					// Lo añadimos al final del contenido del paso
+					const actions = step.querySelector('.step-actions');
+					if (actions && actions.parentNode) {
+						step.insertBefore(box, actions);
+					} else {
+						step.appendChild(box);
+					}
+				}
+				box.textContent = message;
+			}
+
+			function showStepSuccess(index, message) {
+				const step = steps[index];
+				if (!step) return;
+				// Quitar posible error anterior en el paso
+				const oldError = step.querySelector('.step-error');
+				if (oldError) oldError.remove();
+				// Usar el toast de la esquina superior derecha
+				showMascotModal({
+					icon: 'success',
+					title: '¡Logro desbloqueado!',
+					text: message
+				});
+			}
+
+			// Mini editor del paso 3
+			const cssEditor = document.getElementById('css-lab-editor');
+			const cssRunBtn = document.getElementById('css-lab-run');
+			const cssPreview = document.getElementById('css-lab-preview');
+
+			// Mini editor del paso 5 (fondo de fiesta)
+			const cssBgEditor = document.getElementById('css-bg-lab-editor');
+			const cssBgRunBtn = document.getElementById('css-bg-lab-run');
+			const cssBgPreview = document.getElementById('css-bg-lab-preview');
+
+			// Editor del paso 4 (etiqueta link)
+			const linkEditor = document.getElementById('link-lab-editor');
+			const linkRunBtn = document.getElementById('link-lab-run');
+
+			function showMascotModal(options) {
+				if (!window.Swal) return;
+				Swal.fire({
+					icon: options.icon || 'info',
+					title: options.title || 'Mensaje del robot',
+					text: options.text || '',
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: options.timer ?? 2500,
+					timerProgressBar: true,
+					background: '#020617',
+					color: '#e5e7eb',
+					width: 360
+				});
+			}
+
+			function validateStep(index) {
+				// Para los pasos con editor (3, 4 y 5) solo comprobamos si ya están marcados como completados
+				// index es 0‑based: paso 3 -> 2, paso 4 -> 3, paso 5 -> 4
+				if (index === 2 || index === 3 || index === 4) {
+					if (!stepCompleted[index]) {
+						showStepError(index, 'Primero prueba tu código con el botón del laboratorio hasta que salga correcto.');
+						return false;
+					}
+					return true;
+				}
+
+				return true;
+			}
+
+			nextButtons.forEach(btn => {
+				btn.addEventListener('click', () => {
+					// Validar el paso actual antes de avanzar
+					if (!validateStep(currentStep)) {
+						return;
+					}
+					
+					// Si estamos en el último paso, ya no redirigimos por JS; el formulario hará el POST
+					if (currentStep === steps.length - 1) {
+						return;
+					}
+				
+					if (currentStep < steps.length - 1) currentStep++;
+					showStep(currentStep);
+				});
+			});
+
+			const baseHtml = `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Laboratorio CSS</title>
+  <style>
+    body { font-family: sans-serif; background:#0f172a; color:white; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+  </style>
+</head>
+<body>
+  <h1>¡Hola CSS!</h1>
+</body>
+</html>`;
+
+			function applyCssToPreview(code, iframe) {
+				if (!iframe) return;
+				const doc = iframe.contentDocument || iframe.contentWindow.document;
+				doc.open();
+				const cssCode = code || '';
+				const htmlWithCss = baseHtml.replace('</head>', `  <style>\n${cssCode}\n  </style>\n</head>`);
+				doc.write(htmlWithCss);
+				doc.close();
+			}
+
+			if (cssEditor && cssRunBtn && cssPreview) {
+				cssRunBtn.addEventListener('click', () => {
+					applyCssToPreview(cssEditor.value, cssPreview);
+					// Validación y modal para el paso 3 al probar código
+					const code = cssEditor.value.toLowerCase();
+					if (!code.includes('color') || code.includes('blue')) {
+						showMascotModal({
+							icon: 'error',
+							title: 'Ups, revisa tu color',
+							text: 'Cambia la palabra "blue" por otro color como red, purple o skyblue.'
+						});
+						stepCompleted[2] = false;
+					} else {
+						showMascotModal({
+							icon: 'success',
+							title: '¡Color cambiado!',
+							text: '¡Perfecto! Cambiaste el color correctamente.'
+						});
+						stepCompleted[2] = true;
+					}
+				});
+				// Inicializar vista previa con el código por defecto
+				applyCssToPreview(cssEditor.value, cssPreview);
+			}
+
+			if (cssBgEditor && cssBgRunBtn && cssBgPreview) {
+				cssBgRunBtn.addEventListener('click', () => {
+					applyCssToPreview(cssBgEditor.value, cssBgPreview);
+					// Validación y modal para el paso 5 al probar código
+					const code = cssBgEditor.value.toLowerCase();
+					if (!code.includes('background-color')) {
+						showMascotModal({
+							icon: 'error',
+							title: 'Falta la magia del fondo',
+							text: 'Usa la propiedad background-color para cambiar el fondo.'
+						});
+						stepCompleted[4] = false;
+						return;
+					}
+					if (code.includes('lightblue')) {
+						showMascotModal({
+							icon: 'error',
+							title: 'Cambia el color base',
+							text: 'Cambia el color lightblue por otro para que tu página se vista de fiesta.'
+						});
+						stepCompleted[4] = false;
+						return;
+					}
+					showMascotModal({
+						icon: 'success',
+						title: '¡Fondo listo para la fiesta!',
+						text: '¡Genial! Cambiaste el fondo con tu color favorito.'
+					});
+					stepCompleted[4] = true;
+				});
+				// Inicializar vista previa con el código por defecto
+				applyCssToPreview(cssBgEditor.value, cssBgPreview);
+			}
+
+			// Validación y modal para el paso 4 al probar la etiqueta link
+			if (linkEditor && linkRunBtn) {
+				linkRunBtn.addEventListener('click', () => {
+					const text = linkEditor.value.trim().replace(/\s+/g, ' ');
+					const expected = '<link rel="stylesheet" href="styles.css">';
+					if (text.length === 0) {
+						showMascotModal({
+							icon: 'error',
+							title: 'Escribe tu etiqueta',
+							text: 'Primero escribe la etiqueta mágica completa dentro del cuadro.'
+						});
+						stepCompleted[3] = false;
+						return;
+					}
+					if (text.toLowerCase() !== expected.toLowerCase()) {
+						showMascotModal({
+							icon: 'error',
+							title: 'Revisa tu etiqueta',
+							text: 'Algo no coincide en tu etiqueta. Revisa las comillas, el orden de los atributos y los símbolos < y >.'
+						});
+						stepCompleted[3] = false;
+						return;
+					}
+					showMascotModal({
+						icon: 'success',
+						title: '¡Etiqueta correcta!',
+						text: '¡Genial! Escribiste la etiqueta <link> exactamente como necesita la página.'
+					});
+					stepCompleted[3] = true;
+				});
+			}
+
+			showStep(currentStep);
+		})();
+	</script>
+
+</body>
+
+</html>

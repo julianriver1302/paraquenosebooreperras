@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Foros | Codiplay Dashboard</title>
+	<link rel="stylesheet" th:href="@{/assetsPanelUsuaario/styleUsuario.css}" />
+</head>
+<body>
+	<div class="dashboard-container">
+		<aside class="sidebar">
+			<div class="logo">
+				<a th:href="@{/PanelControlUsuario/inicio}">
+					<img th:src="@{/assetsPanelUsuaario/unnamed-removebg-preview.PNG}" alt="Logo Codiplay" />
+				</a>
+				<span class="logo-text"></span>
+			</div>
+			<nav class="main-nav">
+				<ul>
+					<li class="nav-item">
+						<a th:href="@{/PanelControlUsuario/inicio}"><i class="fas fa-home"></i> Inicio</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelControlUsuario/mis_cursos}"><i class="fas fa-book"></i> Mis cursos</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelControlUsuario/mis_logros}"><i class="fas fa-medal"></i> Mis logros</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelControlUsuario/bandeja}"><i class="fas fa-inbox"></i> Bandeja</a>
+					</li>
+					<li class="nav-item active">
+						<a th:href="@{/PanelControlUsuario/foros}"><i class="fas fa-comments"></i> Foros</a>
+					</li>
+				</ul>
+			</nav>
+			<div class="support-section">
+				<a th:href="@{/PanelControlUsuario/soporte}"><i class="fas fa-life-ring"></i> Soporte</a>
+			</div>
+		</aside>
+
+		<main class="main-content">
+			<header class="top-bar">
+				<header class="h1eader">
+					<h1>Foros</h1>
+				</header>
+			</header>
+
+			<section class="modules-section">
+				<div class="module-cards-wrapper" style="flex-direction: column; gap: 24px;">
+					<div class="module-card">
+						<h3>Temas recientes</h3>
+						<div th:if="${#lists.isEmpty(temas)}">
+							<p>Aún no hay temas en el foro.</p>
+						</div>
+						<div th:each="tema : ${temas}" class="forum-topic-item">
+							<h4 th:text="${tema.titulo}">Título del tema</h4>
+							<p th:text="${tema.contenido}">Contenido del tema</p>
+							<small th:text="${tema.modulo}">general</small>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+	</div>
+</body>
+</html>
