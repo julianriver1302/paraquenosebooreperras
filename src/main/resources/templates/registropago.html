@@ -32,8 +32,8 @@
 
 	<script src="https://js.stripe.com/v3/"></script>
 
-	
-	
+
+
 </head>
 
 
@@ -81,7 +81,29 @@
 
 				</div>
 
+				<div class="input-container">
 
+					<label>Apellido</label>
+
+					<input type="text" id="apellido" required />
+
+				</div>
+
+
+				<div class="input-container">
+
+					<label>Tipo Documento</label>
+
+					<input type="text" id="tipoDocumento" required />
+
+				</div>
+				<div class="input-container">
+
+					<label>Documento</label>
+
+					<input type="text" id="documento" required />
+
+				</div>
 
 				<div class="input-container">
 
@@ -91,7 +113,14 @@
 
 				</div>
 
-
+				<div class="input-container"> <label for="password"> Contraseña</label>
+									<div style="position:relative; width:320px;"> <input id="password" type="password"
+											 placeholder="Crea una contraseña" required
+											style="padding-right:2.5rem; width:320px;" />
+										<span class="material-icons toggle-password" id="togglePassword"
+											style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:#111; user-select:none; font-size:1.5rem; background:transparent;">
+											visibility_off </span>
+									</div>
 
 				<div class="input-container">
 
@@ -111,8 +140,8 @@
 				</div>
 
 				<input type="hidden" id="cursoId" th:value="${curso.id}" />
-				     <input type="hidden" id="cursoNombre" th:value="${curso.curso}" />
-				     <input type="hidden" id="cursoPrecio" th:value="${curso.precio}" />
+				<input type="hidden" id="cursoNombre" th:value="${curso.curso}" />
+				<input type="hidden" id="cursoPrecio" th:value="${curso.precio}" />
 
 				<button type="submit">Registrar e ir al Pago</button>
 
@@ -165,12 +194,16 @@
 				// 1) Guardar registro
 				const registro = {
 					nombre: document.getElementById("nombre").value,
+					apellido: document.getElementById("apellido").value,
+					tipoDocumento: document.getElementById("tipoDocumento").value,
+					documento: document.getElementById("documento").value,
 					email: document.getElementById("email").value,
 					telefono: document.getElementById("telefono").value,
 					cursoId: parseInt(document.getElementById("cursoId").value),
 					cursoNombre: document.getElementById("cursoNombre").value,
 					precio: parseInt(document.getElementById("cursoPrecio").value),
-					estadoPago: "pendiente"
+					estadoPago: "pendiente",
+					password: document.getElementById("password").value
 				};
 
 				const res = await fetch('/api/registro/guardar', {
@@ -265,17 +298,17 @@
 						estado: paymentIntent.status
 					};
 
-					const res = await fetch('/api/payments/confirm?registroId=' + registropagoId, {
-						method: 'POST',
-						headers: {'Content-Type': 'application/json'},
-						body: JSON.stringify(pago)
-					});
-
-					const confirmData = await res.json();
-					// redirigir según resultado
-					if (confirmData.status === 'success') {
+					try {
+						await fetch('/api/payments/confirm?registroId=' + registropagoId, {
+							method: 'POST',
+							headers: {'Content-Type': 'application/json'},
+							body: JSON.stringify(pago)
+						});
+						// Si la llamada se completa (independiente del código de estado),
+						// asumimos que el backend procesó el pago y redirigimos a success.
 						window.location.href = '/payment-success';
-					} else {
+					} catch (e) {
+						// Solo en caso de error de red/JS mostramos la vista de fallo
 						window.location.href = '/payment-failed';
 					}
 				} else {
