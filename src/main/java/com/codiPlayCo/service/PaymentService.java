@@ -5,8 +5,11 @@ import com.codiPlayCo.model.Pago;
 import com.codiPlayCo.model.RegistroPago;
 import com.codiPlayCo.model.Usuario;
 import com.codiPlayCo.model.Rol;
+import com.codiPlayCo.model.Curso;
 import com.codiPlayCo.repository.PagoRepository;
 import com.codiPlayCo.repository.RegistroPagoRepository;
+import com.codiPlayCo.repository.ICursoRepository;
+import com.codiPlayCo.repository.IUsuarioRepository;
 import com.codiPlayCo.service.IUsuarioService;
 import com.codiPlayCo.service.RolService;
 import com.codiPlayCo.service.EmailService;
@@ -16,11 +19,14 @@ import com.stripe.param.PaymentIntentCreateParams;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.List;
+import java.util.ArrayList;
 
 @Service
 public class PaymentService {
@@ -30,17 +36,22 @@ public class PaymentService {
     private final IUsuarioService usuarioService;
     private final RolService rolService;
     private final EmailService emailService;
+    private final IUsuarioRepository usuarioRepository;
+    private final ICursoRepository cursoRepository;
 
     @Value("${stripe.secret.key}")
     private String secretKey;
 
     public PaymentService(PagoRepository pagoRepository, RegistroPagoRepository registroRepo,
-            IUsuarioService usuarioService, RolService rolService, EmailService emailService) {
+            IUsuarioService usuarioService, RolService rolService, EmailService emailService,
+            IUsuarioRepository usuarioRepository, ICursoRepository cursoRepository) {
         this.pagoRepository = pagoRepository;
         this.registroRepo = registroRepo;
         this.usuarioService = usuarioService;
         this.rolService = rolService;
         this.emailService = emailService;
+        this.usuarioRepository = usuarioRepository;
+        this.cursoRepository = cursoRepository;
     }
 
     // Crear PaymentIntent
@@ -68,6 +79,7 @@ public class PaymentService {
     }
 
     // Guardar pago en BD, actualizar registroPago si existe e inscribir al usuario
+    @Transactional
     public Pago guardarPago(Pago pago, Integer registroPagoId) {
         System.out.println("=== INICIANDO GUARDADO DE PAGO ===");
         System.out.println("Pago recibido: " + pago);
@@ -178,22 +190,48 @@ public class PaymentService {
             System.out.println("=== CONDICIONES CUMPLIDAS - PROCEDIENDO CON INSCRIPCIÓN Y CORREO ===");
             try {
                 System.out.println("Inscribiendo usuario en curso...");
-                usuarioService.inscribirEnCurso(pagoGuardado.getUsuarioId(), pagoGuardado.getCursoId());
-                System.out.println("Usuario inscrito exitosamente");
+                
+                // Obtener usuario y curso directamente para evitar LazyInitializationException
+                Optional<Usuario> usuarioOpt = usuarioRepository.findById(pagoGuardado.getUsuarioId());
+                Optional<Curso> cursoOpt = cursoRepository.findById(pagoGuardado.getCursoId());
+                
+                if (usuarioOpt.isPresent() && cursoOpt.isPresent()) {
+                    Usuario usuario = usuarioOpt.get();
+                    Curso curso = cursoOpt.get();
+                    
+                    // Inicializar la lista de cursos comprados si es nula
+                    if (usuario.getCursosComprados() == null) {
+                        usuario.setCursosComprados(new ArrayList<>());
+                    }
+                    
+                    // Verificar si ya está inscrito
+                    if (!usuario.getCursosComprados().contains(curso)) {
+                        usuario.getCursosComprados().add(curso);
+                        usuarioRepository.save(usuario);
+                        
+                        // Actualizar también el usuario asociado directamente al curso
+                        curso.setUsuario(usuario);
+                        cursoRepository.save(curso);
+                        
+                        System.out.println("Usuario inscrito exitosamente en el curso");
+                    } else {
+                        System.out.println("Usuario ya estaba inscrito en el curso");
+                    }
+                }
 
                 // Enviar correo de confirmación de pago al usuario
-                System.out.println("=== INICIANDO ENVÍO DE CORREO ===");
-                Optional<Usuario> usuarioOpt = usuarioService.findById(pagoGuardado.getUsuarioId());
                 if (usuarioOpt.isPresent()) {
                     Usuario u = usuarioOpt.get();
                     System.out.println("Usuario encontrado para correo: " + u.getNombre() + " (" + u.getEmail() + ")");
                     
-                    String subject = "Pago confirmado - Acceso a tu curso en CodiPlayCo";
+                    String subject = "¡Tu pago ha sido confirmado! - CodiPlayCo";
                     String body = "Hola " + u.getNombre() + ",\n\n" +
-                            "Hemos recibido tu pago correctamente. Ya tienes acceso al curso que acabas de comprar.\n\n" +
-                            "Puedes iniciar sesión en CodiPlayCo con tu correo " + u.getEmail() + ".\n\n" +
-                            "Gracias por aprender con nosotros.\n" +
-                            "Equipo CodiPlayCo";
+                            "¡Gracias por tu compra en *CodiPlayCo*!\n\n" +
+                            "Tu pago ha sido procesado exitosamente y ya tienes acceso a tu curso.\n" +
+                            "Puedes iniciar sesión en nuestra plataforma con tu correo electrónico y la contraseña que registraste.\n\n" +
+                            "Si tienes alguna duda, puedes escribirnos a codiplayco@gmail.com.\n\n" +
+                            "¡Nos vemos en clase!\n" +
+                            "El equipo de CodiPlayCo 💚";
                     
                     System.out.println("Llamando a emailService.enviarCorreo...");
                     emailService.enviarCorreo(u.getEmail(), subject, body);
