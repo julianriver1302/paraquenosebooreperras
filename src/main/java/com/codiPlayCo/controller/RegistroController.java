@@ -15,7 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.codiPlayCo.model.Rol;
 import com.codiPlayCo.model.Usuario;
 import com.codiPlayCo.model.Curso;
-import com.codiPlayCo.service.CursoServiceImplement; // ← Tu implementación real
+import com.codiPlayCo.repository.IRolRepository;
+import com.codiPlayCo.service.CursoServiceImplement;
 import com.codiPlayCo.service.EmailService;
 import com.codiPlayCo.service.UsuarioServiceImplement;
 
@@ -29,7 +30,10 @@ public class RegistroController {
 	private EmailService emailService;
 
 	@Autowired
-	private CursoServiceImplement cursoService; // ← AQUI
+	private CursoServiceImplement cursoService;
+	
+	@Autowired
+	private IRolRepository rolRepository;
 
 	@GetMapping("/registroclasegratis")
 	public String mostrarRegistro(Model model) {
@@ -56,9 +60,10 @@ public class RegistroController {
 			usuario.setFecharegistro(Date.valueOf(LocalDate.now()));
 			usuario.setUltimoAcceso(Date.valueOf(LocalDate.now()));
 
-			Rol rolEstudiante = new Rol();
-			rolEstudiante.setId(3);
-			usuario.setRol(rolEstudiante); 	
+			// Obtener el rol de estudiante (ID 3) desde la base de datos
+			Rol rolEstudiante = rolRepository.findById(3)
+				.orElseThrow(() -> new RuntimeException("Rol de estudiante no encontrado"));
+			usuario.setRol(rolEstudiante);
 
 			usuarioServiceImplement.save(usuario);
 
