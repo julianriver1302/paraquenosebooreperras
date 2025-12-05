@@ -69,6 +69,11 @@ public class IndexController {
 		return "registropago"; // esta vista ahora sí tendrá "curso"
 	}
 
+	@GetMapping("/pago")
+	public String pago() {
+		return "pago";
+	}
+
 	@GetMapping("/gracias")
 	public String gracias() {
 		return "gracias";
