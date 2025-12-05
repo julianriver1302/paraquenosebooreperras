@@ -77,7 +77,7 @@
 
 					<label>Nombre</label>
 
-					<input type="text" id="nombre" required />
+					<input type="text" id="nombre" required placeholder="Nombre"/>
 
 				</div>
 
@@ -85,7 +85,7 @@
 
 					<label>Apellido</label>
 
-					<input type="text" id="apellido" required />
+					<input type="text" id="apellido" required placeholder="Apellidos" />
 
 				</div>
 
@@ -94,14 +94,14 @@
 
 					<label>Tipo Documento</label>
 
-					<input type="text" id="tipoDocumento" required />
+					<input type="text" id="tipoDocumento" required placeholder="Tipo Documento"/>
 
 				</div>
 				<div class="input-container">
 
 					<label>Documento</label>
 
-					<input type="text" id="documento" required />
+					<input type="text" id="documento" required placeholder="Numero Documento" />
 
 				</div>
 
@@ -109,7 +109,7 @@
 
 					<label>Correo electrónico</label>
 
-					<input type="email" id="email" required />
+					<input type="email" id="email" required placeholder="E-mail" />
 
 				</div>
 
@@ -135,7 +135,7 @@
 
 					<label>Número de teléfono</label>
 
-					<input type="tel" id="telefono" required />
+					<input type="tel" id="telefono" required placeholder="Telefono" />
 
 				</div>
 
@@ -159,35 +159,11 @@
 
 
 
-	<!-- modal -->
-	<div id="modal-metodo-pago" style="display:none;">
-		<div>
-			<button id="cerrar-modal-metodo">Cerrar</button>
-			<h3>Resumen</h3>
-			<p>Producto: <span id="producto"></span></p>
-			<p>Valor: $<span id="precio"></span></p>
-
-			<div id="card-element"></div>
-			<div id="card-errors" role="alert" style="color:#c00"></div>
-
-			<button id="payButton">Pagar ahora</button>
-		</div>
-	</div>
-
-
-
 	<!-- SCRIPT -->
 
 	<script>
 		(function () {
-			const stripe = Stripe("pk_test_51SX7JBPq4mgnIKbVAOWyqzo4vG9fVH87XgZhJcxs8BUZl2Z8r7wWnPWnlsQzY7QxKaA41FNaHLXZeuJWxIBHAegA00tHKCkZjT"); // reemplaza por tu pk pública
-			let clientSecret = null;
-			let card = null;
-			let cardMounted = false;
 			let registroId = null;
-			let registropagoId = null;
-
-			const modal = document.getElementById("modal-metodo-pago");
 
 			document.getElementById("form-registro").addEventListener("submit", async (e) => {
 				e.preventDefault();
@@ -213,109 +189,21 @@
 				});
 
 				const regData = await res.json();
-				registroId = regData.id; // id del registro (registro_pago)
-				registropagoId = registroId;
-
-				// 2) Abrir modal y crear PaymentIntent
-				document.getElementById("producto").innerText = registro.cursoNombre;
-				document.getElementById("precio").innerText = registro.precio;
-				modal.style.display = "block";
-
-				// build PaymentRequest DTO for backend
-				const paymentReq = {
-					precio: registro.precio,
-					currency: "cop",
-					description: registro.cursoNombre,
+				registroId = regData.id;
+				
+				// Redirigir a la página de pago con los datos necesarios en la URL
+				const params = new URLSearchParams({
+					registroId: registroId,
+					cursoNombre: registro.cursoNombre,
+					precio: registro.precio.toString(),
 					nombre: registro.nombre,
 					email: registro.email,
 					telefono: registro.telefono
-					// amount will be set server-side from precio->centavos, but PaymentRequest setPrecio does it clientside too
-				};
-
-				// create payment intent
-				const res2 = await fetch('/api/payments/create-payment-intent', {
-					method: 'POST',
-					headers: {'Content-Type': 'application/json'},
-					body: JSON.stringify(paymentReq)
 				});
+				window.location.href = '/pago?' + params.toString();
 
-				const intentData = await res2.json();
-				if (intentData.error) {
-					document.getElementById("card-errors").innerText = intentData.error;
-					return;
-				}
-
-				clientSecret = intentData.clientSecret;
-
-				// montar Stripe card element solo una vez
-				if (!cardMounted) {
-					const elements = stripe.elements();
-					card = elements.create('card');
-					card.mount('#card-element');
-
-					card.on('change', function (event) {
-						const displayError = document.getElementById('card-errors');
-						if (event.error) {
-							displayError.textContent = event.error.message;
-						} else {
-							displayError.textContent = '';
-						}
-					});
-
-					cardMounted = true;
-				}
 			});
 
-			document.getElementById('cerrar-modal-metodo').addEventListener('click', () => {
-				modal.style.display = 'none';
-			});
-
-			document.getElementById('payButton').addEventListener('click', async () => {
-				document.getElementById('payButton').disabled = true;
-				document.getElementById('card-errors').innerText = '';
-
-				if (!clientSecret) {
-					document.getElementById('card-errors').innerText = 'Error: no se creó el pago. Intenta de nuevo.';
-					document.getElementById('payButton').disabled = false;
-					return;
-				}
-
-				const {error, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
-					payment_method: {card}
-				});
-
-				if (error) {
-					document.getElementById('card-errors').innerText = error.message;
-					document.getElementById('payButton').disabled = false;
-					return;
-				}
-
-				if (paymentIntent && paymentIntent.status === 'succeeded') {
-					// Guardar en BD mediante /api/payments/confirm
-					const pago = {
-						precio: parseInt(document.getElementById("cursoPrecio").value),
-						stripePaymentId: paymentIntent.id,
-						estado: paymentIntent.status
-					};
-
-					try {
-						await fetch('/api/payments/confirm?registroId=' + registropagoId, {
-							method: 'POST',
-							headers: {'Content-Type': 'application/json'},
-							body: JSON.stringify(pago)
-						});
-						// Si la llamada se completa (independiente del código de estado),
-						// asumimos que el backend procesó el pago y redirigimos a success.
-						window.location.href = '/payment-success';
-					} catch (e) {
-						// Solo en caso de error de red/JS mostramos la vista de fallo
-						window.location.href = '/payment-failed';
-					}
-				} else {
-					document.getElementById('card-errors').innerText = 'Pago no completado.';
-					document.getElementById('payButton').disabled = false;
-				}
-			});
 		})();
 	</script>
 

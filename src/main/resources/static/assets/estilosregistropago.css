@@ -2,41 +2,49 @@
 
 #modal-metodo-pago {
 
-	display: none;
+	display: flex;
 
 	position: fixed;
 
 	z-index: 9999;
 
 	left: 0;
+
 	top: 0;
 
 	width: 100vw;
+
 	height: 100vh;
 
-	background: rgba(0, 0, 0, 0.35);
+	background: radial-gradient(circle at top, rgba(59, 130, 246, 0.28), transparent 65%),
+		linear-gradient(to bottom, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.96));
 
 	justify-content: center;
 
 	align-items: center;
 
+	backdrop-filter: blur(10px);
+
+	animation: overlayFade 0.3s ease-out;
+
 }
 
 #modal-metodo-pago .modal {
 
-	background: linear-gradient(135deg, #eaf1ff 0%, #b6d0f7 60%, #2563eb 100%);
+	background: radial-gradient(circle at top, rgba(56, 189, 248, 0.18), transparent 60%),
+		linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.90));
 
-	border-radius: 22px;
+	border-radius: 18px;
 
-	box-shadow: 0 8px 32px 0 rgba(60, 60, 60, 0.18), 0 1.5px 4px 0 rgba(60, 60, 60, 0.10);
+	box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9), 0 0 22px rgba(56, 189, 248, 0.45);
 
-	max-width: 420px;
+	max-width: 360px;
 
-	width: 100%;
+	width: 90%;
 
-	padding: 38px 24px 32px 24px;
+	padding: 22px 20px 20px 20px;
 
-	border: 1.5px solid #b6d0f7;
+	border: 1.5px solid rgba(56, 189, 248, 0.7);
 
 	position: relative;
 
@@ -46,13 +54,11 @@
 
 	flex-direction: column;
 
-	align-items: center;
+	align-items: stretch;
 
-}
+	backdrop-filter: blur(18px);
 
-#modal-metodo-pago .form {
-
-	background: #fff;
+	animation: modalPop 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
 
 	border-radius: 16px;
 
@@ -254,7 +260,24 @@
 
 }
 
+.summary {
+	margin: 10px 0 20px 0;
+	width: 100%;
+	color: #fff;
+}
 
+.summary-item {
+	margin: 4px 0;
+	font-size: 0.98rem;
+}
+
+.hidden {
+	display: none;
+}
+
+#modal-metodo-pago.hidden {
+	display: none !important;
+}
 
 /* ====== ESTANDARIZACIÓN DE INPUT-CONTAINER PARA FORMULARIOS PRINCIPALES ====== */
 
@@ -267,8 +290,6 @@
 	width: 100%;
 
 }
-
-
 
 .input-container input {
 
@@ -300,8 +321,6 @@
 
 }
 
-
-
 .input-container input:focus {
 
 	border-color: #00d4ff;
@@ -311,8 +330,6 @@
 	transform: translateY(-1px);
 
 }
-
-
 
 .input-container label {
 
@@ -330,8 +347,6 @@
 
 }
 
-
-
 /* Responsive design para formularios */
 
 @media (max-width: 768px) {
@@ -348,8 +363,6 @@
 
 	}
 
-
-
 	.form {
 
 		padding: 1.5rem;
@@ -359,8 +372,6 @@
 		margin: 0 auto;
 
 	}
-
-
 
 	#modal-metodo-pago .modal {
 
@@ -372,8 +383,6 @@
 
 }
 
-
-
 @media (max-width: 480px) {
 
 	.input-container input {
@@ -383,8 +392,6 @@
 		font-size: 0.9rem;
 
 	}
-
-
 
 	.form {
 
@@ -396,12 +403,7 @@
 
 }
 
-
-
 /* ====== FIN ESTILOS ORIGINALES DEL MODAL DE MÉTODO DE PAGO ====== */
-
-
-
 
 
 /* Fondo borroso al abrir */
@@ -432,16 +434,6 @@
 
 }
 
-
-
-.hidden {
-
-	display: none;
-
-}
-
-
-
 /* Caja futurista */
 
 .futuristic-modal {
@@ -470,12 +462,16 @@
 
 	0% {
 		transform: scale(0.7);
+
 		opacity: 0;
+
 	}
 
 	100% {
 		transform: scale(1);
+
 		opacity: 1;
+
 	}
 
 }
@@ -502,13 +498,17 @@
 
 .modal-title {
 
-	font-size: 24px;
+	font-size: 1.35rem;
 
-	color: #00eaff;
+	color: #e0f2fe;
 
 	text-align: center;
 
-	margin-bottom: 5px;
+	margin-bottom: 0.25rem;
+
+	letter-spacing: 0.04em;
+
+	font-weight: 700;
 
 }
 
@@ -516,13 +516,13 @@
 
 .modal-subtitle {
 
-	color: #cfcfcf;
+	color: #94a3b8;
 
-	font-size: 14px;
+	font-size: 0.9rem;
 
 	text-align: center;
 
-	margin-bottom: 15px;
+	margin-bottom: 1rem;
 
 }
 
@@ -530,15 +530,17 @@
 
 .card-element {
 
-	padding: 12px;
+	padding: 0.9rem 0.85rem;
 
-	border-radius: 10px;
+	border-radius: 12px;
 
-	background: rgba(15, 15, 30, 0.9);
+	background: rgba(15, 23, 42, 0.9);
 
-	border: 1px solid #00ffe7;
+	border: 1px solid rgba(56, 189, 248, 0.7);
 
-	margin-bottom: 20px;
+	box-shadow: inset 0 0 14px rgba(15, 23, 42, 0.95);
+
+	margin-bottom: 1.1rem;
 
 }
 

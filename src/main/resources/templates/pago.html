@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago | CodiPlayCo</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet" />
+
+    <link th:href="@{/assets/estilosinicio.css}" rel="stylesheet" />
+    <link th:href="@{/assets/estilosregistropago.css}" rel="stylesheet" />
+
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+
+    <main class="main-form-bg">
+        <!-- solo contenedor vacío para conservar el fondo -->
+    </main>
+
+    <!-- ventana flotante de pago -->
+    <div id="modal-metodo-pago" style="display:flex;">
+        <div class="modal">
+            <button id="cerrar-modal-metodo" class="close-btn" type="button" onclick="window.location.href='/'">
+                <span class="material-icons">close</span>
+            </button>
+            <h3 class="modal-title">Resumen de tu pago</h3>
+            <p class="modal-subtitle">Confirma los datos antes de completar tu compra</p>
+
+            <div class="summary">
+                <p class="summary-item">Producto: <span id="producto"></span></p>
+                <p class="summary-item">Valor: $<span id="precio"></span></p>
+            </div>
+
+            <div id="card-element" class="card-element"></div>
+            <div id="card-errors" role="alert" class="error-text"></div>
+
+            <button id="payButton" class="pay-btn" type="button">Pagar ahora</button>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const stripe = Stripe("pk_test_51SX7JBPq4mgnIKbVAOWyqzo4vG9fVH87XgZhJcxs8BUZl2Z8r7wWnPWnlsQzY7QxKaA41FNaHLXZeuJWxIBHAegA00tHKCkZjT");
+            let clientSecret = null;
+            let card = null;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const registroId = urlParams.get('registroId');
+            const cursoNombre = urlParams.get('cursoNombre');
+            const precio = parseInt(urlParams.get('precio') || '0');
+
+            console.log('=== PARÁMETROS RECIBIDOS ===');
+            console.log('registroId:', registroId);
+            console.log('cursoNombre:', cursoNombre);
+            console.log('precio:', precio);
+
+            document.getElementById('producto').innerText = cursoNombre || '';
+            document.getElementById('precio').innerText = precio || '';
+
+            // Crear PaymentIntent inmediatamente usando los datos de la URL
+            const paymentReq = {
+                precio: precio,
+                currency: "cop",
+                description: cursoNombre || 'Curso CodiPlayCo',
+                nombre: urlParams.get('nombre') || '',
+                email: urlParams.get('email') || '',
+                telefono: urlParams.get('telefono') || ''
+            };
+
+            (async () => {
+                const res2 = await fetch('/api/payments/create-payment-intent', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(paymentReq)
+                });
+
+                const intentData = await res2.json();
+                if (intentData.error) {
+                    document.getElementById("card-errors").innerText = intentData.error;
+                    return;
+                }
+
+                clientSecret = intentData.clientSecret;
+
+                const elements = stripe.elements();
+                card = elements.create('card');
+                card.mount('#card-element');
+
+                card.on('change', function (event) {
+                    const displayError = document.getElementById('card-errors');
+                    if (event.error) {
+                        displayError.textContent = event.error.message;
+                    } else {
+                        displayError.textContent = '';
+                    }
+                });
+            })();
+
+            document.getElementById('payButton').addEventListener('click', async () => {
+                document.getElementById('payButton').disabled = true;
+                document.getElementById('card-errors').innerText = '';
+
+                if (!clientSecret) {
+                    document.getElementById('card-errors').innerText = 'Error: no se creó el pago. Intenta de nuevo.';
+                    document.getElementById('payButton').disabled = false;
+                    return;
+                }
+
+                const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                    payment_method: { card }
+                });
+
+                if (error) {
+                    document.getElementById('card-errors').innerText = error.message;
+                    document.getElementById('payButton').disabled = false;
+                    return;
+                }
+
+                if (paymentIntent && paymentIntent.status === 'succeeded') {
+                    const pago = {
+                        precio: precio,
+                        stripePaymentId: paymentIntent.id,
+                        estado: paymentIntent.status
+                    };
+
+                    try {
+                        console.log('=== ENVIANDO CONFIRMACIÓN DE PAGO ===');
+                        console.log('registroId:', registroId);
+                        console.log('pago:', pago);
+                        
+                        const response = await fetch('/api/payments/confirm?registroId=' + (registroId || ''), {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(pago)
+                        });
+                        
+                        console.log('Respuesta HTTP:', response.status);
+                        const responseData = await response.json();
+                        console.log('Respuesta del servidor:', responseData);
+                        
+                        if (response.ok) {
+                            console.log('Pago confirmado exitosamente');
+                            window.location.href = '/payment-success';
+                        } else {
+                            console.error('Error en la respuesta del servidor:', responseData);
+                            window.location.href = '/payment-failed';
+                        }
+                    } catch (e) {
+                        console.error('Error al confirmar pago:', e);
+                        window.location.href = '/payment-failed';
+                    }
+                } else {
+                    document.getElementById('card-errors').innerText = 'Pago no completado.';
+                    document.getElementById('payButton').disabled = false;
+                }
+            });
+        })();
+    </script>
+
+</body>
+</html>
