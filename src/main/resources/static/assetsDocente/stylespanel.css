@@ -1627,5 +1627,394 @@ body.dark-mode .submenu button:hover {
     border-radius: 8px;
     text-align: center;
 }
+/* ================================================
+   BOTÓN VOLVER A FOROS – Mejor estilo
+   ================================================ */
+.btn-volver {
+    font-family: 'Poppins', sans-serif;
+    background: #4a4eff;
+    color: #fff !important;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px #0001;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.btn-volver:hover {
+    background: #3136e8;
+    transform: translateY(-2px);
+}
+
+/* ================================================
+   PANEL DE DETALLE DEL FORO – Igual tamaño que Foros Creados
+   ================================================ */
+.container .panel {
+    width: 90%;
+    max-width: 850px;
+    margin: 0 auto 1.5rem auto;
+    background: #ffffff;
+    padding: 1.6rem;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px #0002;
+    border-left: 6px solid #4a4eff;
+}
+
+/* Título principal del foro */
+.panel h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    color: #1a1a1a;
+}
+
+/* Descripción */
+.panel p {
+    font-size: 1rem;
+    color: #444;
+    margin-bottom: 0.5rem;
+}
+
+/* Fecha */
+.panel small {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #777;
+}
+
+/* ================================================
+   SECCIÓN DE RESPUESTAS – Estilo unificado
+   ================================================ */
+.panel h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+/* Lista general */
+.lista-foros {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Tarjeta para cada respuesta */
+.foro-item {
+    background: #f6f7ff;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    border-left: 4px solid #4a4eff;
+    box-shadow: 0 3px 10px #0001;
+}
+
+/* Header de cada respuesta */
+.foro-item .foro-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.foro-item strong {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #121212;
+}
+
+.foro-item small {
+    color: #666;
+}
+
+/* Mensaje de la respuesta */
+.foro-item p {
+    margin: 0.4rem 0 0 0;
+    font-size: 0.95rem;
+    color: #333;
+}
+/* --- CONTENEDOR PRINCIPAL DEL FORO --- */
+.foro-container, 
+.foro-box, 
+.foro, 
+.card-foro {
+    width: 100%;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0px 3px 10px rgba(0,0,0,0.15);
+    border-left: 5px solid #6a5acd;
+}
+
+/* --- TÍTULO DEL FORO (Ej: Conocimiento Básico) --- */
+.foro-titulo, 
+.titulo-foro, 
+.name-foro, 
+.titulo {
+    font-size: 20px;
+    margin: 0 0 5px 0;
+    font-weight: bold;
+}
+
+/* --- PREGUNTA ABAJO DEL TÍTULO --- */
+.foro-pregunta, 
+.pregunta, 
+.description {
+    margin: 5px 0 10px 0;
+    font-size: 16px;
+}
+
+/* --- FECHA Y HORA DEBAJO DE LA PREGUNTA --- */
+.fecha-hora, 
+.fecha, 
+.hora, 
+.time {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 15px;
+}
+
+/* --- CONTENEDOR DE ICONOS --- */
+.foro-icons, 
+.iconos, 
+.icons, 
+.actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 15px;
+}
+
+/* --- LOS 3 ICONOS IGUALES --- */
+.foro-icons i,
+.iconos i,
+.icons i,
+.actions i {
+    font-size: 22px;
+    color: #6a5acd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- RESPUESTAS DENTRO DEL MISMO RECUADRO --- */
+.respuestas, 
+.lista-respuestas, 
+.foro-respuestas {
+    margin-top: 20px;
+}
+
+.respuesta, 
+.item-respuesta, 
+.res {
+    background: #f5f5f5;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* --- ESTILOS PARA PROGRESO MEJORADO DE ESTUDIANTES --- */
+.tabla-progreso {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.tabla-progreso th,
+.tabla-progreso td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.tabla-progreso th {
+    background: #f8fafc;
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 0.9rem;
+}
+
+.tabla-progreso tr:hover {
+    background: #f8fafc;
+}
+
+.progreso-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progreso-percentage {
+    font-weight: 600;
+    font-size: 0.9rem;
+    min-width: 45px;
+    color: #2d3748;
+}
+
+.barra-progreso {
+    flex: 1;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+    min-width: 100px;
+}
+
+.progreso {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.progreso.bajo {
+    background: linear-gradient(90deg, #f56565, #fc8181);
+}
+
+.progreso.medio {
+    background: linear-gradient(90deg, #ed8936, #f6ad55);
+}
+
+.progreso.completado {
+    background: linear-gradient(90deg, #48bb78, #68d391);
+}
+
+.estado-completado {
+    color: #48bb78;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.estado-progreso {
+    color: #ed8936;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.estado-inicial {
+    color: #718096;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.tabla-detallada {
+    margin-top: 1.5rem;
+}
+
+.modulo-actual,
+.leccion-actual {
+    background: #4299e1;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.sin-progreso {
+    color: #a0aec0;
+    font-style: italic;
+}
+
+.progreso-modulo {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.progreso-modulo span {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.leccion-completada {
+    background: #48bb78;
+    color: white;
+}
+
+.leccion-pendiente {
+    background: #e2e8f0;
+    color: #a0aec0;
+}
+
+.leccion-completada:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(72, 187, 120, 0.3);
+}
+
+.no-estudiantes {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 2px dashed #cbd5e0;
+    color: #718096;
+}
+
+.no-estudiantes i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #a0aec0;
+}
+
+.no-estudiantes p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+}
+
+.no-estudiantes .info {
+    font-size: 0.9rem;
+    color: #a0aec0;
+    font-style: italic;
+}
+
+/* Responsive para tablas */
+@media (max-width: 768px) {
+    .tabla-progreso {
+        font-size: 0.8rem;
+    }
+    
+    .tabla-progreso th,
+    .tabla-progreso td {
+        padding: 8px 10px;
+    }
+    
+    .progreso-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .barra-progreso {
+        width: 100%;
+    }
+    
+    .progreso-modulo span {
+        width: 20px;
+        height: 20px;
+        font-size: 0.6rem;
+    }
+}
+
 
 

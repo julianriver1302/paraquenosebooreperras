@@ -6,46 +6,318 @@
     <title>Detalle Foro</title>
     <link rel="stylesheet" th:href="@{/assetsPanelUsuaario/stylespanelusuario.css}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <style>
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .panel {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 8px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-back {
+            background: none;
+            color: #4CAF50;
+            padding: 0;
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            font-size: 15px;
+        }
+        
+        .btn-back i {
+            margin-right: 8px;
+        }
+        
+        .btn-back:hover {
+            background: none;
+            text-decoration: underline;
+        }
+        
+        .foro-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .foro-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin: 0 0 10px 0;
+        }
+        
+        .foro-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .foro-content {
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .respuestas-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .respuestas-title {
+            font-size: 1.4rem;
+            color: #333;
+            margin: 0;
+        }
+        
+        .respuesta-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .respuesta-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .respuesta-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .respuesta-info {
+            flex: 1;
+        }
+        
+        .respuesta-autor {
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 3px 0;
+        }
+        
+        .respuesta-fecha {
+            color: #888;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        
+        .respuesta-contenido {
+            color: #444;
+            line-height: 1.5;
+            margin: 0 0 0 52px;
+        }
+        
+        .sin-respuestas {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: space-around;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: #666;
+            text-align: center;
+            padding: 5px 0;
+        }
+        
+        .nav-link i {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 3px;
+        }
+        
+        .nav-link span {
+            font-size: 0.8rem;
+        }
+        
+        .nav-link.active {
+            color: #4CAF50;
+        }
+        
+        .nav-link.active span {
+            font-weight: 500;
+        }
+        
+        .content-wrapper {
+            padding-bottom: 70px;
+        }
+    </style>
 </head>
 <body>
 <div class="main-layout">
-    <header>
-        <div class="header-logo-title">
-            <h1 class="titulo-blanco"><span class="panel-icon"><i class="fa-solid fa-comments"></i></span>Foro</h1>
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="panel">
-            <h2 th:text="${foro.titulo}">Título del foro</h2>
-            <p th:text="${foro.descripcion}">Descripción del foro</p>
-            <small th:text="${#temporals.format(foro.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</small>
-        </div>
-
-        <div class="panel">
-            <h3>Respuestas</h3>
-            <div th:if="${respuestas == null or #lists.isEmpty(respuestas)}">
-                <p>Aún no hay respuestas en este foro. ¡Sé el primero en responder!</p>
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Botón de volver -->
+            <a th:href="@{/PanelControlUsuario/foros}" class="btn btn-back">
+                <i class="fas fa-arrow-left"></i> Volver a foros
+            </a>
+            
+            <!-- Encabezado del foro -->
+            <div class="panel">
+                <div class="foro-header">
+                    <h1 class="foro-title" th:text="${foro.titulo}">Título del foro</h1>
+                    <div class="foro-meta">
+                        <i class="far fa-calendar-alt"></i> 
+                        <span th:text="${#temporals.format(foro.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha de publicación</span>
+                    </div>
+                </div>
+                <div class="foro-content" th:text="${foro.descripcion}">
+                    Descripción del foro
+                </div>
             </div>
-            <div th:if="${respuestas != null and !#lists.isEmpty(respuestas)}">
-                <ul class="lista-respuestas">
-                    <li th:each="resp : ${respuestas}">
-                        <div class="respuesta-item">
-                            <strong th:text="${resp.autor.nombre}">Nombre autor</strong>
-                            <small th:text="${#temporals.format(resp.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</small>
-                            <p th:text="${resp.mensaje}">Mensaje</p>
+
+            <!-- Sección de respuestas -->
+            <div class="panel">
+                <div class="respuestas-header">
+                    <h2 class="respuestas-title">
+                        <i class="far fa-comments" style="margin-right: 10px;"></i>
+                        Respuestas
+                    </h2>
+                </div>
+                
+                <!-- Lista de respuestas -->
+                <div th:if="${respuestas != null and !#lists.isEmpty(respuestas)}">
+                    <div th:each="resp : ${respuestas}" class="respuesta-item">
+                        <div class="respuesta-header">
+                            <div class="respuesta-avatar" th:text="${#strings.substring(resp.autor.nombre, 0, 1)}">
+                                A
+                            </div>
+                            <div class="respuesta-info">
+                                <h4 class="respuesta-autor" th:text="${resp.autor.nombre}">Nombre autor</h4>
+                                <p class="respuesta-fecha" th:text="${#temporals.format(resp.fechaCreacion, 'dd/MM/yyyy HH:mm')}">
+                                    Fecha
+                                </p>
+                            </div>
                         </div>
-                    </li>
-                </ul>
+                        <p class="respuesta-contenido" th:text="${resp.mensaje}">
+                            Contenido de la respuesta
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Mensaje cuando no hay respuestas -->
+                <div th:if="${respuestas == null or #lists.isEmpty(respuestas)}" class="sin-respuestas">
+                    <i class="far fa-comment-slash" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+                    <p>Aún no hay respuestas en este foro. ¡Sé el primero en responder!</p>
+                </div>
+            </div>
+
+            <!-- Formulario de respuesta -->
+            <div class="panel">
+                <h3 style="margin-top: 0; margin-bottom: 20px; color: #333;">
+                    <i class="far fa-edit" style="margin-right: 10px;"></i>
+                    Responder
+                </h3>
+                <form th:action="@{'/PanelControlUsuario/foros/' + ${foro.id} + '/responder'}" method="post">
+                    <div class="form-group">
+                        <label for="mensaje">Tu respuesta:</label>
+                        <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribe tu respuesta..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn">
+                        <i class="far fa-paper-plane" style="margin-right: 8px;"></i>
+                        Enviar respuesta
+                    </button>
+                </form>
             </div>
         </div>
-
-        <div class="panel">
-            <h3>Responder</h3>
-            <form th:action="@{'/PanelControlUsuario/foros/' + ${foro.id} + '/responder'}" method="post">
-                <textarea name="mensaje" rows="3" placeholder="Escribe tu respuesta..." required></textarea>
-                <button type="submit" class="btn">Enviar respuesta</button>
-            </form>
+    </div>
+    
+    <!-- Barra de navegación inferior -->
+    <div class="bottom-nav">
+        <div class="nav-links">
+            <a th:href="@{/PanelControlUsuario/inicio}" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Inicio</span>
+            </a>
+            <a th:href="@{/PanelControlUsuario/mis_cursos}" class="nav-link">
+                <i class="fas fa-book"></i>
+                <span>Cursos</span>
+            </a>
+            <a th:href="@{/PanelControlUsuario/foros}" class="nav-link active">
+                <i class="fas fa-comments"></i>
+                <span>Foros</span>
+            </a>
+            <a th:href="@{/PanelControlUsuario/editar-perfil}" class="nav-link">
+                <i class="fas fa-user"></i>
+                <span>Perfil</span>
+            </a>
         </div>
     </div>
 </div>

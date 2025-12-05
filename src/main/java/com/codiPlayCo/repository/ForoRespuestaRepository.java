@@ -11,4 +11,6 @@ import com.codiPlayCo.model.ForoRespuesta;
 public interface ForoRespuestaRepository extends JpaRepository<ForoRespuesta, Integer> {
 
 	List<ForoRespuesta> findByForoId(Integer foroId);
+	List<ForoRespuesta> findByForoIdOrderByFechaCreacionAsc(Integer foroId);
+	int countByForoId(Integer foroId);
 }

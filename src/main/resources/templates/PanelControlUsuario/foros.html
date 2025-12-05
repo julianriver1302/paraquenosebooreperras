@@ -6,6 +6,199 @@
     <title>Foros</title>
     <link rel="stylesheet" th:href="@{/assetsPanelUsuaario/stylespanelusuario.css}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <style>
+        .panel {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+        
+        .form-col {
+            flex: 1;
+            padding: 0 10px;
+            min-width: 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #444;
+        }
+        
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn-crear {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+            margin-top: 10px;
+        }
+        
+        .btn-crear:hover {
+            background-color: #45a049;
+        }
+        
+        .foro-list {
+            margin-top: 20px;
+        }
+        
+        .foro-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .foro-item:last-child {
+            border-bottom: none;
+        }
+        
+        .foro-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            color: #4CAF50;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .foro-content {
+            flex: 1;
+        }
+        
+        .foro-title {
+            font-weight: 600;
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+        
+        .foro-desc {
+            color: #666;
+            font-size: 14px;
+            margin: 0 0 5px 0;
+        }
+        
+        .foro-meta {
+            font-size: 12px;
+            color: #888;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .respuestas-count {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .foro-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-action {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px;
+            color: #666;
+            transition: color 0.2s;
+        }
+        
+        .btn-action:hover {
+            color: #4CAF50;
+        }
+        
+        .btn-edit {
+            color: #2196F3;
+        }
+        
+        .btn-delete {
+            color: #f44336;
+        }
+        
+        .foro-item a.btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .foro-item a.btn:hover {
+            background-color: #45a049;
+        }
+        
+        .panel {
+            margin-bottom: 2rem;
+        }
+        
+        .iconos-inferiores {
+            display: flex;
+            justify-content: space-around;
+            margin-top: auto;
+            padding: 1.5rem 0 0;
+            border-top: 1px solid #eee;
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+        }
+        
+        .iconos-inferiores a {
+            color: #555;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .iconos-inferiores a:hover {
+            color: #4CAF50;
+        }
+    </style>
 </head>
 <body>
 <div class="main-layout">
@@ -15,35 +208,91 @@
         </div>
     </header>
 
-    <div class="container">
-        <div class="panel" th:if="${cursos == null or #lists.isEmpty(cursos)}">
-            <h2><span class="panel-icon"><i class="fa-solid fa-comment-dots"></i></span>Foros</h2>
-            <p>No tienes cursos inscritos todavía, por lo tanto no hay foros disponibles.</p>
+    <div class="container" style="max-width: 1000px; margin: 0 auto; padding: 20px;">
+        <!-- Mostrar mensaje de error si existe -->
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}" style="margin-bottom: 20px;"></div>
+        
+        <!-- Mostrar mensaje si no hay foros -->
+        <div th:if="${forosPorCurso == null or forosPorCurso.isEmpty()}" 
+             style="min-height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+            <h2 style="font-size: 1.5rem; margin-bottom: 1rem;"><i class="fa-regular fa-comment-dots" style="margin-right: 10px;"></i>Foros</h2>
+            <p style="color: #666;">
+                No hay foros disponibles en este momento.
+            </p>
         </div>
 
-        <div class="panel" th:if="${cursos != null and !#lists.isEmpty(cursos)}">
-            <h2><span class="panel-icon"><i class="fa-solid fa-comment-dots"></i></span>Foros de mis cursos</h2>
+        <!-- Lista de foros - Solo mostrar si hay foros -->
+        <div th:if="${forosPorCurso != null and not forosPorCurso.isEmpty()}" class="panel" style="position: relative;">
+            <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: #333;">Foros de Discusión</h2>
+            
+            <div th:each="entry : ${forosPorCurso.entrySet()}" class="foro-curso-bloque">
+                <h3 style="font-size: 1.2rem; color: #444; margin: 1.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #eee;">
+                    <i class="fas fa-book" style="margin-right: 8px; color: #4CAF50;"></i>
+                    <span th:text="${entry.key.curso}">Nombre curso</span>
+                </h3>
 
-            <div th:each="curso : ${cursos}" class="foro-curso-bloque">
-                <h3 th:text="${curso.curso}">Nombre curso</h3>
-
-                <div th:if="${#maps.containsKey(forosPorCurso, curso.id) and !#lists.isEmpty(forosPorCurso[curso.id])}">
-                    <ul class="lista-foros">
-                        <li th:each="foro : ${forosPorCurso[curso.id]}">
-                            <div class="foro-item">
-                                <strong th:text="${foro.titulo}">Título foro</strong><br />
-                                <span th:text="${foro.descripcion}">Descripción</span><br />
-                                <small th:text="${#temporals.format(foro.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</small><br />
-                                <a th:href="@{'/PanelControlUsuario/foros/' + ${foro.id}}" class="btn">Ver y responder</a>
+                <div th:if="${!#lists.isEmpty(entry.value)}">
+                    <div class="foro-list">
+                        <div th:each="foro : ${entry.value}" class="foro-item">
+                            <div class="foro-icon">
+                                <i class="far fa-comment-dots"></i>
                             </div>
-                        </li>
-                    </ul>
+                            <div class="foro-content">
+                                <h4 class="foro-title" th:text="${foro.titulo}">Título foro</h4>
+                                <p class="foro-desc" th:text="${foro.descripcion}">Descripción del foro</p>
+                                <div class="foro-meta">
+                                    <i class="far fa-clock"></i> 
+                                    <span th:text="${#temporals.format(foro.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                                    <span class="respuestas-count" th:if="${respuestasPorForo != null and respuestasPorForo.containsKey(entry.key.id) and respuestasPorForo[entry.key.id].containsKey(foro.id)}">
+                                        <i class="far fa-comments"></i>
+                                        <span th:text="${respuestasPorForo[entry.key.id][foro.id]} + ' respuesta' + (${respuestasPorForo[entry.key.id][foro.id]} == 1 ? '' : 's')">0 respuestas</span>
+                                    </span>
+                                    <span class="respuestas-count" th:if="${respuestasPorForo == null or not respuestasPorForo.containsKey(entry.key.id) or not respuestasPorForo[entry.key.id].containsKey(foro.id)}">
+                                        <i class="far fa-comments"></i>
+                                        0 respuestas
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="foro-actions">
+                                <a th:href="@{'/PanelControlUsuario/foros/' + ${foro.id}}" class="btn-action" title="Ver foro y responder">
+                                    <i class="far fa-comment"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div th:if="${!#maps.containsKey(forosPorCurso, curso.id) || #lists.isEmpty(forosPorCurso[curso.id])}">
-                    <p>No hay foros para este curso aún.</p>
+                <div th:if="${#lists.isEmpty(entry.value)}" 
+                     style="padding: 15px; background: #f9f9f9; border-radius: 4px; text-align: center; color: #666;">
+                    <i class="far fa-comment-slash" style="margin-right: 5px;"></i>
+                    No hay foros para este curso aún.
                 </div>
             </div>
+            
+            <!-- Barra de navegación inferior -->
+            <div class="bottom-nav" style="position: fixed; bottom: 0; left: 0; right: 0; background: white; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); padding: 10px 0; z-index: 1000;">
+                <div style="display: flex; justify-content: space-around; max-width: 600px; margin: 0 auto;">
+                    <a th:href="@{/PanelControlUsuario/inicio}" style="text-decoration: none; color: #666; text-align: center; padding: 5px 0;" title="Inicio">
+                        <i class="fas fa-home" style="display: block; font-size: 1.5rem; margin-bottom: 3px;"></i>
+                        <span style="font-size: 0.8rem;">Inicio</span>
+                    </a>
+                    <a th:href="@{/PanelControlUsuario/mis_cursos}" style="text-decoration: none; color: #666; text-align: center; padding: 5px 0;" title="Cursos">
+                        <i class="fas fa-book" style="display: block; font-size: 1.5rem; margin-bottom: 3px;"></i>
+                        <span style="font-size: 0.8rem;">Cursos</span>
+                    </a>
+                    <a th:href="@{/PanelControlUsuario/foros}" style="text-decoration: none; color: #4CAF50; text-align: center; padding: 5px 0;" title="Foros">
+                        <i class="fas fa-comments" style="display: block; font-size: 1.5rem; margin-bottom: 3px;"></i>
+                        <span style="font-size: 0.8rem; font-weight: 500;">Foros</span>
+                    </a>
+                    <a th:href="@{/PanelControlUsuario/editar-perfil}" style="text-decoration: none; color: #666; text-align: center; padding: 5px 0;" title="Perfil">
+                        <i class="fas fa-user" style="display: block; font-size: 1.5rem; margin-bottom: 3px;"></i>
+                        <span style="font-size: 0.8rem;">Perfil</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Espacio para la barra de navegación inferior -->
+            <div style="height: 70px;"></div>
         </div>
     </div>
 </div>

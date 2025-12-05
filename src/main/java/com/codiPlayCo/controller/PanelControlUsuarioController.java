@@ -20,6 +20,8 @@ import com.codiPlayCo.service.IUsuarioService;
 import com.codiPlayCo.service.ICursoService;
 import com.codiPlayCo.repository.ForoRepository;
 import com.codiPlayCo.repository.ForoRespuestaRepository;
+import com.codiPlayCo.repository.MensajeRepository;
+import com.codiPlayCo.model.Mensaje;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -37,6 +39,9 @@ public class PanelControlUsuarioController {
 
 	@Autowired
 	private ForoRespuestaRepository foroRespuestaRepository;
+
+	@Autowired
+	private MensajeRepository mensajeRepository;
 
 	@GetMapping("/PanelControlUsuario/inicio")
 	public String inicio(HttpSession session, Model model) {
@@ -189,10 +194,58 @@ public class PanelControlUsuarioController {
 	@GetMapping("/PanelControlUsuario/bandeja")
 	public String bandeja(HttpSession session, Model model) {
 		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-		if (idUsuario != null) {
-			usuarioService.findById(idUsuario).ifPresent(u -> model.addAttribute("usuario", u));
+		Integer rol = (Integer) session.getAttribute("rol");
+		if (idUsuario == null || rol == null || rol != 3) {
+			return "redirect:/iniciosesion?error=acceso_denegado";
 		}
+
+		Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
+		if (usuario == null) {
+			return "redirect:/iniciosesion?error=acceso_denegado";
+		}
+
+		// Mensajes para el estudiante
+		java.util.List<Mensaje> recibidos = mensajeRepository.findByDestinatarioIdOrderByFechaEnvioDesc(idUsuario);
+		java.util.List<Mensaje> enviados = mensajeRepository.findByRemitenteIdOrderByFechaEnvioDesc(idUsuario);
+
+		model.addAttribute("usuario", usuario);
+		model.addAttribute("mensajesRecibidos", recibidos);
+		model.addAttribute("mensajesEnviados", enviados);
 		return "PanelControlUsuario/bandeja";
+	}
+
+	@PostMapping("/PanelControlUsuario/bandeja/responder")
+	public String responderMensaje(@RequestParam("destinatarioId") Integer destinatarioId,
+	                              @RequestParam("contenido") String contenido,
+	                              HttpSession session,
+	                              RedirectAttributes redirectAttrs) {
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+		Integer rol = (Integer) session.getAttribute("rol");
+		if (idUsuario == null || rol == null || rol != 3) {
+			return "redirect:/iniciosesion?error=acceso_denegado";
+		}
+
+		Usuario remitente = usuarioService.findById(idUsuario).orElse(null);
+		Usuario destinatario = usuarioService.findById(destinatarioId).orElse(null);
+		if (remitente == null || destinatario == null) {
+			redirectAttrs.addFlashAttribute("error", "No se pudo enviar la respuesta.");
+			return "redirect:/PanelControlUsuario/bandeja";
+		}
+
+		if (contenido == null || contenido.trim().isEmpty()) {
+			redirectAttrs.addFlashAttribute("error", "El contenido del mensaje no puede estar vacío.");
+			return "redirect:/PanelControlUsuario/bandeja";
+		}
+
+		Mensaje respuesta = new Mensaje();
+		respuesta.setRemitente(remitente);
+		respuesta.setDestinatario(destinatario);
+		respuesta.setContenido(contenido.trim());
+		respuesta.setLeido(false);
+		mensajeRepository.save(respuesta);
+
+		redirectAttrs.addFlashAttribute("mensaje", "Respuesta enviada correctamente.");
+		return "redirect:/PanelControlUsuario/bandeja";
 	}
 
 	@PostMapping("/PanelControlUsuario/modulo2/leccion1/completar")
@@ -225,6 +278,53 @@ public class PanelControlUsuarioController {
 		return "PanelControlUsuario/soporte";
 	}
 
+
+
+	@GetMapping("/PanelControlUsuario/foros")
+	public String listarForosEstudiante(Model model, HttpSession session) {
+		// Verificar autenticación y rol
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+		Integer rol = (Integer) session.getAttribute("rol");
+
+		if (idUsuario == null || rol == null || rol != 3) {
+			return "redirect:/iniciosesion?error=acceso_denegado";
+		}
+
+		try {
+			// Obtener el usuario
+			Usuario usuario = usuarioService.findById(idUsuario)
+					.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+			// Obtener todos los foros ordenados por fecha de creación
+			List<Foro> foros = foroRepository.findAllByOrderByFechaCreacionDesc();
+			
+			// Agrupar foros por curso
+			Map<Curso, List<Foro>> forosPorCurso = new HashMap<>();
+			Map<Integer, Map<Integer, Integer>> respuestasPorForo = new HashMap<>();
+
+			for (Foro foro : foros) {
+				Curso curso = foro.getCurso();
+				forosPorCurso.computeIfAbsent(curso, k -> new ArrayList<>()).add(foro);
+				
+				// Contar respuestas para cada foro
+				int count = foroRespuestaRepository.countByForoId(foro.getId());
+				respuestasPorForo
+					.computeIfAbsent(curso.getId(), k -> new HashMap<>())
+					.put(foro.getId(), count);
+			}
+
+			// Enviar datos a la vista
+			model.addAttribute("usuario", usuario);
+			model.addAttribute("forosPorCurso", forosPorCurso);
+			model.addAttribute("respuestasPorForo", respuestasPorForo);
+			
+		} catch (Exception e) {
+			model.addAttribute("error", "Error al cargar los foros: " + e.getMessage());
+		}
+
+		return "PanelControlUsuario/foros";
+	}
+
 	@GetMapping("/PanelControlUsuario/foros/{foroId}")
 	public String detalleForoEstudiante(@PathVariable("foroId") Integer foroId, HttpSession session, Model model) {
 		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
@@ -241,11 +341,12 @@ public class PanelControlUsuarioController {
 		}
 
 		Foro foro = foroOpt.get();
-		List<ForoRespuesta> respuestas = foroRespuestaRepository.findByForoId(foroId);
+		List<ForoRespuesta> respuestas = foroRespuestaRepository.findByForoIdOrderByFechaCreacionAsc(foroId);
 
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("foro", foro);
 		model.addAttribute("respuestas", respuestas);
+		model.addAttribute("nuevaRespuesta", new ForoRespuesta());
 		return "PanelControlUsuario/foro-detalle";
 	}
 

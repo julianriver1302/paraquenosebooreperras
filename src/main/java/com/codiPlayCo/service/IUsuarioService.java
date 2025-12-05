@@ -15,4 +15,7 @@ public interface IUsuarioService {
     List<Usuario> findDocentesActivos();
     List<Usuario> findByCursoComprado(Integer cursoId);
     void inscribirEnCurso(Integer idEstudiante, Integer idCurso);
+    
+    // Obtener usuario con sus cursos cargados
+    Optional<Usuario> findByIdWithCursos(Integer id);
 }

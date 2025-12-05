@@ -15,8 +15,18 @@ public interface ICursoRepository extends JpaRepository<Curso, Integer> {
 	@Query("SELECT c FROM Curso c JOIN c.usuarios u WHERE u.id = :usuarioId")
 	List<Curso> findByUsuarioId(@Param("usuarioId") Integer usuarioId);
 
+	// Obtener cursos en los que el usuario está inscrito
+	@Query("SELECT DISTINCT c FROM Curso c JOIN c.usuarios u WHERE u.id = :usuarioId")
+	List<Curso> findCursosCompradosByUsuarioId(@Param("usuarioId") Integer usuarioId);
+
 	// Obtener cursos asignados a un docente específico (por AsignacionDocente)
 	@Query("SELECT DISTINCT c FROM Curso c LEFT JOIN FETCH c.usuarios WHERE c.asignacionDocente.usuario.id = :docenteId")
 	List<Curso> findByDocenteId(@Param("docenteId") Integer docenteId);
+	
+	// Verificar si un usuario está inscrito en un curso específico
+	@Query("SELECT COUNT(c) > 0 FROM Curso c JOIN c.usuarios u WHERE c.id = :cursoId AND u.id = :usuarioId")
+	boolean existsByIdAndUsuariosId(@Param("cursoId") Integer cursoId, @Param("usuarioId") Integer usuarioId);
+
+	
 
 }

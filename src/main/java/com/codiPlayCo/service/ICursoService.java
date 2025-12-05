@@ -25,4 +25,12 @@ public interface ICursoService {
     List<Curso> findByDocenteId(Integer docenteId);
 
 	Optional<Curso> findById(Integer idCurso);
+
+	// Método para obtener cursos comprados por estudiante (evita LazyInitializationException)
+	List<Curso> findCursosCompradosByUsuarioId(Integer usuarioId);
+    
+
+	
+	// Verificar si un usuario está inscrito en un curso
+	boolean estaUsuarioInscritoEnCurso(Integer usuarioId, Integer cursoId);
 }

@@ -30,6 +30,9 @@
 					<li class="nav-item">
 						<a th:href="@{/PanelControlUsuario/mis_logros}"><i class="fas fa-medal"></i> Mis logros</a>
 					</li>
+					<li class="nav-item">
+											<a th:href="@{/PanelControlUsuario/foros}"><i class="fas fa-medal"></i> foros</a>
+										</li>
 				</ul>
 			</nav>
 
@@ -51,10 +54,10 @@
 				<!-- ✅ Mostrar lista de cursos -->
 				<div class="cursos-lista" th:if="${!#lists.isEmpty(cursos)}">
 					<div class="curso-card" th:each="curso : ${cursos}">
-						<h3 th:text="${curso.nombre}">Nombre del curso</h3>
+						<h3 th:text="${curso.curso}">Nombre del curso</h3>
 						<p th:text="${curso.descripcion}">Descripción del curso</p>
-						<p><strong>Duración:</strong> <span th:text="${curso.duracion}">4 semanas</span></p>
-						<p><strong>Profesor:</strong> <span th:text="${curso.profesor}">Profesor X</span></p>
+						<p><strong>Precio:</strong> <span th:text="${curso.precio}">$100</span></p>
+						<p><strong>Dirigido a:</strong> <span th:text="${curso.dirigido}">Todos</span></p>
 					</div>
 				</div>
 			</section>

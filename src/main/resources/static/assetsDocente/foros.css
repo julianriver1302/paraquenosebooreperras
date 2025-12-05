@@ -1,0 +1,861 @@
+/* Estilos para la lista de foros */
+.lista-foros {
+    list-style: none;
+    padding: 0;
+}
+
+.lista-foros li {
+    background: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-left: 4px solid #4CAF50;
+    transition: all 0.3s ease;
+}
+
+.dark-mode .lista-foros li {
+    background: #2d2d2d;
+    border-left-color: #4CAF50;
+}
+
+.foro-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.foro-header strong {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.dark-mode .foro-header strong {
+    color: #fff;
+}
+
+.foro-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-editar {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-editar:hover {
+    background: #45a049;
+}
+
+.btn-ver-respuestas {
+    background: #2196F3;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.btn-ver-respuestas:hover {
+    background: #0b7dda;
+}
+
+.btn-eliminar {
+    background: #f44336;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-eliminar:hover {
+    background: #d32f2f;
+}
+
+/* Estilos del modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+}
+
+.dark-mode .modal-content {
+    background-color: #2d2d2d;
+    color: #fff;
+}
+
+.close-modal {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.dark-mode .form-group input[type="text"],
+.dark-mode .form-group textarea {
+    background-color: #3d3d3d;
+    color: #fff;
+    border-color: #555;
+}
+
+.btn-guardar {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-guardar:hover {
+    background: #0b7dda;
+}
+
+/* Mejoras de accesibilidad */
+button:focus {
+    outline: 2px solid #4CAF50;
+    outline-offset: 2px;
+}
+
+/* Mejoras para móviles */
+@media (max-width: 768px) {
+    .foro-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .foro-actions {
+        margin-top: 8px;
+        width: 100%;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 20% auto;
+    }
+}
+
+/* Panel styles */
+.panel {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+    width: 90%;
+    max-width: 800px;
+    box-sizing: border-box;
+}
+
+/* Estilo específico para el panel de Crear Foro */
+.panel:has(h2:contains('Crear Foro')) {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+
+.dark-mode .panel {
+    background: #2d2d2d;
+    border-color: #444;
+}
+
+.panel h2, .panel h3 {
+    margin-top: 0;
+    color: #2d3748;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dark-mode .panel h2,
+.dark-mode .panel h3 {
+    color: #fff;
+}
+
+.panel-icon {
+    color: #4a6cf7;
+}
+
+/* Form styles */
+.form-foro {
+    max-width: 50%;
+    margin: 1rem auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-foro label {
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.dark-mode .form-foro label {
+    color: #e2e8f0;
+}
+
+.form-foro input[type="text"],
+.form-foro select,
+.form-foro textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+}
+
+.dark-mode .form-foro input[type="text"],
+.dark-mode .form-foro select,
+.dark-mode .form-foro textarea {
+    background-color: #3d3d3d;
+    color: #fff;
+    border-color: #555;
+}
+
+.form-foro button[type="submit"] {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    align-self: flex-start;
+    transition: background-color 0.2s;
+}
+
+.form-foro button[type="submit"]:hover {
+    background: #45a049;
+}
+
+/* Foro item styles */
+.foro-item {
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 4px solid #4CAF50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+/* Contenido principal del foro */
+.foro-content {
+    flex: 1;
+    min-width: 0; /* Para evitar que el contenido se desborde */
+}
+
+/* Estilo para la cabecera del foro */
+.foro-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Estilo para el título del foro */
+.foro-header strong {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: auto;
+}
+
+/* Contenedor de acciones */
+.foro-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* Estilo para los botones de acción */
+.foro-actions .btn-editar,
+.foro-actions .btn-ver-respuestas,
+.foro-actions .btn-eliminar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+/* Estilo para los íconos dentro de los botones */
+.foro-actions .btn-editar i,
+.foro-actions .btn-ver-respuestas i,
+.foro-actions .btn-eliminar i {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* Estilo para el formulario de eliminar */
+.foro-actions form {
+    display: inline-block;
+    margin: 0;
+    line-height: 0; /* Elimina el espacio extra debajo del formulario */
+}
+
+/* Asegurar que el botón de eliminar mantenga el mismo estilo */
+.foro-actions .btn-eliminar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+}
+
+/* Estilo para la descripción del foro */
+.foro-item p {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #4a5568;
+}
+
+/* Estilo para la fecha */
+.foro-item small {
+    display: block;
+    margin-top: 0.25rem;
+    color: #718096;
+    font-size: 0.8rem;
+}
+
+.dark-mode .foro-item {
+    background: #2d2d2d;
+    border-left-color: #4CAF50;
+}
+
+.foro-item p {
+    margin: 0.5rem 0;
+    color: #4a5568;
+}
+
+.dark-mode .foro-item p {
+    color: #e2e8f0;
+}
+
+.foro-item small {
+    color: #718096;
+    font-size: 0.8rem;
+}
+
+/* Alert styles */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+/* Form styles */
+.form-foro .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-foro .form-group {
+    margin-bottom: 1rem;
+}
+
+.form-foro .form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-foro .form-actions {
+    grid-column: 1 / -1;
+    text-align: right;
+    margin-top: 1rem;
+}
+
+/* Forum list styles */
+.forum-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.forum-card {
+    display: flex;
+    align-items: flex-start;
+    background: #fff;
+    border-radius: 8px;
+    padding: 1.25rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #e2e8f0;
+}
+
+.forum-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.forum-icon {
+    font-size: 1.5rem;
+    color: #4a6cf7;
+    margin-right: 1rem;
+    margin-top: 0.25rem;
+}
+
+.forum-content {
+    flex: 1;
+}
+
+.forum-card h4 {
+    margin: 0 0 0.5rem 0;
+    color: #2d3748;
+}
+
+.forum-meta {
+    font-size: 0.875rem;
+    color: #718096;
+    margin: 0.25rem 0;
+}
+
+.forum-excerpt {
+    margin: 0.5rem 0 0;
+    color: #4a5568;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+}
+
+.forum-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 1rem;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    color: #718096;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.btn-icon:hover {
+    background: #f7fafc;
+    color: #4a6cf7;
+}
+
+.btn-delete:hover {
+    color: #e53e3e;
+}
+
+/* Forum detail styles */
+.forum-detail {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.forum-post {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.forum-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.forum-info {
+    flex: 1;
+}
+
+.forum-info h2 {
+    margin: 0 0 0.25rem 0;
+    color: #2d3748;
+}
+
+.forum-content {
+    padding: 0 0 0 2.5rem;
+}
+
+/* Replies section */
+.replies-section {
+    margin-top: 2rem;
+}
+
+.replies-section h3 {
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.reply {
+    display: flex;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #edf2f7;
+}
+
+.reply-avatar {
+    font-size: 2rem;
+    color: #718096;
+}
+
+.reply-content {
+    flex: 1;
+}
+
+.reply-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.reply-header strong {
+    color: #2d3748;
+}
+
+.reply-date {
+    font-size: 0.875rem;
+    color: #718096;
+}
+
+.reply-message {
+    color: #4a5568;
+    line-height: 1.5;
+}
+
+.no-replies {
+    text-align: center;
+    padding: 2rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    color: #718096;
+    border: 1px dashed #cbd5e0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .form-foro .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .forum-card {
+        flex-direction: column;
+    }
+    
+    .forum-actions {
+        margin: 1rem 0 0 0;
+        justify-content: flex-end;
+    }
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: #4a6cf7;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.25rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary:hover {
+    background-color: #3a5bd9;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #4a6cf7;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.btn-back:hover {
+    text-decoration: underline;
+}
+
+/* Panel styles */
+.panel {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.panel h2, .panel h3 {
+    color: #2d3748;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.panel-icon {
+    color: #4a6cf7;
+}
+/* --- AJUSTE DEL TAMAÑO DEL PANEL DE FOROS --- */
+.panel.foros-panel {
+    max-width: 800px !important;
+    margin: 0 auto !important;
+    width: 90% !important;
+}
+
+/* --- REESTRUCTURAR EL ITEM DEL FORO SIN MODIFICAR EL HTML --- */
+.foro-item {
+    display: flex;
+    flex-direction: column; /* TODO EN COLUMNA */
+    align-items: flex-start;
+    background: #f9f9f9;
+    padding: 1.2rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    position: relative; /* Para colocar botones abajo */
+}
+
+/* TÍTULO ABAJO DE CURSO */
+.foro-header {
+    width: 100%;
+    margin-bottom: 0.6rem;
+    display: block; /* YA NO EN FILA */
+}
+
+/* TÍTULO DEL FORO */
+.foro-header strong {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+}
+
+/* DESCRIPCIÓN debajo del título */
+.foro-item p {
+    width: 100%;
+    margin: 0.5rem 0;
+    white-space: normal;
+}
+
+/* FECHA debajo de la descripción */
+.foro-item small {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* --- ICONOS ABAJO A LA DERECHA --- */
+.foro-actions {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+}
+
+.foro-actions button,
+.foro-actions a {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+}
+
+/* Arreglo para el formulario del botón eliminar */
+.foro-actions form {
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+}
+/* Contenedor de acciones */
+.foro-actions {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Tamaño uniforme para cada botón */
+.foro-actions button,
+.foro-actions a {
+    width: 40px !important;
+    height: 40px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    border-radius: 10px;
+}
+
+/* FORZAR QUE TODOS LOS ÍCONOS MIDAN LO MISMO */
+.foro-actions i,
+.foro-actions svg,
+.foro-actions img {
+    width: 24px !important;
+    height: 24px !important;
+    line-height: 24px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    vertical-align: middle !important;
+}
+/* CONTENEDOR DE ACCIONES */
+.foro-actions {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* BOTONES DE ACCIONES */
+.foro-actions button,
+.foro-actions a {
+    width: 42px !important;
+    height: 42px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0 !important;
+    border-radius: 10px;
+}
+
+/* CLASE UNIFICADA PARA TODOS LOS ICONOS */
+.foro-icon {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 24px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    color: #ffffff !important;
+}
+
+/* SI ALGÚN ÍCONO ES SVG, IMG O FONT AWESOME, TAMBIÉN LO FORZAMOS */
+.foro-actions i,
+.foro-actions svg,
+.foro-actions img {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 24px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    vertical-align: middle !important;
+}
+
+/* Estilo para el contador de respuestas */
+.respuesta-count {
+    background: #ff4757;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 10px;
+    margin-left: 3px;
+    min-width: 18px;
+    text-align: center;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+
+.btn-ver-respuestas {
+    position: relative;
+}
+

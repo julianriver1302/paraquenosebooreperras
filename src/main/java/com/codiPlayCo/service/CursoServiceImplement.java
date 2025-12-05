@@ -60,7 +60,17 @@ public class CursoServiceImplement implements ICursoService {
 				return cursoRepository.findById(idCurso);
 	}
 
-
-
+	// Método para obtener cursos comprados por estudiante (evita LazyInitializationException)
+	@Override
+	public List<Curso> findCursosCompradosByUsuarioId(Integer usuarioId) {
+		return cursoRepository.findCursosCompradosByUsuarioId(usuarioId);
+	}
 	
+	// Verificar si un usuario está inscrito en un curso
+    @Override
+    public boolean estaUsuarioInscritoEnCurso(Integer usuarioId, Integer cursoId) {
+        return ((CursoServiceImplement) cursoRepository).estaUsuarioInscritoEnCurso(usuarioId, cursoId);
+    }
+    
+   
 }
