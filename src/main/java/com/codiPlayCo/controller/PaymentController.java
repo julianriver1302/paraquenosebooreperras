@@ -36,9 +36,17 @@ public class PaymentController {
 	public ResponseEntity<?> confirmarPago(@RequestBody Pago pago,
 			@RequestParam(name = "registroId", required = false) Integer registroId) {
 		try {
+			System.out.println("Recibida solicitud de confirmación de pago:");
+			System.out.println("registroId: " + registroId);
+			System.out.println("pago: " + pago);
+			
 			Pago pagoGuardado = paymentService.guardarPago(pago, registroId);
+			System.out.println("Pago guardado exitosamente: " + pagoGuardado);
+			
 			return ResponseEntity.ok(Map.of("status", "success", "data", pagoGuardado));
 		} catch (Exception e) {
+			System.err.println("Error al confirmar pago: " + e.getMessage());
+			e.printStackTrace();
 			return ResponseEntity.badRequest().body(Map.of("status", "error", "message", e.getMessage()));
 		}
 	}

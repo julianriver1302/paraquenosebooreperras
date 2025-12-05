@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Registro de Docentes - CodiPlayCo</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+	<link rel="stylesheet" th:href="@{/assetsAdmin/css/panel_codiplay.css}">
+	<link th:href="@{/assets/loader.css}" rel="stylesheet" />
+</head>
+
+<body>
+	<div class="admin-container">
+		<!-- Sidebar -->
+		<nav class="sidebar">
+			<div class="sidebar-header">
+				<div class="logo-container">
+					<img th:src="@{/assetsAdmin/images/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}" alt="CodiPlayCo Logo" class="logo">
+					<h2 class="brand-title">CodiPlayCo</h2>
+				</div>
+			</div>
+			
+			<div class="sidebar-content">
+				<ul class="nav-menu">
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay}" class="nav-link">
+							<i class="fas fa-home"></i>
+							<span>Dashboard</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay/Admin/editar_usuarios}" class="nav-link">
+							<i class="fas fa-users-cog"></i>
+							<span>Gestionar Usuarios</span>
+						</a>
+					</li>
+					<li class="nav-item active">
+						<a th:href="@{/PanelCodiplay/Admin/registrar_docentes}" class="nav-link">
+							<i class="fas fa-chalkboard-teacher"></i>
+							<span>Registrar Docentes</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay/Admin/proceso_estudiantes}" class="nav-link">
+							<i class="fas fa-chart-line"></i>
+							<span>Progreso Estudiantes</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay/Admin/crear_curso}" class="nav-link">
+							<i class="fas fa-plus-circle"></i>
+							<span>Crear Curso</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/PanelCodiplay/Admin/listar_cursos}" class="nav-link">
+							<i class="fas fa-list"></i>
+							<span>Cursos Disponibles</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+			
+			<div class="sidebar-footer">
+				<a th:href="@{/logout}" class="logout-btn">
+					<i class="fas fa-sign-out-alt"></i>
+					<span>Cerrar Sesión</span>
+				</a>
+			</div>
+		</nav>
+
+		<!-- Main Content -->
+		<main class="main-content">
+			<header class="main-header">
+				<div class="header-content">
+					<div class="page-info">
+						<button th:onclick="window.history.back()" class="btn-back">
+							<i class="fas fa-arrow-left"></i>
+							<span>Volver</span>
+						</button>
+						<h1 class="page-title">
+							<i class="fas fa-user-plus"></i>
+							Registro de Docentes
+						</h1>
+					</div>
+					<div class="header-info">
+						<div class="admin-info">
+							<i class="fas fa-user-shield"></i>
+							<span>Administrador</span>
+						</div>
+						<div class="current-time" id="currentTime"></div>
+					</div>
+				</div>
+			</header>
+
+			<div class="form-container">
+				<div class="form-wrapper">
+					<!-- Alertas -->
+					<div th:if="${successMessage}" class="alert alert-success">
+						<i class="fas fa-check-circle"></i>
+						<span th:text="${successMessage}"></span>
+					</div>
+					<div th:if="${errorMessage}" class="alert alert-error">
+						<i class="fas fa-exclamation-circle"></i>
+						<span th:text="${errorMessage}"></span>
+					</div>
+
+					<!-- Formulario -->
+					<form th:action="@{/PanelCodiplay/Admin/guardar_docente}" method="post" th:object="${usuario}" class="registration-form">
+						<div class="form-header">
+							<div class="form-icon">
+								<i class="fas fa-chalkboard-teacher"></i>
+							</div>
+							<h2>Información del Docente</h2>
+							<p>Complete todos los campos para registrar un nuevo docente</p>
+						</div>
+
+						<div class="form-grid">
+							<!-- Información Personal -->
+							<div class="form-section">
+								<h3 class="section-title">
+									<i class="fas fa-user"></i>
+									Información Personal
+								</h3>
+								
+								<div class="form-row">
+									<div class="form-group">
+										<label for="nombre">
+											<i class="fas fa-user"></i>
+											Nombres *
+										</label>
+										<input type="text" id="nombre" name="nombre" placeholder="Ingrese los nombres completos" required>
+									</div>
+									<div class="form-group">
+										<label for="apellido">
+											<i class="fas fa-user"></i>
+											Apellidos *
+										</label>
+										<input type="text" id="apellido" name="apellido" placeholder="Ingrese los apellidos completos" required>
+									</div>
+								</div>
+
+								<div class="form-row">
+									<div class="form-group">
+										<label for="tipoDocumento">
+											<i class="fas fa-id-card"></i>
+											Tipo de Documento *
+										</label>
+										<select id="tipoDocumento" name="tipoDocumento" required>
+											<option value="">Seleccionar tipo...</option>
+											<option value="Cédula de Ciudadanía">Cédula de Ciudadanía</option>
+											<option value="Cédula de Extranjería">Cédula de Extranjería</option>
+											<option value="Tarjeta de Identidad">Tarjeta de Identidad</option>
+											<option value="Pasaporte">Pasaporte</option>
+											<option value="Documento Nacional de Identidad">Documento Nacional de Identidad</option>
+											<option value="Registro Civil">Registro Civil</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label for="documento">
+											<i class="fas fa-hashtag"></i>
+											Número de Documento *
+										</label>
+										<input type="text" id="documento" name="documento" placeholder="Número de documento" required>
+									</div>
+								</div>
+							</div>
+
+							<!-- Información de Contacto -->
+							<div class="form-section">
+								<h3 class="section-title">
+									<i class="fas fa-address-book"></i>
+									Información de Contacto
+								</h3>
+								
+								<div class="form-row">
+									<div class="form-group">
+										<label for="celular">
+											<i class="fas fa-phone"></i>
+											Teléfono Celular *
+										</label>
+										<input type="tel" id="celular" name="celular" placeholder="Ej: 3001234567" required>
+									</div>
+									<div class="form-group">
+										<label for="email">
+											<i class="fas fa-envelope"></i>
+											Correo Electrónico *
+										</label>
+										<input type="email" id="email" name="email" placeholder="docente@ejemplo.com" required>
+									</div>
+								</div>
+							</div>
+
+							<!-- Información de Acceso -->
+							<div class="form-section">
+								<h3 class="section-title">
+									<i class="fas fa-lock"></i>
+									Información de Acceso
+								</h3>
+								
+								<div class="form-group password-group">
+									<label for="password">
+										<i class="fas fa-key"></i>
+										Contraseña *
+									</label>
+									<div class="password-input-wrapper">
+										<input type="password" id="password" name="password" placeholder="Mínimo 6 caracteres" required>
+										<button type="button" class="password-toggle" onclick="togglePassword()">
+											<i class="fas fa-eye" id="password-icon"></i>
+										</button>
+									</div>
+									<small class="password-help">
+										<i class="fas fa-info-circle"></i>
+										La contraseña debe tener al menos 6 caracteres
+									</small>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-actions">
+							<button type="button" th:onclick="window.history.back()" class="btn-secondary">
+								<i class="fas fa-times"></i>
+								Cancelar
+							</button>
+							<button type="submit" class="btn-primary">
+								<i class="fas fa-user-plus"></i>
+								Registrar Docente
+							</button>
+
+						</div>
+					</form>
+				</div>
+			</div>
+		</main>
+	</div>
+
+	<script>
+		// Actualizar hora actual
+		function updateTime() {
+			const now = new Date();
+			const timeString = now.toLocaleString('es-ES', {
+				weekday: 'long',
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit'
+			});
+			document.getElementById('currentTime').textContent = timeString;
+		}
+		
+		updateTime();
+		setInterval(updateTime, 60000);
+
+		// Toggle password visibility
+		function togglePassword() {
+			const passwordInput = document.getElementById('password');
+			const passwordIcon = document.getElementById('password-icon');
+			
+			if (passwordInput.type === 'password') {
+				passwordInput.type = 'text';
+				passwordIcon.classList.remove('fa-eye');
+				passwordIcon.classList.add('fa-eye-slash');
+			} else {
+				passwordInput.type = 'password';
+				passwordIcon.classList.remove('fa-eye-slash');
+				passwordIcon.classList.add('fa-eye');
+			}
+		}
+
+		// Form validation
+		document.querySelector('.registration-form').addEventListener('submit', function(e) {
+			const requiredFields = this.querySelectorAll('input[required], select[required]');
+			let isValid = true;
+
+			requiredFields.forEach(field => {
+				if (!field.value.trim()) {
+					field.classList.add('error');
+					isValid = false;
+				} else {
+					field.classList.remove('error');
+				}
+			});
+
+			if (!isValid) {
+				e.preventDefault();
+				alert('Por favor, complete todos los campos obligatorios.');
+			}
+		});
+
+		// Remove error class on input
+		document.querySelectorAll('input, select').forEach(field => {
+			field.addEventListener('input', function() {
+				this.classList.remove('error');
+			});
+		});
+
+		// Efecto hover en tarjetas
+		document.querySelectorAll('.stat-card, .action-card').forEach(card => {
+			card.addEventListener('mouseenter', function() {
+				this.style.transform = 'translateY(-5px)';
+			});
+			
+			card.addEventListener('mouseleave', function() {
+				this.style.transform = 'translateY(0)';
+			});
+		});
+	</script>
+</body>
+
+</html>

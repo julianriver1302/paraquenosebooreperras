@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="/assets/imag/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png" rel="icon">
+  	<link href="/assets/imag/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png" rel="apple-touch-icon">
+  <title>Panel Administrativo - CodiPlayCo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" th:href="@{/assetsAdmin/css/panel_codiplay.css}">
+  <link th:href="@{/assets/loader.css}" rel="stylesheet" />
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-container">
+          <img th:src="@{/assetsAdmin/images/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}" alt="CodiPlayCo Logo" class="logo">
+          <h2 class="brand-title">CodiPlayCo</h2>
+        </div>
+      </div>
+      
+      <div class="sidebar-content">
+        <ul class="nav-menu">
+          <li class="nav-item active">
+            <a th:href="@{/PanelCodiplay}" class="nav-link">
+              <i class="fas fa-home"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/editar_usuarios}" class="nav-link">
+              <i class="fas fa-users-cog"></i>
+              <span>Gestionar Usuarios</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/registrar_docentes}" class="nav-link">
+              <i class="fas fa-chalkboard-teacher"></i>
+              <span>Registrar Docentes</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/proceso_estudiantes}" class="nav-link">
+              <i class="fas fa-chart-line"></i>
+              <span>Progreso Estudiantes</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/crear_curso}" class="nav-link">
+              <i class="fas fa-plus-circle"></i>
+              <span>Crear Curso</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/listar_cursos}" class="nav-link">
+              <i class="fas fa-list"></i>
+              <span>Cursos Disponibles</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="sidebar-footer">
+        <a th:href="@{/logout}" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Cerrar Sesión</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="main-header">
+        <div class="header-content">
+          <h1 class="page-title">
+            <i class="fas fa-tachometer-alt"></i>
+            Panel Administrativo
+          </h1>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <div class="welcome-section">
+          <div class="welcome-card">
+            <div class="welcome-icon">
+              <i class="fas fa-hand-wave"></i>
+            </div>
+            <div class="welcome-text">
+              <h2>¡Bienvenido al Panel de Control!</h2>
+              <p>Gestiona todos los aspectos de la plataforma educativa CodiPlayCo desde aquí.</p>
+            </div>
+          </div>
+        </div>
+
+        <section class="stats-grid">
+          <div class="stat-card students" onclick="location.href='estudiantes_registrados.html'">
+            <div class="stat-icon">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Estudiantes Activos</h3>
+              <div class="stat-number">
+                <span th:text="${totalEstudiantes != null ? totalEstudiantes : 0}">0</span>
+              </div>
+              <p>Niños inscritos actualmente</p>
+            </div>
+            <div class="stat-action">
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+
+          <div class="stat-card progress" onclick="location.href='progreso_por_curso.html'">
+            <div class="stat-icon">
+              <i class="fas fa-chart-bar"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Progreso por Curso</h3>
+              <div class="stat-number">100%</div>
+              <p>Visualización de avances</p>
+            </div>
+            <div class="stat-action">
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+
+          <div class="stat-card teachers" onclick="location.href='docentes_asociados.html'">
+            <div class="stat-icon">
+              <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Docentes Activos</h3>
+              <div class="stat-number">5</div>
+              <p>Profesores asociados</p>
+            </div>
+            <div class="stat-action">
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+
+        </section>
+
+        <section class="quick-actions">
+          <h3 class="section-title">
+            <i class="fas fa-bolt"></i>
+            Acciones Rápidas
+          </h3>
+          <div class="actions-grid">
+            <div class="action-card" onclick="location.href='@/PanelCodiplay/Admin/editar_usuarios'">
+              <i class="fas fa-user-edit"></i>
+              <span>Editar Usuarios</span>
+            </div>
+            <div class="action-card" onclick="location.href='@/PanelCodiplay/Admin/registrar_docentes'">
+              <i class="fas fa-user-plus"></i>
+              <span>Registrar Docente</span>
+            </div>
+            <div class="action-card" onclick="location.href='@/PanelCodiplay/Admin/listar_cursos'">
+              <i class="fas fa-list-alt"></i>
+              <span>Ver Cursos</span>
+            </div>
+            
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Efecto hover en tarjetas
+    document.querySelectorAll('.stat-card, .action-card').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+      });
+    });
+  </script>
+  <script th:src="@{/assets/loader.js}"></script>
+</body>
+</html>

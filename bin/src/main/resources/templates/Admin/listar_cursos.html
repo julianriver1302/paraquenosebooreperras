@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cursos Disponibles - CodiPlayCo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" th:href="@{/assetsAdmin/css/panel_codiplay.css}">
+  <link th:href="@{/assets/loader.css}" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-container">
+          <img th:src="@{/assetsAdmin/images/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}" alt="CodiPlayCo Logo" class="logo">
+          <h2 class="brand-title">CodiPlayCo</h2>
+        </div>
+      </div>
+      
+      <div class="sidebar-content">
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay}" class="nav-link">
+              <i class="fas fa-home"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/editar_usuarios}" class="nav-link">
+              <i class="fas fa-users-cog"></i>
+              <span>Gestionar Usuarios</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/registrar_docentes}" class="nav-link">
+              <i class="fas fa-chalkboard-teacher"></i>
+              <span>Registrar Docentes</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/proceso_estudiantes}" class="nav-link">
+              <i class="fas fa-chart-line"></i>
+              <span>Progreso Estudiantes</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/PanelCodiplay/Admin/crear_curso}" class="nav-link">
+              <i class="fas fa-plus-circle"></i>
+              <span>Crear Curso</span>
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a th:href="@{/PanelCodiplay/Admin/listar_cursos}" class="nav-link">
+              <i class="fas fa-list"></i>
+              <span>Cursos Disponibles</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="sidebar-footer">
+        <a th:href="@{/logout}" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Cerrar Sesión</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="main-header">
+        <div class="header-content">
+          <div class="page-info">
+            <button th:onclick="window.history.back()" class="btn-back">
+              <i class="fas fa-arrow-left"></i>
+              <span>Volver</span>
+            </button>
+            <h1 class="page-title">
+              <i class="fas fa-list"></i>
+              Cursos Disponibles
+            </h1>
+          </div>
+          <div class="header-info">
+            <div class="admin-info">
+              <i class="fas fa-user-shield"></i>
+              <span>Administrador</span>
+            </div>
+            <div class="current-time" id="currentTime"></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+       
+
+        <!-- Acciones y lista de cursos -->
+        <section class="quick-actions">
+          <div class="section-header">
+            <h3 class="section-title">
+              <i class="fas fa-graduation-cap"></i>
+              Gestión de Cursos
+            </h3>
+            <a th:href="@{/PanelCodiplay/Admin/crear_curso}" class="btn-primary">
+              <i class="fas fa-plus"></i>
+              Crear Nuevo Curso
+            </a>
+          </div>
+          
+          <!-- Lista de cursos -->
+          <div class="courses-container" th:if="${not #lists.isEmpty(cursos)}">
+            <div class="course-card" th:each="curso : ${cursos}" th:classappend="${curso.estado == 'Inactivo'} ? 'course-inactive' : ''">
+              <div class="course-header">
+                <div class="course-icon">
+                  <i class="fas fa-book-open"></i>
+                </div>
+                <div class="course-info">
+                  <h4 th:text="${curso.curso}">Nombre del Curso</h4>
+                  <p th:text="${curso.dirigido}">Dirigido a</p>
+                  <span class="course-status" th:class="${curso.estado == 'Activo'} ? 'status-active' : 'status-inactive'" 
+                        th:text="${curso.estado}">Estado</span>
+                </div>
+                <div class="course-price">
+                  <span class="price" th:text="'$' + ${#numbers.formatDecimal(curso.precio, 0, 'POINT', 0, 'POINT')}">$0</span>
+                </div>
+              </div>
+              
+              <div class="course-description">
+                <p th:text="${#strings.abbreviate(curso.descripcion, 100)}">Descripción del curso...</p>
+              </div>
+              
+              <div class="course-details">
+                <div class="detail-item">
+                  <i class="fas fa-chalkboard-teacher"></i>
+                  <span th:if="${curso.asignacionDocente != null and curso.asignacionDocente.usuario != null}" 
+                        th:text="${curso.asignacionDocente.usuario.nombre + ' ' + curso.asignacionDocente.usuario.apellido}">Docente</span>
+                  <span th:if="${curso.asignacionDocente == null or curso.asignacionDocente.usuario == null}">Sin asignar</span>
+                </div>
+                <div class="detail-item">
+                  <div class="difficulty-stars">
+                    <span th:each="i : ${#numbers.sequence(1, 5)}">
+                      <i th:if="${i <= curso.dificultad}" class="fas fa-star star-filled"></i>
+                      <i th:if="${i > curso.dificultad}" class="fas fa-star star-empty"></i>
+                    </span>
+                    <span class="difficulty-text" th:text="${curso.dificultad} + '/5'"></span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="course-actions">
+                <a th:href="@{/PanelCodiplay/Admin/editar_curso/{id}(id=${curso.id})}" class="action-btn edit-btn">
+                  <i class="fas fa-edit"></i>
+                  Editar
+                </a>
+                <a th:href="@{/PanelCodiplay/Admin/cambiar_estado_curso/{id}(id=${curso.id})}" 
+                   class="action-btn toggle-btn"
+                   th:text="${curso.estado == 'Activo'} ? 'Desactivar' : 'Activar'">
+                  Toggle
+                </a>
+                <a th:href="@{/PanelCodiplay/Admin/eliminar_curso/{id}(id=${curso.id})}" 
+                   class="action-btn delete-btn btn-eliminar-curso"
+                   th:data-curso-id="${curso.id}"
+                   th:data-curso-nombre="${curso.curso}">
+                  <i class="fas fa-trash"></i>
+                  Eliminar
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Estado vacío -->
+          <div class="empty-state" th:if="${#lists.isEmpty(cursos)}">
+            <div class="empty-icon">
+              <i class="fas fa-book-open"></i>
+            </div>
+            <h3>No hay cursos creados</h3>
+            <p>Comienza creando tu primer curso para la plataforma.</p>
+            <a th:href="@{/PanelCodiplay/Admin/crear_curso}" class="btn-primary">
+              <i class="fas fa-plus"></i>
+              Crear Primer Curso
+            </a>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script th:inline="javascript">
+    // Ruta del logo para usar en SweetAlert
+    const logoUrl = /*[[@{/assetsAdmin/images/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png}]]*/ '/assetsAdmin/images/ChatGPT Image 4 jul 2025, 02_22_14 p.m..png';
+    
+    // Actualizar hora actual
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.toLocaleString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      document.getElementById('currentTime').textContent = timeString;
+    }
+    
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    // Efecto hover en tarjetas
+    document.querySelectorAll('.stat-card, .course-card').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+      });
+    });
+
+    // Función para confirmar eliminación con SweetAlert personalizado
+    function confirmarEliminacion(event, cursoId, cursoNombre) {
+      event.preventDefault();
+      
+      Swal.fire({
+        title: '<div class="swal-custom-header"><div class="swal-logo-wrapper"><img src="' + logoUrl + '" class="swal-logo" alt="CodiPlayCo Logo"></div><h2 class="swal-title">Confirmar Eliminación</h2></div>',
+        html: `
+          <div class="swal-custom-content">
+            <div class="swal-icon-wrapper">
+              <div class="swal-icon-circle">
+                <i class="fas fa-trash-alt swal-warning-icon"></i>
+              </div>
+            </div>
+            <div class="swal-text-content">
+              <p class="swal-message">Estás a punto de eliminar el curso:</p>
+              <div class="swal-course-badge">
+                <i class="fas fa-book-open"></i>
+                <span class="swal-course-name">${cursoNombre}</span>
+              </div>
+              <div class="swal-warning-badge">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>Esta acción no se puede deshacer</span>
+              </div>
+            </div>
+          </div>
+        `,
+        icon: null,
+        showCancelButton: true,
+        confirmButtonText: '<i class="fas fa-trash"></i> Sí, eliminar',
+        cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+        reverseButtons: true,
+        customClass: {
+          popup: 'swal2-popup-custom',
+          title: 'swal2-title-custom',
+          htmlContainer: 'swal2-html-container-custom',
+          confirmButton: 'swal2-confirm-custom',
+          cancelButton: 'swal2-cancel-custom',
+          actions: 'swal2-actions-custom'
+        },
+        buttonsStyling: true,
+        allowOutsideClick: false,
+        allowEscapeKey: true,
+        showClass: {
+          popup: 'swal2-show-custom'
+        },
+        hideClass: {
+          popup: 'swal2-hide-custom'
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Mostrar loading personalizado mientras se elimina
+          Swal.fire({
+            title: '<div class="swal-custom-header-loading"><div class="swal-logo-wrapper-small"><img src="' + logoUrl + '" class="swal-logo-small" alt="CodiPlayCo Logo"></div><h2 class="swal-title-loading">Eliminando curso</h2></div>',
+            html: '<div class="swal-loading-content"><div class="swal-spinner-wrapper"><div class="swal-spinner"></div></div><p class="swal-loading-text">Procesando tu solicitud...</p></div>',
+            icon: null,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            customClass: {
+              popup: 'swal2-popup-custom swal2-popup-loading',
+              htmlContainer: 'swal2-html-container-custom'
+            },
+            didOpen: () => {
+              Swal.showLoading();
+            }
+          });
+          
+          // Redirigir a la URL de eliminación
+          window.location.href = '/PanelCodiplay/Admin/eliminar_curso/' + cursoId;
+        }
+      });
+    }
+
+    // Agregar event listeners a todos los botones de eliminar
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.btn-eliminar-curso').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          const cursoId = this.getAttribute('data-curso-id');
+          const cursoNombre = this.getAttribute('data-curso-nombre');
+          confirmarEliminacion(e, cursoId, cursoNombre);
+        });
+      });
+    });
+  </script>
+
+  <style>
+    /* Estilos para las estrellas de dificultad */
+    .difficulty-stars {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .difficulty-stars .star-filled {
+      color: #FFD700;
+      font-size: 14px;
+    }
+
+    .difficulty-stars .star-empty {
+      color: #E0E0E0;
+      opacity: 0.5;
+      font-size: 14px;
+    }
+
+    .difficulty-text {
+      margin-left: 8px;
+      font-size: 12px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    /* Mejorar el layout de los detalles del curso */
+    .course-details {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .detail-item i {
+      color: #667eea;
+      width: 16px;
+      text-align: center;
+    }
+
+    /* Animación suave para las estrellas */
+    .difficulty-stars i {
+      transition: all 0.2s ease;
+    }
+
+    .course-card:hover .difficulty-stars .star-filled {
+      transform: scale(1.1);
+    }
+
+    /* ============================================
+       ESTILOS PERSONALIZADOS PARA SWEETALERT
+       Diseño moderno, elegante y compacto
+       ============================================ */
+    
+    .swal2-popup-custom {
+      font-family: 'Inter', sans-serif;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 0 8px 25px rgba(0, 0, 0, 0.15);
+      padding: 0;
+      max-width: 420px;
+      background: #ffffff;
+      border: none;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .swal2-popup-custom::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      z-index: 1;
+    }
+
+    .swal2-popup-loading {
+      background: #ffffff;
+    }
+
+    /* Animaciones suaves y elegantes */
+    @keyframes swal2-show-custom {
+      0% {
+        transform: scale(0.85) translateY(-30px);
+        opacity: 0;
+        filter: blur(4px);
+      }
+      100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+        filter: blur(0);
+      }
+    }
+
+    @keyframes swal2-hide-custom {
+      0% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0.85) translateY(-30px);
+        opacity: 0;
+      }
+    }
+
+    .swal2-show-custom {
+      animation: swal2-show-custom 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .swal2-hide-custom {
+      animation: swal2-hide-custom 0.25s ease-in;
+    }
+
+    /* Header con logo - Diseño compacto */
+    .swal-custom-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 25px 30px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      margin: -20px -20px 20px -20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .swal-custom-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .swal-logo-wrapper {
+      position: relative;
+      z-index: 2;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .swal-logo {
+      width: 65px;
+      height: 65px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+      position: relative;
+      z-index: 2;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .swal-logo-wrapper-small {
+      position: relative;
+      z-index: 2;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .swal-logo-small {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+      display: block;
+      margin: 0 auto;
+    }
+
+    .swal-title {
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+      text-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+      letter-spacing: -0.5px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .swal-title-loading {
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0;
+      text-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 2;
+    }
+
+    .swal-custom-header-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 25px 30px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      margin: -20px -20px 20px -20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .swal-custom-header-loading::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+    }
+
+    .swal2-title-custom {
+      padding: 0;
+      margin: 0;
+      width: 100%;
+    }
+
+    /* Contenido principal - Diseño compacto */
+    .swal2-html-container-custom {
+      padding: 0 30px 25px;
+      margin: 0;
+    }
+
+    .swal-custom-content {
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    /* Icono de advertencia - Diseño compacto */
+    .swal-icon-wrapper {
+      margin: 15px 0 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .swal-icon-circle {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffe5e5 0%, #ffcccc 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 18px rgba(255, 107, 107, 0.25);
+      position: relative;
+      animation: iconPulse 2s ease-in-out infinite;
+    }
+
+    .swal-icon-circle::before {
+      content: '';
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 107, 107, 0.2);
+      animation: ripple 2s ease-out infinite;
+    }
+
+    @keyframes iconPulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes ripple {
+      0% {
+        transform: scale(0.8);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.3);
+        opacity: 0;
+      }
+    }
+
+    .swal-warning-icon {
+      font-size: 36px;
+      color: #ff6b6b;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Contenido de texto */
+    .swal-text-content {
+      margin-top: 5px;
+    }
+
+    .swal-message {
+      font-size: 15px;
+      color: #4a5568;
+      margin: 0 0 18px;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    /* Badge del curso - Diseño compacto */
+    .swal-course-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      background: linear-gradient(135deg, #f0f4ff 0%, #e0e9ff 100%);
+      border-radius: 12px;
+      border: 2px solid #667eea;
+      margin: 0 0 15px;
+      box-shadow: 0 3px 10px rgba(102, 126, 234, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .swal-course-badge:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.25);
+    }
+
+    .swal-course-badge i {
+      font-size: 20px;
+      color: #667eea;
+    }
+
+    .swal-course-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #667eea;
+      letter-spacing: -0.3px;
+    }
+
+    /* Badge de advertencia */
+    .swal-warning-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+      border-radius: 10px;
+      border: 1px solid #ffcccc;
+      margin: 0;
+    }
+
+    .swal-warning-badge i {
+      font-size: 16px;
+      color: #ff6b6b;
+    }
+
+    .swal-warning-badge span {
+      font-size: 13px;
+      color: #ff6b6b;
+      font-weight: 600;
+    }
+
+    /* Loading personalizado */
+    .swal-loading-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .swal-spinner-wrapper {
+      margin-bottom: 18px;
+    }
+
+    .swal-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #f0f0f0;
+      border-top: 4px solid #667eea;
+      border-right: 4px solid #764ba2;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      box-shadow: 0 3px 10px rgba(102, 126, 234, 0.2);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .swal-loading-text {
+      font-size: 15px;
+      color: #667eea;
+      font-weight: 600;
+      margin: 0;
+      letter-spacing: 0.3px;
+    }
+
+    /* Botones - Diseño compacto */
+    .swal2-actions-custom {
+      margin: 25px 0 20px;
+      gap: 10px;
+      padding: 0 10px;
+    }
+
+    .swal2-confirm-custom {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%) !important;
+      border-radius: 12px;
+      padding: 12px 28px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+      border: none;
+      color: white;
+      letter-spacing: 0.2px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .swal2-confirm-custom::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .swal2-confirm-custom:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .swal2-confirm-custom:hover {
+      background: linear-gradient(135deg, #ee5a6f 0%, #dd4a5f 100%) !important;
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 10px 30px rgba(255, 107, 107, 0.5);
+    }
+
+    .swal2-confirm-custom:active {
+      transform: translateY(-2px) scale(0.98);
+    }
+
+    .swal2-confirm-custom i {
+      margin-right: 8px;
+    }
+
+    .swal2-cancel-custom {
+      background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%) !important;
+      border-radius: 12px;
+      padding: 12px 28px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+      border: none;
+      color: white;
+      letter-spacing: 0.2px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .swal2-cancel-custom::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .swal2-cancel-custom:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .swal2-cancel-custom:hover {
+      background: linear-gradient(135deg, #5a6268 0%, #495057 100%) !important;
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 10px 30px rgba(108, 117, 125, 0.4);
+    }
+
+    .swal2-cancel-custom:active {
+      transform: translateY(-2px) scale(0.98);
+    }
+
+    .swal2-cancel-custom i {
+      margin-right: 8px;
+    }
+
+    /* Responsive - Diseño adaptativo */
+    @media (max-width: 600px) {
+      .swal2-popup-custom {
+        max-width: 92%;
+        margin: 20px auto;
+      }
+
+      .swal-custom-header {
+        padding: 30px 25px 20px;
+      }
+
+      .swal-logo {
+        width: 80px;
+        height: 80px;
+      }
+
+      .swal-title {
+        font-size: 26px;
+      }
+
+      .swal-icon-circle {
+        width: 85px;
+        height: 85px;
+      }
+
+      .swal-warning-icon {
+        font-size: 40px;
+      }
+
+      .swal-course-badge {
+        padding: 14px 20px;
+      }
+
+      .swal-course-name {
+        font-size: 19px;
+      }
+
+      .swal2-actions-custom {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .swal2-confirm-custom,
+      .swal2-cancel-custom {
+        width: 100%;
+        padding: 14px 24px;
+      }
+    }
+  </style>
+  
+</body>
+</html>
+   

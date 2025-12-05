@@ -92,6 +92,10 @@ public class UsuarioServiceImplement implements IUsuarioService {
             usuario.getCursosComprados().add(curso);
             usuarioRepository.save(usuario);
         }
+
+        // Actualizar también el usuario asociado directamente al curso (columna cursos.usuario_id)
+        curso.setUsuario(usuario);
+        cursoService.save(curso);
     }
     
     @Override

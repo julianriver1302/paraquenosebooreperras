@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.codiPlayCo.model.Curso;
 import com.codiPlayCo.model.Usuario;
+import com.codiPlayCo.service.EmailService;
 import com.codiPlayCo.service.ICursoService;
 import com.codiPlayCo.service.IUsuarioService;
 
@@ -69,6 +70,11 @@ public class IndexController {
 		return "registropago"; // esta vista ahora sí tendrá "curso"
 	}
 
+	@GetMapping("/pago")
+	public String pago() {
+		return "pago";
+	}
+
 	@GetMapping("/gracias")
 	public String gracias() {
 		return "gracias";
@@ -79,6 +85,9 @@ public class IndexController {
 
 	@Autowired
 	private ICursoService cursoService;
+
+	@Autowired
+	private EmailService emailService;
 
 	@GetMapping("/login")
 	public String login(Model model) {
@@ -154,6 +163,23 @@ public class IndexController {
 			}
 			usuario.setCursosComprados(cursosComprados);
 			usuarioService.save(usuario);
+			
+			// Enviar correo de confirmación
+			try {
+				String asunto = "¡Tu pago ha sido confirmado! - CodiPlayCo";
+				String cuerpo = "Hola " + usuario.getNombre() + ",\n\n"
+						+ "¡Gracias por tu compra en *CodiPlayCo*!\n\n"
+						+ "Tu pago ha sido procesado exitosamente y ya tienes acceso a tu curso.\n"
+						+ "Puedes iniciar sesión en nuestra plataforma con tu correo electrónico y la contraseña que registraste.\n\n"
+						+ "Si tienes alguna duda, puedes escribirnos a codiplayco@gmail.com.\n\n"
+						+ "¡Nos vemos en clase!\n"
+						+ "El equipo de CodiPlayCo 💚";
+				
+				emailService.enviarCorreo(usuario.getEmail(), asunto, cuerpo);
+				LOGGER.info("Correo de confirmación enviado a: " + usuario.getEmail());
+			} catch (Exception e) {
+				LOGGER.error("Error al enviar correo de confirmación: " + e.getMessage(), e);
+			}
 		}
 
 		return "redirect:/gracias";
