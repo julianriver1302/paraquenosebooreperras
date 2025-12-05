@@ -4,11 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +23,13 @@ import com.codiPlayCo.model.ProgresoEstudianteDTO;
 import com.codiPlayCo.model.ProgresoPorModuloDTO;
 import com.codiPlayCo.model.Actividades;
 import com.codiPlayCo.model.ActividadesEstudiantes;
-import com.codiPlayCo.model.Foro;
-import com.codiPlayCo.model.ForoRespuesta;
+import com.codiPlayCo.model.Mensaje;
 import com.codiPlayCo.service.IUsuarioService;
 import com.codiPlayCo.service.ICursoService;
 import com.codiPlayCo.repository.ActividadesRepository;
 import com.codiPlayCo.repository.ActividadesEstudiantesRepository;
-import com.codiPlayCo.repository.ForoRepository;
-import com.codiPlayCo.repository.ForoRespuestaRepository;
+import com.codiPlayCo.repository.MensajeRepository;
+import com.codiPlayCo.repository.IUsuarioRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -55,10 +50,10 @@ public class DocenteController {
 	private ActividadesEstudiantesRepository actividadesEstudiantesRepository;
 
 	@Autowired
-	private ForoRepository foroRepository;
+	private MensajeRepository mensajeRepository;
 
 	@Autowired
-	private ForoRespuestaRepository foroRespuestaRepository;
+	private IUsuarioRepository usuarioRepository;
 
 	@GetMapping ("/paneldocente")
     public String panel(HttpSession session, Model model) {
@@ -203,14 +198,10 @@ public class DocenteController {
     }
 
     @GetMapping("/mensajes")
-    public String mensajes() {
-        return "InterfazDocente/Mensajes";
-    }
-
-    @GetMapping("/foros")
-    public String foros(HttpSession session, Model model) {
+    public String mensajes(HttpSession session, Model model) {
         Integer idUsuario = (Integer) session.getAttribute("idUsuario");
         Integer rol = (Integer) session.getAttribute("rol");
+
         if (idUsuario == null || rol == null || rol != 2) {
             return "redirect:/iniciosesion?error=acceso_denegado";
         }
@@ -220,122 +211,55 @@ public class DocenteController {
             return "redirect:/iniciosesion?error=acceso_denegado";
         }
 
-        List<Curso> cursosDocente = cursoService.findByDocenteId(idUsuario);
-        Map<Integer, List<Foro>> forosPorCurso = new HashMap<>();
-        Map<Integer, Integer> respuestasPorForo = new HashMap<>();
-        for (Curso curso : cursosDocente) {
-            List<Foro> forosCurso = foroRepository.findByCursoId(curso.getId());
-            forosPorCurso.put(curso.getId(), forosCurso);
-            for (Foro foro : forosCurso) {
-                int totalRespuestas = foroRespuestaRepository.findByForoId(foro.getId()).size();
-                respuestasPorForo.put(foro.getId(), totalRespuestas);
-            }
-        }
+        // Estudiantes disponibles (usando rol Estudiante). Si luego quieres filtrar por curso podemos afinar.
+        java.util.List<Usuario> estudiantes = usuarioService.findByRol("Estudiante");
+
+        // Bandeja simple: mensajes enviados y recibidos por el docente
+        List<Mensaje> enviados = mensajeRepository.findByRemitenteIdOrderByFechaEnvioDesc(idUsuario);
+        List<Mensaje> recibidos = mensajeRepository.findByDestinatarioIdOrderByFechaEnvioDesc(idUsuario);
 
         model.addAttribute("docente", docente);
-        model.addAttribute("cursos", cursosDocente);
-        model.addAttribute("forosPorCurso", forosPorCurso);
-        model.addAttribute("respuestasPorForo", respuestasPorForo);
-        return "InterfazDocente/Foros";
+        model.addAttribute("estudiantes", estudiantes);
+        model.addAttribute("mensajesEnviados", enviados);
+        model.addAttribute("mensajesRecibidos", recibidos);
+
+        return "InterfazDocente/Mensajes";
     }
 
-    @PostMapping("/foros/editar")
-    public String editarForo(@RequestParam("foroId") Integer foroId,
-                             @RequestParam("titulo") String titulo,
-                             @RequestParam("descripcion") String descripcion,
-                             HttpSession session,
-                             RedirectAttributes redirectAttrs) {
+    @PostMapping("/mensajes/enviar")
+    public String enviarMensaje(@RequestParam("destinatarioId") Integer destinatarioId,
+            @RequestParam("contenido") String contenido,
+            HttpSession session,
+            RedirectAttributes redirectAttrs) {
         Integer idUsuario = (Integer) session.getAttribute("idUsuario");
         Integer rol = (Integer) session.getAttribute("rol");
+
         if (idUsuario == null || rol == null || rol != 2) {
             return "redirect:/iniciosesion?error=acceso_denegado";
         }
 
-        Optional<Foro> foroOpt = foroRepository.findById(foroId);
-        if (foroOpt.isEmpty()) {
-            redirectAttrs.addFlashAttribute("error", "El foro no existe o no se pudo encontrar.");
-            return "redirect:/InterfazDocente/foros";
+        Usuario remitente = usuarioService.findById(idUsuario).orElse(null);
+        Usuario destinatario = usuarioService.findById(destinatarioId).orElse(null);
+        if (remitente == null || destinatario == null) {
+            redirectAttrs.addFlashAttribute("error", "No se pudo enviar el mensaje.");
+            return "redirect:/InterfazDocente/mensajes";
         }
 
-        Foro foro = foroOpt.get();
-        // Verificar que el usuario sea el dueño del foro
-        if (!foro.getDocente().getId().equals(idUsuario)) {
-            redirectAttrs.addFlashAttribute("error", "No tienes permiso para editar este foro.");
-            return "redirect:/InterfazDocente/foros";
+        if (contenido == null || contenido.trim().isEmpty()) {
+            redirectAttrs.addFlashAttribute("error", "El contenido del mensaje no puede estar vacío.");
+            return "redirect:/InterfazDocente/mensajes";
         }
 
-        foro.setTitulo(titulo);
-        foro.setDescripcion(descripcion);
-        foroRepository.save(foro);
+        Mensaje mensaje = new Mensaje();
+        mensaje.setRemitente(remitente);
+        mensaje.setDestinatario(destinatario);
+        mensaje.setContenido(contenido.trim());
+        mensaje.setLeido(false);
+        mensajeRepository.save(mensaje);
 
-        redirectAttrs.addFlashAttribute("mensaje", "Foro actualizado correctamente.");
-        return "redirect:/InterfazDocente/foros";
+        redirectAttrs.addFlashAttribute("mensaje", "Mensaje enviado correctamente.");
+        return "redirect:/InterfazDocente/mensajes";
     }
-
-    @GetMapping("/foros/detalle")
-    public String verDetalleForo(@RequestParam("foroId") Integer foroId,
-                                 HttpSession session,
-                                 Model model,
-                                 RedirectAttributes redirectAttrs) {
-        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-        Integer rol = (Integer) session.getAttribute("rol");
-        if (idUsuario == null || rol == null || rol != 2) {
-            return "redirect:/iniciosesion?error=acceso_denegado";
-        }
-
-        Optional<Foro> foroOpt = foroRepository.findById(foroId);
-        if (foroOpt.isEmpty()) {
-            redirectAttrs.addFlashAttribute("error", "El foro no existe o no se pudo encontrar.");
-            return "redirect:/InterfazDocente/foros";
-        }
-
-        Foro foro = foroOpt.get();
-        if (foro.getDocente() == null || !foro.getDocente().getId().equals(idUsuario)) {
-            redirectAttrs.addFlashAttribute("error", "No tienes permiso para ver este foro.");
-            return "redirect:/InterfazDocente/foros";
-        }
-
-        List<ForoRespuesta> respuestas = foroRespuestaRepository.findByForoId(foroId);
-
-        model.addAttribute("foro", foro);
-        model.addAttribute("respuestas", respuestas);
-
-        return "InterfazDocente/ForoDetalle";
-    }
-
-    @PostMapping("/foros/eliminar")
-    public String eliminarForo(@RequestParam("foroId") Integer foroId,
-                               HttpSession session,
-                               RedirectAttributes redirectAttrs) {
-        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-        Integer rol = (Integer) session.getAttribute("rol");
-        if (idUsuario == null || rol == null || rol != 2) {
-            return "redirect:/iniciosesion?error=acceso_denegado";
-        }
-
-        Optional<Foro> foroOpt = foroRepository.findById(foroId);
-        if (foroOpt.isEmpty()) {
-            redirectAttrs.addFlashAttribute("error", "El foro no existe o no se pudo encontrar.");
-            return "redirect:/InterfazDocente/foros";
-        }
-
-        Foro foro = foroOpt.get();
-        if (foro.getDocente() == null || !foro.getDocente().getId().equals(idUsuario)) {
-            redirectAttrs.addFlashAttribute("error", "No tienes permiso para eliminar este foro.");
-            return "redirect:/InterfazDocente/foros";
-        }
-
-        // Primero eliminar respuestas asociadas para evitar problemas de FK
-        List<ForoRespuesta> respuestas = foroRespuestaRepository.findByForoId(foroId);
-        if (respuestas != null && !respuestas.isEmpty()) {
-            foroRespuestaRepository.deleteAll(respuestas);
-        }
-
-        foroRepository.delete(foro);
-        redirectAttrs.addFlashAttribute("mensaje", "Foro eliminado correctamente.");
-        return "redirect:/InterfazDocente/foros";
-    }
-
     @GetMapping("/mis-cursos")
     public String misCursos(HttpSession session, Model model) {
         Integer idUsuario = (Integer) session.getAttribute("idUsuario");
@@ -345,8 +269,41 @@ public class DocenteController {
             if (docente != null && docente.getRol() != null && docente.getRol().getId() == 2) {
                 // Cursos asignados a este docente
                 java.util.List<Curso> cursosDocente = cursoService.findByDocenteId(idUsuario);
+                System.out.println("=== Cursos del docente " + idUsuario + ": " + cursosDocente.size() + " cursos encontrados ===");
+                for (Curso c : cursosDocente) {
+                    System.out.println(" - Curso: " + c.getCurso() + " (ID: " + c.getId() + ")");
+                }
                 model.addAttribute("docente", docente);
                 model.addAttribute("cursos", cursosDocente);
+                
+                // INSCRIBIR ESTUDIANTES MANUALMENTE PARA PRUEBA
+                if (!cursosDocente.isEmpty()) {
+                    Curso cursoPrueba = cursosDocente.get(0);
+                    
+                    // Usar el método con FETCH JOIN para evitar LazyInitializationException
+                    Usuario estudiante1 = usuarioRepository.findByIdWithCursos(3).orElse(null);
+                    Usuario estudiante2 = usuarioRepository.findByIdWithCursos(7).orElse(null);
+                    
+                    if (estudiante1 != null && estudiante1.getCursosComprados() == null) {
+                        estudiante1.setCursosComprados(new java.util.ArrayList<>());
+                    }
+                    if (estudiante2 != null && estudiante2.getCursosComprados() == null) {
+                        estudiante2.setCursosComprados(new java.util.ArrayList<>());
+                    }
+                    
+                    if (estudiante1 != null && !estudiante1.getCursosComprados().contains(cursoPrueba)) {
+                        estudiante1.getCursosComprados().add(cursoPrueba);
+                        usuarioService.save(estudiante1);
+                        System.out.println("Estudiante 1 inscrito en curso " + cursoPrueba.getId());
+                    }
+                    
+                    if (estudiante2 != null && !estudiante2.getCursosComprados().contains(cursoPrueba)) {
+                        estudiante2.getCursosComprados().add(cursoPrueba);
+                        usuarioService.save(estudiante2);
+                        System.out.println("Estudiante 2 inscrito en curso " + cursoPrueba.getId());
+                    }
+                }
+                
                 // Calcular progreso general de estudiantes por curso (porcentaje)
                 java.util.Map<Integer, java.util.List<ProgresoEstudianteDTO>> progresoPorCurso = new java.util.HashMap<>();
                 // Calcular progreso detallado por módulo / lección
@@ -359,11 +316,31 @@ public class DocenteController {
                 leccionesPorModulo.put(4, 15); // módulo 4: 15 tarjetas/lecciones en modulo4.html
                 for (Curso curso : cursosDocente) {
                     java.util.List<Usuario> estudiantesCurso = usuarioService.findByCursoComprado(curso.getId());
+                    
+                    // Verificación detallada para depuración
+                    System.out.println("Curso " + curso.getCurso() + " (ID: " + curso.getId() + "): " + 
+                        (estudiantesCurso != null ? estudiantesCurso.size() : 0) + " estudiantes encontrados");
+                    
+                    // Verificar cada estudiante encontrado
+                    if (estudiantesCurso != null) {
+                        for (Usuario est : estudiantesCurso) {
+                            System.out.println("   - Estudiante: " + est.getNombre() + " " + est.getApellido() + 
+                                " (ID: " + est.getId() + ", Rol: " + 
+                                (est.getRol() != null ? est.getRol().getId() : "null") + ")");
+                        }
+                    } else {
+                        System.out.println("   - La consulta retornó null");
+                    }
                     java.util.List<Actividades> actividadesCurso = actividadesRepository.findByCurso(curso.getId());
                     int totalActividades = actividadesCurso.size();
+                    
+                    
                     java.util.List<ProgresoEstudianteDTO> progresos = new java.util.ArrayList<>();
                     java.util.List<ProgresoPorModuloDTO> progresosDetallados = new java.util.ArrayList<>();
-                    for (Usuario est : estudiantesCurso) {
+                    
+                    // Null check to prevent NPE
+                    if (estudiantesCurso != null && !estudiantesCurso.isEmpty()) {
+                        for (Usuario est : estudiantesCurso) {
                         // Progreso general
                         Long completadas = actividadesEstudiantesRepository
                                 .countCompletadasByEstudianteAndCurso(est.getId(), curso.getId());
@@ -388,7 +365,7 @@ public class DocenteController {
                             if (done) {
                                 if (ultimoModulo == null
                                         || moduloAct > ultimoModulo
-                                        || (moduloAct.equals(ultimoModulo) && leccionAct > ultimaLeccion)) {
+                                        || (ultimoModulo != null && moduloAct.equals(ultimoModulo) && (ultimaLeccion != null && leccionAct > ultimaLeccion))) {
                                     ultimoModulo = moduloAct;
                                     ultimaLeccion = leccionAct;
                                 }
@@ -397,10 +374,42 @@ public class DocenteController {
                         progDet.setModuloActual(ultimoModulo);
                         progDet.setLeccionActual(ultimaLeccion);
                         progresosDetallados.add(progDet);
-                    }
+                        }
+                    } // Close the null check
                     progresoPorCurso.put(curso.getId(), progresos);
                     progresoModulosPorCurso.put(curso.getId(), progresosDetallados);
+                    
+                    // Debug: Imprimir resumen del progreso
+                    
+                    
                 }
+                
+                // Debug: Imprimir información final
+                System.out.println("=== RESUMEN FINAL ===");
+                System.out.println("Cursos procesados: " + cursosDocente.size());
+                System.out.println("ProgresoPorCurso keys: " + progresoPorCurso.keySet());
+                for (Integer key : progresoPorCurso.keySet()) {
+                    System.out.println("Curso " + key + ": " + progresoPorCurso.get(key).size() + " estudiantes");
+                }
+                
+                // Verificación adicional: consultar todos los estudiantes con rol 3 y sus cursos
+                java.util.List<Usuario> todosEstudiantes = usuarioRepository.findEstudiantesConCursos();
+                System.out.println("=== Total estudiantes con rol 'Estudiante': " + todosEstudiantes.size() + " ===");
+                for (Usuario est : todosEstudiantes) {
+                    System.out.println(" - " + est.getNombre() + " " + est.getApellido() + 
+                        " (ID: " + est.getId() + ", Rol: " + 
+                        (est.getRol() != null ? est.getRol().getNombre() : "null") + ")");
+                    // Ahora sí podemos acceder a cursosComprados porque usamos FETCH JOIN
+                    if (est.getCursosComprados() != null) {
+                        System.out.println("   Cursos comprados: " + est.getCursosComprados().size());
+                        for (Curso cursoEst : est.getCursosComprados()) {
+                            System.out.println("     - " + cursoEst.getCurso() + " (ID: " + cursoEst.getId() + ")");
+                        }
+                    } else {
+                        System.out.println("   Cursos comprados: 0");
+                    }
+                }
+                
                 model.addAttribute("progresoPorCurso", progresoPorCurso);
                 model.addAttribute("progresoModulosPorCurso", progresoModulosPorCurso);
                 model.addAttribute("leccionesPorModulo", leccionesPorModulo);

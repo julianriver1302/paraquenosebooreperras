@@ -5,9 +5,15 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title></title>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
 	<link rel="stylesheet" th:href="@{/assetsDocente/stylespanel.css}">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+	<link rel="stylesheet" th:href="@{/assetsDocente/css/mensajes.css}" />
+	<style>
+		/* Estilos inline mínimos para el funcionamiento inicial */
+		.tab-content { display: none; }
+		.tab-content.active { display: block; }
+	</style>
 </head>
 
 <body>
@@ -32,8 +38,9 @@
 	</nav>
 	<div class="main-layout">
 		<header>
+
 			<div class="header-logo-title">
-				<h1 class="titulo-blanco"><span class="panel-icon"><i class="fa-solid fa-comments"></i></span>Foros</h1>
+				<h1 class="titulo-blanco"><span class="panel-icon"><i class="fa-solid fa-envelope"></i></span>Mensajes</h1>
 			</div>
 			<div class="topbar-right">
 				<div class="notificaciones" title="Notificaciones"><i class="fa-solid fa-bell"></i></div>
@@ -54,57 +61,209 @@
 		</header>
 		<div class="container">
 			<div class="panel">
-				<h2><span class="panel-icon"><i class="fa-solid fa-paper-plane"></i></span> Enviar Mensaje
-				</h2>
-				<label>Para:</label>
-				<select>
-					<option>Juan Pérez</option>
-				</select>
-				<label>Mensaje:</label>
-				<textarea rows="3" placeholder="Escribe tu mensaje..."></textarea>
-				<button>Enviar Mensaje</button>
+				<div class="panel-header">
+					<h2><span class="panel-icon"><i class="fa-solid fa-envelope"></i></span> Centro de mensajes</h2>
+					<div class="tabs-mensajes">
+						<button class="tab-btn active" data-tab="tab-enviar">
+							<i class="fas fa-paper-plane"></i> Enviar mensaje
+						</button>
+						<button class="tab-btn" data-tab="tab-enviados">
+							<i class="fas fa-share-square"></i> Enviados
+						</button>
+						<button class="tab-btn" data-tab="tab-recibidos">
+							<i class="fas fa-inbox"></i> Recibidos
+						</button>
+					</div>
+				</div>
+				<div id="tab-enviar" class="tab-content active">
+					<div class="form-container">
+						<form th:action="@{/InterfazDocente/mensajes/enviar}" method="post" class="message-form">
+							<div class="form-group">
+								<label for="destinatarioId">Para:</label>
+								<select id="destinatarioId" name="destinatarioId" class="form-control" required>
+									<option value="" disabled selected>Seleccione un estudiante</option>
+									<option th:each="estudiante : ${estudiantes}"
+											th:value="${estudiante.id}"
+											th:text="${estudiante.nombre + ' ' + estudiante.apellido}">
+										Estudiante
+									</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="contenido">Mensaje:</label>
+								<textarea id="contenido" name="contenido" rows="5" class="form-control" 
+									  placeholder="Escribe tu mensaje..." required></textarea>
+							</div>
+							<div class="form-actions">
+								<button type="submit" class="btn btn-primary">
+									<i class="fas fa-paper-plane"></i> Enviar Mensaje
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div id="tab-enviados" class="tab-content">
+					<div class="messages-header">
+						<h3><i class="fas fa-share-square"></i> Mensajes Enviados</h3>
+					</div>
+					<div th:if="${#lists.isEmpty(mensajesEnviados)}" class="no-messages">
+						<i class="far fa-paper-plane fa-3x"></i>
+						<p>No has enviado mensajes todavía.</p>
+					</div>
+					<ul th:if="${!#lists.isEmpty(mensajesEnviados)}" class="lista-mensajes">
+						<li th:each="m : ${mensajesEnviados}">
+							<strong th:text="${m.destinatario.nombre + ' ' + m.destinatario.apellido}">Destinatario</strong>
+							<span th:text="${#temporals.format(m.fechaEnvio, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+							<p th:text="${m.contenido}">Contenido</p>
+						</li>
+					</ul>
+				</div>
+				<div id="tab-recibidos" class="tab-content">
+					<div class="messages-header">
+						<h3><i class="fas fa-inbox"></i> Mensajes Recibidos</h3>
+					</div>
+					<div th:if="${#lists.isEmpty(mensajesRecibidos)}" class="no-messages">
+						<i class="far fa-envelope fa-3x"></i>
+						<p>No tienes mensajes recibidos.</p>
+					</div>
+					<ul th:if="${!#lists.isEmpty(mensajesRecibidos)}" class="lista-mensajes">
+						<li th:each="m : ${mensajesRecibidos}">
+							<strong th:text="${m.remitente.nombre + ' ' + m.remitente.apellido}">Remitente</strong>
+							<span th:text="${#temporals.format(m.fechaEnvio, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+							<p th:text="${m.contenido}">Contenido</p>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
+
 	</div>
+
 	<script>
-		// Mantener modo oscuro con localStorage
-		function setDarkMode(enabled) {
-			if (enabled) {
-				document.body.classList.add('dark-mode');
-				localStorage.setItem('theme', 'dark-mode');
-			} else {
-				document.body.classList.remove('dark-mode');
-				localStorage.setItem('theme', 'light-mode');
+		document.addEventListener('DOMContentLoaded', function() {
+			// Mantener modo oscuro con localStorage
+			function setDarkMode(enabled) {
+				if (enabled) {
+					document.body.classList.add('dark-mode');
+					localStorage.setItem('theme', 'dark-mode');
+				} else {
+					document.body.classList.remove('dark-mode');
+					localStorage.setItem('theme', 'light-mode');
+				}
 			}
-		}
-		// Al cargar la página, aplicar preferencia
-		(function () {
-			const theme = localStorage.getItem('theme');
-			if (theme === 'dark-mode') {
-				document.body.classList.add('dark-mode');
+
+			// Aplicar tema al cargar
+			function applyTheme() {
+				const theme = localStorage.getItem('theme');
+				const isDark = theme === 'dark-mode' || 
+					(theme === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
+				
+				setDarkMode(isDark);
+				
 				const btn = document.querySelector('.toggle-mode-btn');
 				if (btn) {
 					const icon = btn.querySelector('i');
-					icon.classList.remove('fa-moon');
-					icon.classList.add('fa-sun');
+					icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
 				}
 			}
-		})();
-		// Alternar icono luna/sol y modo oscuro
-		const btn = document.querySelector('.toggle-mode-btn');
-		if (btn) btn.addEventListener('click', function () {
-			const icon = btn.querySelector('i');
-			const isDark = !document.body.classList.contains('dark-mode');
-			setDarkMode(isDark);
-			if (isDark) {
-				icon.classList.remove('fa-moon');
-				icon.classList.add('fa-sun');
-			} else {
-				icon.classList.remove('fa-sun');
-				icon.classList.add('fa-moon');
+
+			// Alternar modo oscuro
+			const btn = document.querySelector('.toggle-mode-btn');
+			if (btn) {
+				btn.addEventListener('click', function() {
+					const isDark = !document.body.classList.contains('dark-mode');
+					setDarkMode(isDark);
+					const icon = btn.querySelector('i');
+					icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+				});
 			}
+
+			// Inicializar tabs
+			function initTabs() {
+				const tabButtons = document.querySelectorAll('.tab-btn');
+				const tabContents = document.querySelectorAll('.tab-content');
+				
+				if (tabButtons.length === 0 || tabContents.length === 0) return;
+
+				// Función para cambiar de pestaña
+				function switchTab(targetId) {
+					tabButtons.forEach(btn => {
+						if (btn.getAttribute('data-tab') === targetId) {
+							btn.classList.add('active');
+						} else {
+							btn.classList.remove('active');
+						}
+					});
+
+					tabContents.forEach(content => {
+						content.style.display = 'none';
+						content.classList.remove('active');
+						
+						if (content.id === targetId) {
+							content.style.display = 'block';
+							content.classList.add('active');
+							setTimeout(() => content.style.opacity = '1', 10);
+						} else {
+							content.style.opacity = '0';
+							setTimeout(() => {
+								content.style.display = 'none';
+							}, 200);
+						}
+					});
+				}
+
+				// Manejar clic en las pestañas
+				tabButtons.forEach(btn => {
+					btn.addEventListener('click', () => {
+						const targetId = btn.getAttribute('data-tab');
+						switchTab(targetId);
+						// Guardar la pestaña activa
+						sessionStorage.setItem('activeTab', targetId);
+					});
+				});
+
+				// Restaurar pestaña activa si existe
+				const activeTab = sessionStorage.getItem('activeTab');
+				if (activeTab && document.getElementById(activeTab)) {
+					switchTab(activeTab);
+				}
+			}
+
+			// Inicializar
+			applyTheme();
+			initTabs();
+
+			// Mejorar accesibilidad de los tabs
+			document.querySelectorAll('.tab-btn').forEach((btn, index, array) => {
+				btn.setAttribute('role', 'tab');
+				btn.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+				btn.setAttribute('tabindex', index === 0 ? '0' : '-1');
+				
+				// Navegación con teclado
+				btn.addEventListener('keydown', (e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						btn.click();
+					} else if (e.key === 'ArrowRight') {
+						const next = array[(index + 1) % array.length];
+						next.focus();
+						e.preventDefault();
+					} else if (e.key === 'ArrowLeft') {
+						const prev = array[(index - 1 + array.length) % array.length];
+						prev.focus();
+						e.preventDefault();
+					} else if (e.key === 'Home') {
+						array[0].focus();
+						e.preventDefault();
+					} else if (e.key === 'End') {
+						array[array.length - 1].focus();
+						e.preventDefault();
+					}
+				});
+			});
 		});
 	</script>
+
 </body>
 
 </html>

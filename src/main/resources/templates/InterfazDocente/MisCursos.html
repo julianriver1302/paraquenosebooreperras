@@ -110,7 +110,7 @@
 				});
 			}
 		</script>
-		<div class="container">
+
 			<div class="panel" th:if="${cursos == null or #lists.isEmpty(cursos)}">
 				<h2><span class="panel-icon"><i class="fa-solid fa-chart-line"></i></span>Curso Asignado</h2>
 				<p>No tienes cursos asignados actualmente.</p>
@@ -121,30 +121,38 @@
 					<span th:text="${curso.curso}">Nombre del curso</span>
 				</h2>
 
-				<!-- Formulario sencillo para inscribir un estudiante en este curso -->
-				<form th:action="@{/InterfazDocente/inscribir-estudiante}" method="post" style="margin-bottom: 1rem;">
-					<input type="hidden" name="cursoId" th:value="${curso.id}" />
-					<label style="font-size: 0.9rem; margin-right: 0.5rem;">ID Estudiante:</label>
-					<input type="number" name="estudianteId" min="1" required style="width: 80px; padding: 0.1rem 0.2rem;" />
-					<button type="submit" style="padding: 0.2rem 0.6rem; font-size: 0.9rem;">Inscribir</button>
-				</form>
-
 				<div th:if="${#maps.containsKey(progresoPorCurso, curso.id)}">
+					<h3>Progreso General de Estudiantes</h3>
 					<table class="tabla-progreso">
 						<thead>
 							<tr>
 								<th>Estudiante</th>
 								<th>Progreso</th>
+								<th>Estado</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr th:each="p : ${progresoPorCurso[curso.id]}">
 								<td th:text="${p.nombreCompleto}">Nombre estudiante</td>
 								<td>
-									<span th:text="${#numbers.formatDecimal(p.porcentaje, 0, 2)} + ' %'"></span>
-									<div class="barra-progreso">
-										<div class="progreso" th:style="'width:' + ${p.porcentaje} + '%';"></div>
+									<div class="progreso-container">
+										<span class="progreso-percentage" th:text="${#numbers.formatDecimal(p.porcentaje, 0, 2)} + ' %'">0%</span>
+										<div class="barra-progreso">
+											<div class="progreso" th:style="'width:' + ${p.porcentaje} + '%;'" 
+												 th:classappend="${p.porcentaje >= 100 ? 'completado' : (p.porcentaje >= 50 ? 'medio' : 'bajo')}"></div>
+										</div>
 									</div>
+								</td>
+								<td>
+									<span th:if="${p.porcentaje >= 100}" class="estado-completado">
+										<i class="fas fa-check-circle"></i> Completado
+									</span>
+									<span th:if="${p.porcentaje >= 50 and p.porcentaje < 100}" class="estado-progreso">
+										<i class="fas fa-spinner"></i> En progreso
+									</span>
+									<span th:if="${p.porcentaje < 50}" class="estado-inicial">
+										<i class="fas fa-clock"></i> Iniciando
+									</span>
 								</td>
 							</tr>
 						</tbody>
@@ -152,35 +160,48 @@
 				</div>
 
 				<!-- Progreso detallado por módulo y lección -->
-				<div th:if="${#maps.containsKey(progresoModulosPorCurso, curso.id)}" style="margin-top: 1.5rem;">
-					<h3>Progreso por módulo actual</h3>
-					<table class="tabla-progreso">
+				<div th:if="${#maps.containsKey(progresoModulosPorCurso, curso.id)}" style="margin-top: 2rem;">
+					<h3>Progreso Detallado por Módulo</h3>
+					<table class="tabla-progreso tabla-detallada">
 						<thead>
 							<tr>
 								<th>Estudiante</th>
-								<th>Módulo actual</th>
-								<th>Lección actual</th>
+								<th>Módulo Actual</th>
+								<th>Lección Actual</th>
+								<th>Progreso del Módulo</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr th:each="pDet : ${progresoModulosPorCurso[curso.id]}">
 								<td th:text="${pDet.nombreCompleto}">Nombre estudiante</td>
 								<td>
-									<span th:if="${pDet.moduloActual != null}" th:text="${pDet.moduloActual}">1</span>
-									<span th:if="${pDet.moduloActual == null}">Sin progreso</span>
+									<span th:if="${pDet.moduloActual != null}" class="modulo-actual" th:text="'Módulo ' + ${pDet.moduloActual}">Módulo 1</span>
+									<span th:if="${pDet.moduloActual == null}" class="sin-progreso">Sin iniciar</span>
 								</td>
 								<td>
-									<span th:if="${pDet.leccionActual != null}" th:text="${pDet.leccionActual}">1</span>
-									<span th:if="${pDet.leccionActual == null}">Sin progreso</span>
+									<span th:if="${pDet.leccionActual != null}" class="leccion-actual" th:text="'Lección ' + ${pDet.leccionActual}">Lección 1</span>
+									<span th:if="${pDet.leccionActual == null}" class="sin-progreso">Sin iniciar</span>
+								</td>
+								<td>
+									<div th:if="${pDet.moduloActual != null}" class="progreso-modulo">
+										<span th:each="leccion : ${#numbers.sequence(1, #maps.containsKey(leccionesPorModulo, pDet.moduloActual) ? leccionesPorModulo[pDet.moduloActual] : 1)}" 
+											  th:class="${leccion <= pDet.leccionActual ? 'leccion-completada' : 'leccion-pendiente'}"
+											  th:title="'Lección ' + ${leccion}">
+											<span th:text="${leccion}"></span>
+										</span>
+									</div>
+									<span th:if="${pDet.moduloActual == null}" class="sin-progreso">0%</span>
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 
-				<div
-					th:if="${!#maps.containsKey(progresoPorCurso, curso.id) || #lists.isEmpty(progresoPorCurso[curso.id])}">
+				<div th:if="${!#maps.containsKey(progresoPorCurso, curso.id) || #lists.isEmpty(progresoPorCurso[curso.id])}"
+					 class="no-estudiantes">
+					<i class="fas fa-user-graduate"></i>
 					<p>No hay estudiantes inscritos en este curso todavía.</p>
+					<p class="info">Los estudiantes aparecerán aquí una vez que se inscriban y paguen por el curso.</p>
 				</div>
 			</div>
 		</div>

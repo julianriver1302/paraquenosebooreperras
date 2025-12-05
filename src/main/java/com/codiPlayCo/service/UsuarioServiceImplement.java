@@ -97,4 +97,9 @@ public class UsuarioServiceImplement implements IUsuarioService {
         curso.setUsuario(usuario);
         cursoService.save(curso);
     }
+    
+    @Override
+    public Optional<Usuario> findByIdWithCursos(Integer id) {
+        return usuarioRepository.findByIdWithCursos(id);
+    }
 }

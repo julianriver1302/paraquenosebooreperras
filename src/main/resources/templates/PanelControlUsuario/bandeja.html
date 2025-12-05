@@ -46,8 +46,35 @@
 			<section class="modules-section">
 				<div class="module-cards-wrapper">
 					<div class="module-card">
-						<h3>Notificaciones y mensajes</h3>
-						<p>Aquí aparecerán las notificaciones y mensajes importantes para el usuario.</p>
+						<h3>Mensajes recibidos</h3>
+						<div th:if="${#lists.isEmpty(mensajesRecibidos)}">
+							<p>No tienes mensajes nuevos.</p>
+						</div>
+						<ul th:if="${!#lists.isEmpty(mensajesRecibidos)}" class="lista-mensajes">
+							<li th:each="m : ${mensajesRecibidos}">
+								<strong th:text="${m.remitente.nombre + ' ' + m.remitente.apellido}">Remitente</strong>
+								<span th:text="${#temporals.format(m.fechaEnvio, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+								<p th:text="${m.contenido}">Contenido</p>
+								<form th:action="@{/PanelControlUsuario/bandeja/responder}" method="post" style="margin-top:0.5rem;">
+									<input type="hidden" name="destinatarioId" th:value="${m.remitente.id}" />
+									<textarea name="contenido" rows="2" placeholder="Responder..." required></textarea>
+									<button type="submit">Responder</button>
+								</form>
+							</li>
+						</ul>
+					</div>
+					<div class="module-card" style="margin-top:1.5rem;">
+						<h3>Mensajes enviados</h3>
+						<div th:if="${#lists.isEmpty(mensajesEnviados)}">
+							<p>No has enviado mensajes todavía.</p>
+						</div>
+						<ul th:if="${!#lists.isEmpty(mensajesEnviados)}" class="lista-mensajes">
+							<li th:each="m : ${mensajesEnviados}">
+								<strong th:text="${m.destinatario.nombre + ' ' + m.destinatario.apellido}">Destinatario</strong>
+								<span th:text="${#temporals.format(m.fechaEnvio, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+								<p th:text="${m.contenido}">Contenido</p>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</section>
